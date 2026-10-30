@@ -1,0 +1,336 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{colortbl}
+
+
+% Thème
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Couleurs personnalisées
+\definecolor{bleuactu}{RGB}{0,51,102}
+\definecolor{vertactu}{RGB}{0,102,51}
+\definecolor{rougeactu}{RGB}{153,0,0}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\setbeamercolor{structure}{fg=bleuactu}
+\setbeamercolor{frametitle}{bg=bleuactu,fg=white}
+
+% Informations du document
+\title{SCR, MCR et Fonds Propres en Assurance}
+\subtitle{Guide Complet Solvabilité II}
+\author[F. Borel-Mathurin]{Fabrice BOREL-MATHURIN}
+\institute[ACPR-DEAR et SAF Lyon 1] {
+ACPR - DEAR\\
+et\\
+Laboratoire SAF Université Claude Bernard Lyon 1}
+\date{6 novembre 2025}
+%\date{\today}
+
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Sommaire}
+\tableofcontents
+\end{frame}
+
+\section{Le Capital de Solvabilité Requis (SCR)}
+\begin{frame}{SCR - Définition et objectif}
+\begin{block}{Définition du SCR}
+Montant de capital que doit détenir un assureur pour absorber les pertes imprévues sur un horizon d'un an avec un niveau de confiance de \textbf{99,5\%}
+\end{block}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Sources réglementaires:}
+\begin{itemize}
+\item Directive Solvabilité II (2009/138/CE), Article 101
+\item Règlement Délégué (UE) 2015/35, Article 24
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Concept économique:}
+\begin{itemize}
+\item Value-at-Risk (VaR) à 99,5\%
+\item Variation des fonds propres sur un an
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Structure modulaire du SCR}
+\begin{block}{Formule standard}
+\[
+SCR = BSCR + SCR_{\text{opérationnel}} - Adj_{\text{PT}} - Adj_{\text{DT}}
+\]
+\end{block}
+
+\begin{itemize}
+\item \textbf{BSCR}: Basic SCR (agrégation des modules de risque)
+\item \textbf{SCR\textsubscript{opérationnel}}: Risque opérationnel
+\item \textbf{Adj\textsubscript{PT}}: Ajustement provisions techniques
+\item \textbf{Adj\textsubscript{DT}}: Ajustement impôts différés
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Modules de risque du BSCR}
+\begin{block}{Les 6 modules principaux}
+\begin{enumerate}
+\item Risque de marché (SCR\textsubscript{market})
+\item Risque de contrepartie (SCR\textsubscript{counterparty})
+\item Risque de souscription Vie (SCR\textsubscript{life})
+\item Risque de souscription Non-Vie (SCR\textsubscript{non-life})
+\item Risque de souscription Santé (SCR\textsubscript{health})
+\item Risque d'immobilisations incorporelles (SCR\textsubscript{intangible})
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}{Matrice de corrélation niveau 1}
+\scriptsize
+\begin{table}
+\begin{tabular}{l|cccccc}
+\textbf{Modules} & \textbf{Marché} & \textbf{Contrepartie} & \textbf{Vie} & \textbf{Non-Vie} & \textbf{Santé} & \textbf{Intangibles} \\
+\midrule
+\textbf{Marché} & 1,00 & 0,25 & 0,25 & 0,25 & 0,25 & 0,25 \\
+\textbf{Contrepartie} & 0,25 & 1,00 & 0,25 & 0,50 & 0,25 & 0,25 \\
+\textbf{Vie} & 0,25 & 0,25 & 1,00 & 0,25 & 0,25 & 0,25 \\
+\textbf{Non-Vie} & 0,25 & 0,50 & 0,25 & 1,00 & 0,25 & 0,25 \\
+\textbf{Santé} & 0,25 & 0,25 & 0,25 & 0,25 & 1,00 & 0,25 \\
+\textbf{Intangibles} & 0,25 & 0,25 & 0,25 & 0,25 & 0,25 & 1,00 \\
+\end{tabular}
+\end{table}
+\normalsize
+\textbf{Référence}: Règlement Délégué (UE) 2015/35, Annexe IV
+\end{frame}
+
+\section{Modules de Risque : Calculs Détaillés}
+\begin{frame}{Risque de marché - Sous-modules}
+\begin{block}{Risque action (SCR\textsubscript{eq})}
+\begin{itemize}
+\item \textbf{Actions Type 1} (côtées EEE/OCDE): Choc de 39\% + symmetric adjustment
+\item \textbf{Actions Type 2} (autres): Choc de 49\% + symmetric adjustment
+\item \textbf{Calcul}: $\Delta NAV = (\text{Actifs actions} \times \text{choc}) - (\Delta BE \text{ lié aux actions})$
+\end{itemize}
+\end{block}
+
+\begin{block}{Risque immobilier (SCR\textsubscript{prop})}
+\begin{itemize}
+\item Choc de -25\% sur la valeur des actifs immobiliers
+\item Impact sur BE si détention d'actifs immobiliers
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Risque de taux et de spread}
+\begin{block}{Risque de taux (SCR\textsubscript{int})}
+\begin{itemize}
+\item Deux scénarios (hausse et baisse des taux)
+\item Courbe de choc EIOPA par maturité
+\item Impact sur obligations + effet inverse sur BE
+\end{itemize}
+\end{block}
+
+\begin{block}{Risque de spread (SCR\textsubscript{spread})}
+Formule: $\text{Spread}_{\text{choc}} = a + b \times \text{duration modifiée}$
+
+\begin{table}
+\scriptsize
+\begin{tabular}{lc}
+\textbf{Rating} & \textbf{Coefficients} \\
+\midrule
+AAA-AA & a = 0,9\%, b = 0,06\% \\
+A & a = 1,1\%, b = 0,07\% \\
+BBB & a = 1,4\%, b = 0,08\% \\
+BB & a = 3,0\%, b = 0,22\% \\
+B & a = 6,5\%, b = 0,38\% \\
+C & a = 13,5\%, b = 0,50\% \\
+\end{tabular}
+\end{table}
+\end{block}
+\end{frame}
+
+\section{Minimum Capital Requirement (MCR)}
+\begin{frame}{MCR - Définition et objectif}
+\begin{block}{Définition}
+Le MCR représente le \textbf{seuil absolu} en dessous duquel l'assureur ne peut plus exercer son activité
+\end{block}
+
+\textbf{Référence}: Directive Solvabilité II, Articles 129-131
+
+\begin{alertblock}{Importance critique}
+\begin{itemize}
+\item Niveau minimum de capital réglementaire
+\item Déclenchement de mesures de sauvegarde
+\item Risque de retrait d'agrément
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Calcul du MCR}
+\begin{block}{Formules par ligne de business}
+\textbf{Assurance Vie:}
+\[
+MCR_{\text{Vie}} = 0,04 \times BE_{\text{Vie}} + 0,003 \times \text{Capitaux sous risque}
+\]
+
+\textbf{Assurance Non-Vie:}
+\[
+MCR_{\text{Non-Vie}} = 0,08 \times \text{Primes annuelles} + 0,06 \times BE_{\text{Non-Vie}}
+\]
+\end{block}
+
+\begin{block}{Encadrement réglementaire}
+\[
+MCR = \max(MCR_{\text{floor}} ; \min(MCR_{\text{combined}} ; MCR_{\text{cap}}))
+\]
+\begin{itemize}
+\item $MCR_{\text{floor}}$: 2,5 à 3,7 M€
+\item $MCR_{\text{cap}}$: 45\% du SCR
+\item $MCR_{\text{combined}}$: Somme des MCR par ligne
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Comparaison SCR vs MCR}
+\begin{table}
+\begin{tabular}{l|p{4cm}|p{4cm}}
+\textbf{Aspect} & \textbf{SCR} & \textbf{MCR} \\
+\midrule
+\textbf{Niveau de confiance} & 99,5\% sur 1 an & Non spécifié \\
+\textbf{Objectif} & Seuil d'alerte & Seuil critique \\
+\textbf{Conséquences} & Plan de rétablissement & Plan de financement ou retrait d'agrément \\
+\textbf{Typique} & 100-200\% du MCR & 25-35\% du SCR \\
+\end{tabular}
+\end{table}
+\end{frame}
+
+\section{Fonds Propres Prudentiels}
+\begin{frame}{Classification en tiers}
+\begin{block}{Tier 1 - Capital de base}
+\begin{itemize}
+\item \textbf{Tier 1 non restreint}: Capital social, primes d'émission
+\item \textbf{Tier 1 restreint}: Fonds de dotation mutuelles
+\item \textbf{Tier 1 auxiliaire}: Capital callable
+\end{itemize}
+\end{block}
+
+\begin{block}{Tier 2 - Capital complémentaire}
+\begin{itemize}
+\item Dettes subordonnées (durée ≥ 10 ans)
+\item Lettres de crédit, garanties
+\end{itemize}
+\end{block}
+
+\begin{block}{Tier 3 - Autres éléments}
+\begin{itemize}
+\item Dettes subordonnées (durée 5-10 ans)
+\item Impôts différés actifs nets
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Limites d'éligibilité}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Pour couvrir le SCR:}
+\begin{itemize}
+\item Tier 1 ≥ 50\% du SCR
+\item Tier 1 restreint + auxiliaire ≤ 20\% du SCR
+\item Tier 3 ≤ 15\% du SCR
+\item Tier 2 ≤ 50\% du SCR
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Pour couvrir le MCR:}
+\begin{itemize}
+\item Tier 1 non restreint ≥ 80\% du MCR
+\item Tier 2 ≤ 20\% du MCR
+\item Tier 3 non éligible
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\section{Travaux Dirigés}
+\begin{frame}{Exercice: Calcul du SCR marché}
+\begin{exampleblock}{Données}
+\begin{itemize}
+\item Actions Type 1: 150 M€
+\item Actions Type 2: 30 M€
+\item Obligations souveraines: 300 M€
+\item Obligations corporate (rating A, duration 5 ans): 200 M€
+\item Immobilier: 80 M€
+\item BE = 750 M€ (90\% sensible aux taux)
+\item Symmetric adjustment: -3\%
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Solution Excel}
+\begin{block}{SCR Equity}
+\begin{lstlisting}[language=Excel]
+= (150 * (39% - 3%) + 30 * (49% - 3%)) * (1 - 5%)
+= 150*0,36 + 30*0,46 * 0,95 = 68,4 M€
+\end{lstlisting}
+\end{block}
+
+\begin{block}{SCR Interest Rate}
+\begin{itemize}
+\item Scénario hausse: Impact obligations = -4,2\%, Impact BE = +3,8\%
+\item Scénario baisse: Impact obligations = +4,5\%, Impact BE = -4,1\%
+\item SCR\_Int = max(Scénario hausse; Scénario baisse) = 45,2 M€
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Analyse de sensibilité Python}
+\begin{lstlisting}[language=Python]
+import matplotlib.pyplot as plt
+import numpy as np
+
+parametres = ['Taux', 'Actions', 'Spread', 'Mortalité', 'Rachat']
+scr_base = [45, 68, 23, 18, 22]
+scr_sensibilite = [52, 81, 28, 21, 29]
+
+plt.figure(figsize=(10, 6))
+plt.barh(parametres, np.array(scr_sensibilite) - np.array(scr_base))
+plt.xlabel('Impact sur le SCR (M€)')
+plt.title('Analyse de sensibilité du SCR')
+plt.grid(True, alpha=0.3)
+plt.show()
+\end{lstlisting}
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}{Sources Réglementaires Principales}
+\begin{itemize}
+\item \textbf{Directive 2009/138/CE} (Solvency II)
+\item \textbf{Règlement Délégué (UE) 2015/35}
+\item \textbf{EIOPA} - Guidelines on SCR standard formula (2014)
+\item \textbf{ACPR} - Instruction 2015-I-13 sur le calcul du SCR
+\item \textbf{EIOPA} - Technical documentation of the SCR standard formula
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\centering
+\Large
+\textbf{Merci pour votre attention}
+\end{frame}
+
+\end{document}

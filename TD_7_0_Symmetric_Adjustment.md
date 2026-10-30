@@ -1,0 +1,536 @@
+# TD 7.0 - Calcul du Symmetric Adjustment : De la Donnée de Marché au SCR
+
+## Objectif pédagogique
+
+**Connecter la réglementation à la réalité des marchés financiers**
+
+Vous avez vu dans le cours (page 8) que le choc actions Type 1 est de **39% ± Symmetric Adjustment (SA)**. 
+
+**Problème** : Dans le TD 7.1, le SA était "fourni à -3%". Mais dans la vraie vie, **vous devez le calculer vous-même** à partir des données de marché !
+
+**Objectif** : Calculer le Symmetric Adjustment officiel EIOPA à partir de l'historique de l'indice EuroStoxx 50.
+
+---
+
+## Contexte réglementaire
+
+### Formule du Symmetric Adjustment (Article 106, Règlement Délégué 2015/35)
+
+Le Symmetric Adjustment (SA) permet d'ajuster le choc actions en fonction de la situation actuelle du marché par rapport à sa moyenne long terme.
+
+**Formule officielle EIOPA** :
+
+$$
+SA = \frac{1}{2} \times \frac{I_{current} - I_{avg}}{I_{avg}}
+$$
+
+Avec :
+- $I_{current}$ = Niveau actuel de l'indice (dernier point disponible)
+- $I_{avg}$ = Moyenne de l'indice sur les **36 derniers mois**
+- Coefficient **1/2** = facteur de lissage réglementaire
+
+**Contraintes** :
+- Le SA est plafonné : $-10\% \leq SA \leq +10\%$
+- Mise à jour **mensuelle** par EIOPA
+- Applicable aux actions Type 1 ET Type 2
+
+**Interprétation** :
+- Si $SA > 0$ : Le marché est **au-dessus** de sa moyenne → choc actions **réduit** (marché "cher")
+- Si $SA < 0$ : Le marché est **en-dessous** de sa moyenne → choc actions **augmenté** (marché "déprimé")
+
+---
+
+## PARTIE 1 : Calcul Excel
+
+### Données fournies
+
+Le fichier `data_eurostoxx50_36mois.csv` contient l'historique mensuel de l'indice EuroStoxx 50 sur 36 mois (de janvier 2022 à décembre 2024).
+
+**Structure du fichier** :
+```
+Date,Indice_EuroStoxx50,Valeur_Point
+2022-01-31,4175.20,4175.20
+2022-02-28,4077.60,4077.60
+...
+2024-12-31,4950.00,4950.00
+```
+
+### Exercice 1.1 : Import des données dans Excel
+
+**Consigne** :
+1. Ouvrez Excel
+2. Importez le fichier CSV : `Données > Obtenir des données externes > Fichier CSV`
+3. Vérifiez que vous avez bien 36 lignes de données (janvier 2022 à décembre 2024)
+
+**Vérification** : La dernière ligne doit être `2024-12-31,4950.00`
+
+---
+
+### Exercice 1.2 : Calcul de la moyenne mobile 36 mois
+
+**Consigne** :
+
+1. Dans la colonne D, ajoutez un titre : `"Moyenne 36 mois"`
+
+2. En cellule **D37** (ligne du dernier mois, décembre 2024), calculez la moyenne des 36 derniers points :
+   ```excel
+   =MOYENNE(B2:B37)
+   ```
+
+3. Notez le résultat :
+   - $I_{avg}$ = ?
+
+**Aide** : Vous devriez obtenir une valeur autour de 4 300-4 500 points.
+
+---
+
+### Exercice 1.3 : Calcul du Symmetric Adjustment
+
+**Consigne** :
+
+1. Dans la colonne E, ajoutez un titre : `"Symmetric Adjustment (SA)"`
+
+2. En cellule **E37**, calculez le SA avec la formule EIOPA :
+   ```excel
+   = 0.5 * ((B37 - D37) / D37)
+   ```
+   
+   Ou de manière équivalente :
+   ```excel
+   = (B37 / D37 - 1) / 2
+   ```
+
+3. **Formatez** la cellule en pourcentage (1 décimale)
+
+4. Notez le résultat :
+   - $SA$ = ?
+
+**Vérification** : 
+- Si l'indice actuel (4950) est supérieur à la moyenne (~ 4400), le SA doit être **positif**
+- Il doit être compris entre -10% et +10%
+
+---
+
+### Exercice 1.4 : Application au choc actions
+
+**Consigne** :
+
+1. Créez un nouveau tableau de synthèse dans Excel :
+
+| Paramètre | Valeur | Formule |
+|-----------|--------|---------|
+| Indice actuel ($I_{current}$) | =B37 | |
+| Moyenne 36 mois ($I_{avg}$) | =D37 | |
+| **Symmetric Adjustment** | =E37 | |
+| | | |
+| Choc actions Type 1 (base) | 39,0% | |
+| Choc ajusté (Type 1) | =39% + E37 | |
+| | | |
+| Choc actions Type 2 (base) | 49,0% | |
+| Choc ajusté (Type 2) | =49% + E37 | |
+
+2. **Interprétation** :
+   - Si le SA est de +5,5%, alors le choc Type 1 devient 39% + 5,5% = 44,5%
+   - Cela signifie que le **SCR actions augmente** (marché jugé "cher", plus risqué)
+
+---
+
+### Exercice 1.5 : Graphique de tendance
+
+**Consigne** :
+
+1. Créez un graphique en courbes avec :
+   - Axe X : Date (colonne A)
+   - Axe Y1 : Indice EuroStoxx 50 (colonne B)
+   - Axe Y2 : Moyenne 36 mois (colonne D, répétée pour toutes les lignes)
+
+2. Ajoutez des éléments visuels :
+   - Titre : "EuroStoxx 50 vs Moyenne 36 mois"
+   - Légende claire
+   - Point actuel en surbrillance
+
+3. **Question d'analyse** : À quels moments l'indice est-il significativement au-dessus/en-dessous de sa moyenne ?
+
+---
+
+## PARTIE 2 : Automatisation Python
+
+### Exercice 2.1 : Import des données
+
+Complétez le script Python suivant :
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Import des données
+df = pd.read_csv('data_eurostoxx50_36mois.csv')
+
+# Affichage des premières lignes
+print("Premières lignes du fichier :")
+print(df.head())
+
+# Conversion de la colonne Date en datetime
+df['Date'] = pd.to_datetime(df['Date'])
+
+# Tri par date (au cas où)
+df = df.sort_values('Date').reset_index(drop=True)
+
+print(f"\nNombre de mois de données : {len(df)}")
+print(f"Période couverte : {df['Date'].min()} à {df['Date'].max()}")
+```
+
+**Exécutez** ce script et vérifiez que vous avez bien 36 mois de données.
+
+---
+
+### Exercice 2.2 : Calcul de la moyenne mobile
+
+**Consigne** : Complétez la fonction suivante
+
+```python
+def calculer_moyenne_mobile_36m(df):
+    """
+    Calcule la moyenne mobile sur 36 mois de l'indice.
+    
+    Paramètres:
+        df (DataFrame): DataFrame avec colonnes 'Date' et 'Indice_EuroStoxx50'
+    
+    Retourne:
+        DataFrame: DataFrame enrichi avec colonne 'Moyenne_36m'
+    """
+    # TODO: Calculer la moyenne mobile
+    # Indice : df['Moyenne_36m'] = df['Indice_EuroStoxx50'].rolling(window=36).mean()
+    
+    df['Moyenne_36m'] = ???
+    
+    return df
+
+# Test
+df = calculer_moyenne_mobile_36m(df)
+print(f"\nMoyenne 36 mois (dernier point) : {df['Moyenne_36m'].iloc[-1]:.2f}")
+```
+
+---
+
+### Exercice 2.3 : Calcul du Symmetric Adjustment
+
+**Consigne** : Complétez la fonction suivante
+
+```python
+def calculer_symmetric_adjustment(df):
+    """
+    Calcule le Symmetric Adjustment selon la formule EIOPA.
+    
+    Paramètres:
+        df (DataFrame): DataFrame avec colonnes 'Indice_EuroStoxx50' et 'Moyenne_36m'
+    
+    Retourne:
+        DataFrame: DataFrame enrichi avec colonne 'SA'
+    """
+    # Formule EIOPA : SA = 0.5 * (I_current - I_avg) / I_avg
+    # TODO: Compléter la formule
+    df['SA'] = ???
+    
+    # Application du plafond [-10%, +10%]
+    df['SA'] = df['SA'].clip(lower=-0.10, upper=0.10)
+    
+    return df
+
+# Test
+df = calculer_symmetric_adjustment(df)
+sa_actuel = df['SA'].iloc[-1]
+print(f"\nSymmetric Adjustment (dernier point) : {sa_actuel:.2%}")
+```
+
+---
+
+### Exercice 2.4 : Calcul des chocs ajustés
+
+**Consigne** : Créez une fonction qui calcule les chocs actions ajustés
+
+```python
+def calculer_chocs_ajustes(sa):
+    """
+    Calcule les chocs actions Type 1 et Type 2 ajustés du SA.
+    
+    Paramètres:
+        sa (float): Symmetric Adjustment (en décimal, ex: 0.055 pour 5.5%)
+    
+    Retourne:
+        dict: {'choc_type1': float, 'choc_type2': float}
+    """
+    choc_base_type1 = 0.39  # 39%
+    choc_base_type2 = 0.49  # 49%
+    
+    choc_ajuste_type1 = choc_base_type1 + sa
+    choc_ajuste_type2 = choc_base_type2 + sa
+    
+    return {
+        'choc_type1': choc_ajuste_type1,
+        'choc_type2': choc_ajuste_type2
+    }
+
+# Test
+chocs = calculer_chocs_ajustes(sa_actuel)
+print(f"\nChoc actions Type 1 ajusté : {chocs['choc_type1']:.2%}")
+print(f"Choc actions Type 2 ajusté : {chocs['choc_type2']:.2%}")
+```
+
+---
+
+### Exercice 2.5 : Visualisation complète
+
+**Consigne** : Créez un graphique professionnel
+
+```python
+def visualiser_sa_et_indice(df):
+    """
+    Crée un graphique avec l'indice, sa moyenne, et le SA.
+    """
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), 
+                                    gridspec_kw={'height_ratios': [2, 1]})
+    
+    # Graphique 1 : Indice vs Moyenne
+    ax1.plot(df['Date'], df['Indice_EuroStoxx50'], 
+             label='EuroStoxx 50', linewidth=2, color='steelblue')
+    ax1.plot(df['Date'], df['Moyenne_36m'], 
+             label='Moyenne 36 mois', linewidth=2, 
+             linestyle='--', color='orange')
+    
+    # Point actuel
+    ax1.scatter(df['Date'].iloc[-1], df['Indice_EuroStoxx50'].iloc[-1], 
+                s=100, color='red', zorder=5, label='Niveau actuel')
+    
+    ax1.set_ylabel('Indice (points)', fontsize=12)
+    ax1.set_title('EuroStoxx 50 et Moyenne Mobile 36 mois', 
+                  fontsize=14, fontweight='bold')
+    ax1.legend(loc='best', fontsize=10)
+    ax1.grid(True, alpha=0.3)
+    
+    # Graphique 2 : Symmetric Adjustment
+    ax2.plot(df['Date'], df['SA'] * 100, 
+             linewidth=2, color='darkgreen')
+    ax2.axhline(0, color='black', linestyle='-', linewidth=0.8)
+    ax2.axhline(10, color='red', linestyle='--', linewidth=0.8, alpha=0.5)
+    ax2.axhline(-10, color='red', linestyle='--', linewidth=0.8, alpha=0.5)
+    
+    # Point actuel
+    ax2.scatter(df['Date'].iloc[-1], df['SA'].iloc[-1] * 100, 
+                s=100, color='red', zorder=5)
+    
+    ax2.set_xlabel('Date', fontsize=12)
+    ax2.set_ylabel('Symmetric Adjustment (%)', fontsize=12)
+    ax2.set_title('Évolution du Symmetric Adjustment', 
+                  fontsize=14, fontweight='bold')
+    ax2.grid(True, alpha=0.3)
+    ax2.set_ylim(-12, 12)
+    
+    plt.tight_layout()
+    plt.savefig('sa_evolution.png', dpi=150, bbox_inches='tight')
+    plt.show()
+
+# Exécution
+visualiser_sa_et_indice(df)
+```
+
+---
+
+## PARTIE 3 : Application au SCR
+
+### Exercice 3.1 : Impact sur le SCR du TD 7.1
+
+Reprenez les données du TD 7.1 (assureur "SécuritéPlus") :
+- Actions Type 1 : 150 M€
+- Actions Type 2 : 30 M€
+- SA (fourni) : -3%
+
+**Consigne** :
+
+1. **Avec le SA calculé** (ex: +5,5%), recalculez le SCR actions :
+
+```python
+# Données
+actions_type1 = 150  # M€
+actions_type2 = 30   # M€
+sa_calcule = 0.055   # Exemple : 5.5%
+
+# Chocs ajustés
+choc_type1 = 0.39 + sa_calcule
+choc_type2 = 0.49 + sa_calcule
+
+# SCR actions (sans ajustement PB pour simplifier)
+scr_type1 = actions_type1 * choc_type1
+scr_type2 = actions_type2 * choc_type2
+scr_equity = scr_type1 + scr_type2
+
+print(f"\nAvec SA = {sa_calcule:.2%} :")
+print(f"SCR actions Type 1 : {scr_type1:.2f} M€")
+print(f"SCR actions Type 2 : {scr_type2:.2f} M€")
+print(f"SCR equity total   : {scr_equity:.2f} M€")
+```
+
+2. **Comparez** avec le résultat du TD 7.1 (SA = -3%) :
+
+| Scénario | SA | SCR Equity |
+|----------|----|-----------:|
+| TD 7.1 (fourni) | -3% | 64,4 M€ |
+| Calcul réel | +5,5% | ??? M€ |
+| **Différence** | +8,5 pts | ??? M€ |
+
+**Question** : Quel est l'impact financier d'un changement de SA de 8,5 points de pourcentage ?
+
+---
+
+### Exercice 3.2 : Sensibilité au SA
+
+**Consigne** : Créez un graphique tornado de sensibilité du SCR au SA
+
+```python
+def analyse_sensibilite_sa(actions_type1, actions_type2):
+    """
+    Analyse l'impact du SA sur le SCR actions.
+    """
+    sa_range = np.linspace(-0.10, 0.10, 21)  # De -10% à +10%
+    scr_range = []
+    
+    for sa in sa_range:
+        choc_type1 = 0.39 + sa
+        choc_type2 = 0.49 + sa
+        scr = actions_type1 * choc_type1 + actions_type2 * choc_type2
+        scr_range.append(scr)
+    
+    # Graphique
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(sa_range * 100, scr_range, linewidth=3, color='darkred')
+    
+    # Point actuel (exemple SA = +5.5%)
+    sa_actuel = 0.055
+    scr_actuel = actions_type1 * (0.39 + sa_actuel) + actions_type2 * (0.49 + sa_actuel)
+    ax.scatter(sa_actuel * 100, scr_actuel, s=200, color='red', 
+               zorder=5, label=f'SA actuel = {sa_actuel:.1%}')
+    
+    ax.set_xlabel('Symmetric Adjustment (%)', fontsize=12)
+    ax.set_ylabel('SCR Equity (M€)', fontsize=12)
+    ax.set_title('Sensibilité du SCR Actions au Symmetric Adjustment', 
+                 fontsize=14, fontweight='bold')
+    ax.grid(True, alpha=0.3)
+    ax.legend(fontsize=11)
+    
+    plt.tight_layout()
+    plt.savefig('sensibilite_sa_scr.png', dpi=150, bbox_inches='tight')
+    plt.show()
+    
+    # Analyse quantitative
+    scr_min = min(scr_range)
+    scr_max = max(scr_range)
+    print(f"\nAnalyse de sensibilité :")
+    print(f"  SCR minimum (SA = -10%) : {scr_min:.2f} M€")
+    print(f"  SCR maximum (SA = +10%) : {scr_max:.2f} M€")
+    print(f"  Plage de variation       : {scr_max - scr_min:.2f} M€")
+    print(f"  Impact de 1 pt de SA     : {(scr_max - scr_min) / 20:.2f} M€")
+
+# Exécution
+analyse_sensibilite_sa(actions_type1=150, actions_type2=30)
+```
+
+---
+
+## PARTIE 4 : Réflexion et Synthèse
+
+### Question 4.1 : Interprétation économique
+
+**Scénario** : Supposons que le SA passe de -3% (TD 7.1) à +8% (marché très haut) en 6 mois.
+
+**Questions** :
+1. Que signifie ce changement en termes de valorisation du marché ?
+2. Quel est l'impact sur le SCR de l'assureur ?
+3. Quel est l'impact sur le ratio de solvabilité ?
+4. Quelles Management Actions l'assureur pourrait-il envisager ?
+
+**Réponses attendues** :
+1. Le marché est passé d'une situation "déprimée" à une situation "survalorisée"
+2. Le SCR augmente (choc plus sévère car marché jugé plus risqué)
+3. Le ratio de solvabilité baisse (OF constant, SCR plus élevé)
+4. Possibles MA : vendre des actions, augmenter la couverture réassurance, etc.
+
+---
+
+### Question 4.2 : Critiques du mécanisme SA
+
+Le Symmetric Adjustment est controversé dans la communauté actuarielle.
+
+**Débat** :
+- **Pour** : Évite la pro-cyclicité (vendre en bas de marché → amplifier la crise)
+- **Contre** : Réduit le SCR quand le marché est haut (moment le plus risqué !)
+
+**Question de réflexion** :
+> "Le SA réduit le choc actions quand le marché est historiquement haut. Est-ce cohérent avec une approche prudentielle ?"
+
+**Discussion** : Rédigez 5-10 lignes argumentées (pour ou contre le SA).
+
+---
+
+## PARTIE 5 : Mise en production
+
+### Exercice 5.1 : Automatisation mensuelle
+
+**Contexte** : Vous êtes actuaire chez un assureur. Chaque mois, vous devez :
+1. Télécharger les nouvelles données EuroStoxx 50
+2. Recalculer le SA
+3. Mettre à jour le SCR
+4. Générer un rapport pour le RISK Committee
+
+**Consigne** : Créez un script Python `update_sa_monthly.py` qui :
+- Lit le CSV mis à jour
+- Calcule le nouveau SA
+- Compare avec le mois précédent
+- Génère un rapport PDF automatique
+
+**Bonus** : Ajoutez une alerte email si le SA varie de plus de ±2% par rapport au mois précédent.
+
+---
+
+## Conclusion : Le "Real-World Data" comme compétence clé
+
+**Ce que vous avez appris** :
+
+1. ✅ **Autonomie** : Calculer un paramètre réglementaire sans qu'il soit "fourni"
+2. ✅ **Connexion théorie-pratique** : La formule EIOPA + les données de marché = votre travail quotidien
+3. ✅ **Impact business** : Une variation de SA de 1% = plusieurs millions d'euros de capital requis
+4. ✅ **Outils pro** : Excel pour l'exploration, Python pour l'automatisation
+
+**Message clé** :
+> "En tant qu'actuaire, vous ne serez jamais juste un 'exécutant de formules'. Vous serez responsable de l'interprétation des données de marché et de leur traduction en exigences prudentielles."
+
+---
+
+## Fichiers à rendre
+
+1. **Fichier Excel** : `TD_7_0_Symmetric_Adjustment.xlsx`
+   - Onglet 1 : Données et calculs
+   - Onglet 2 : Graphiques
+   
+2. **Script Python** : `td_7_0_sa_calculation.py`
+   - Fonctions complètes
+   - Commentaires
+   
+3. **Rapport** (2 pages max) :
+   - Résultats (SA calculé, chocs ajustés)
+   - Analyse de sensibilité
+   - Réflexion sur la question 4.2
+
+---
+
+## Grille d'évaluation
+
+| Critère | Points |
+|---------|--------|
+| Calculs Excel corrects (SA, chocs) | 30% |
+| Script Python fonctionnel | 30% |
+| Visualisations (graphiques) | 20% |
+| Analyse et interprétation | 20% |
+| **Total** | 100% |
+
+**Bonus** (+10%) : Automatisation mensuelle (Exercice 5.1)
