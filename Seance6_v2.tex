@@ -1,0 +1,1533 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,decorations.pathreplacing}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{hyperref}
+\usepackage{mathtools}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Configuration des listings Python
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\scriptsize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{ForestGreen}\itshape,
+    stringstyle=\color{red},
+    showstringspaces=false,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    breaklines=true,
+    backgroundcolor=\color{gray!10}
+}
+
+% Thème Beamer
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Couleurs personnalisées
+\definecolor{bleuactu}{RGB}{0,51,102}
+\definecolor{vertactu}{RGB}{0,102,51}
+\definecolor{rougeactu}{RGB}{153,0,0}
+\definecolor{orangeactu}{RGB}{230,126,34}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\setbeamercolor{structure}{fg=bleuactu}
+\setbeamercolor{frametitle}{bg=bleuactu,fg=white}
+
+% Commandes personnalisées
+\newcommand{\BE}{\text{BE}}
+\newcommand{\RM}{\text{RM}}
+\newcommand{\SCR}{\text{SCR}}
+\newcommand{\VaR}{\text{VaR}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\PM}{\text{PM}}
+\newcommand{\TMG}{\text{TMG}}
+\newcommand{\PB}{\text{PB}}
+\newcommand{\EUR}{€}
+
+% Informations du document
+\title[Séance 6 \& 7 - Stochastique \& ALM]{Séance 6 \& 7 : Approche Stochastique et ALM}
+\subtitle{Comptabilité Prudentielle en Assurance}
+\author[F. Borel-Mathurin]{Fabrice BOREL-MATHURIN}
+\institute[ACPR-DEAR et SAF Lyon 1] {
+    ACPR - DEAR\\
+    et\\
+    Laboratoire SAF Université Claude Bernard Lyon 1
+}
+\date{Novembre 2025}
+
+\begin{document}
+
+% ============================================================
+% PAGE DE TITRE
+% ============================================================
+\begin{frame}
+\titlepage
+\end{frame}
+
+% ============================================================
+% TABLE DES MATIÈRES
+% ============================================================
+\begin{frame}{Plan de la Séance}
+\tableofcontents
+\end{frame}
+
+% ============================================================
+% SECTION 1 : LIMITES APPROCHE DÉTERMINISTE
+% ============================================================
+\section{I. Limites de l'Approche Déterministe}
+
+\begin{frame}{Rappel : Approche Déterministe du BE}
+\begin{block}{Principe de base (séances précédentes)}
+Le Best Estimate est calculé comme :
+\[
+\BE = \sum_{t=1}^{T} \frac{\text{Flux}_{\text{sortants}}(t) - \text{Flux}_{\text{entrants}}(t)}{(1+r_t)^t}
+\]
+\end{block}
+
+\begin{itemize}
+    \item \textbf{Hypothèses fixes} : taux d'intérêt, mortalité, rachats
+    \item \textbf{Projection unique} : un seul scénario central
+    \item \textbf{Simplicité} : calculs rapides, compréhension aisée
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{alertblock}{Question}
+Est-ce que cette approche capture \textbf{toute} la réalité des contrats d'assurance ?
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Limites Fondamentales : Les Options Cachées}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Exemples d'options et garanties :}
+\begin{itemize}
+    \item \textbf{Garantie plancher} (Floor) : rendement minimum garanti
+    \item \textbf{Participation aux bénéfices} : dépend de la performance des actifs
+    \item \textbf{Options de rachat dynamique} : comportement dépendant du contexte économique
+    \item \textbf{Garanties en cas de décès} : valeur variable selon les actifs
+\end{itemize}
+
+\column{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+    % Axe
+    \draw[->] (0,0) -- (4,0) node[right] {Rendement actifs};
+    \draw[->] (0,0) -- (0,3) node[above] {Prestation};
+    
+    % Garantie plancher
+    \draw[thick, blue] (0,1) -- (2,1);
+    \draw[thick, blue] (2,1) -- (4,2.5);
+    \draw[dashed, red] (0,0) -- (4,2);
+    
+    % Annotations
+    \node[blue] at (1,0.6) {Garantie};
+    \node[red] at (3,2.3) {Sans garantie};
+    \draw[<-] (2,1) -- (2.5,0.3) node[right] {\scriptsize Point pivot};
+\end{tikzpicture}
+\end{center}
+\textit{Payoff asymétrique non-linéaire}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Conséquence}
+Une approche déterministe \textbf{sous-estime} systématiquement la valeur de ces options.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Limite 1 : Options et Garanties Financières}
+\begin{block}{Exemple : Contrat Euro avec TMG}
+\begin{itemize}
+    \item Taux Minimum Garanti (TMG) = 2\% par an
+    \item Actifs investis : obligations à taux variable
+    \item Si taux baisse à 0,5\% : l'assureur \textbf{perd} la différence
+    \item Si taux monte à 4\% : l'assuré ne profite que partiellement (PB plafonnée)
+\end{itemize}
+\end{block}
+
+\begin{alertblock}{Problème déterministe}
+Avec un scénario unique (ex: taux = 2\%), on \textbf{ignore} :
+\begin{itemize}
+    \item La probabilité de scénarios défavorables (taux $<$ TMG)
+    \item Le coût potentiel de la garantie
+    \item L'asymétrie du risque
+\end{itemize}
+\end{alertblock}
+
+\textbf{Solution : } Valorisation stochastique avec \alert{distribution complète} des scénarios futurs.
+\end{frame}
+
+\begin{frame}{Limite 2 : Management Actions Dynamiques}
+\begin{columns}
+\column{0.55\textwidth}
+\textbf{Décisions de gestion conditionnelles :}
+\begin{enumerate}
+    \item \textbf{Allocation d'actifs} : ajustement selon contexte de marché
+    \item \textbf{Participation aux bénéfices} :
+    \begin{itemize}
+        \item Si performance bonne : distribution PB élevée
+        \item Si performance faible : PB minimale
+    \end{itemize}
+    \item \textbf{Provisions pour PB différée (PPB)} : constitution/reprise dynamique
+\end{enumerate}
+
+\column{0.45\textwidth}
+\begin{tikzpicture}[scale=0.7]
+    % Arbre de décision simplifié
+    \node[draw, rectangle] (start) at (0,0) {$t=0$};
+    \node[draw, circle] (up) at (-1.5,2) {$\uparrow$ Marché};
+    \node[draw, circle] (down) at (-1.5,-2) {$\downarrow$ Marché};
+    \draw[->] (start) -- (up) node[midway,left] {\scriptsize 50\%};
+    \draw[->] (start) -- (down) node[midway,left] {\scriptsize 50\%};
+    
+    \node[align=center] at (1.5,2) {\scriptsize PB haute\\Alloc. actions};
+    \node[align=center] at (1.5,-2) {\scriptsize PB basse\\Alloc. oblig.};
+    
+    \draw[->,dashed,blue] (up) -- (1.5,2);
+    \draw[->,dashed,red] (down) -- (1.5,-2);
+\end{tikzpicture}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Nécessité stochastique}
+Les management actions \textbf{dépendent du scénario futur} $\Rightarrow$ impossible à modéliser en approche déterministe simple.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Limite 3 : Comportement Dynamique des Assurés}
+\textbf{Rachats structurels vs rachats dynamiques :}
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Type de rachat} & \textbf{Déterministe} & \textbf{Stochastique} \\
+\midrule
+Structurel (besoin liquidité) & 5\% / an & 5\% / an \\
+\rowcolor{yellow!20}
+Dynamique (contexte éco) & \textbf{Fixe 5\%} & \textbf{Variable 2-15\%} \\
+\midrule
+Exemple : & & \\
+\quad Si taux externe $\uparrow$ & -- & Rachats $\uparrow$ (10\%) \\
+\quad Si performance $\downarrow$ & -- & Rachats $\uparrow$ (12\%) \\
+\quad Si marché stable & -- & Rachats normaux (5\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\begin{alertblock}{Impact sur le BE}
+\begin{itemize}
+    \item Rachats massifs en environnement défavorable : \textbf{perte de rentabilité}
+    \item Sous-estimation des rachats $\Rightarrow$ surestimation du BE
+    \item Nécessité d'une \textbf{loi de rachat dynamique} : $\lambda_t = f(\text{contexte}_t)$
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Synthèse : Pourquoi le Stochastique ?}
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+    % Box déterministe
+    \node[draw, fill=red!20, rectangle, minimum width=4cm, minimum height=2cm] (det) at (0,0) 
+    {\begin{tabular}{c}\textbf{Approche}\\\textbf{Déterministe}\end{tabular}};
+    % Flèches vers limites
+    \node[align=center] (lim1) at (-3,-2.5) {\scriptsize Options/\\\scriptsize Garanties};
+    \node[align=center] (lim2) at (0,-2.5) {\scriptsize Management\\\scriptsize Actions};
+    \node[align=center] (lim3) at (3,-2.5) {\scriptsize Comportement\\\scriptsize Assuré};
+    
+    \draw[->, thick, red] (det) -- (lim1);
+    \draw[->, thick, red] (det) -- (lim2);
+    \draw[->, thick, red] (det) -- (lim3);
+    % Box stochastique
+    \node[draw, fill=green!20, rectangle, minimum width=4cm, minimum height=2cm] (sto) at (8,0) 
+    {\begin{tabular}{c}\textbf{Approche}\\\textbf{Stochastique}\end{tabular}};
+    \node[align=center] (sol1) at (5,-2.5) {\scriptsize Distribution\\\scriptsize complète};
+    \node[align=center] (sol2) at (8,-2.5) {\scriptsize Scénarios\\\scriptsize multiples};
+    \node[align=center] (sol3) at (11,-2.5) {\scriptsize Décisions\\\scriptsize conditionnelles};
+    
+    \draw[->, thick, ForestGreen] (sto) -- (sol1);
+    \draw[->, thick, ForestGreen] (sto) -- (sol2);
+    \draw[->, thick, ForestGreen] (sto) -- (sol3);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5cm}
+\begin{block}{Réglementation Solvency II}
+Article 77 : "\textit{Le calcul du Best Estimate doit utiliser des méthodes et techniques actuarielles et statistiques \textbf{appropriées} à la nature, l'ampleur et la complexité des risques.}"
+
+$\Rightarrow$ \textbf{Obligation} d'approche stochastique pour contrats complexes.
+\end{block}
+\end{frame}
+
+% ============================================================
+% SECTION 2 : GÉNÉRATEURS DE SCÉNARIOS ÉCONOMIQUES
+% ============================================================
+\section{II. Générateurs de Scénarios Économiques (ESG)}
+
+\begin{frame}{Qu'est-ce qu'un ESG ?}
+\begin{definition}[Economic Scenario Generator]
+Un \textbf{ESG} est un outil mathématique qui génère des trajectoires aléatoires cohérentes de variables économiques (taux d'intérêt, actions, immobilier, inflation...) sur un horizon donné.
+\end{definition}
+
+\vspace{0.3cm}
+\begin{block}{Objectif}
+Produire un \textbf{ensemble de scénarios plausibles} représentant l'incertitude future, calibré sur :
+\begin{itemize}
+    \item Les données de marché observées (volatilités, corrélations)
+    \item Les contraintes réglementaires (EIOPA)
+\end{itemize}
+\end{block}
+\end{frame}
+
+% === NOUVELLE SLIDE (1/5) ===
+\begin{frame}{Distinction : Risque Neutre (Q) vs Monde Réel (P)}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{p{5.5cm}|p{5.5cm}}
+\toprule
+\rowcolor{blue!10} \textbf{Monde Réel ($\mathbb{P}$)} & \rowcolor{green!10} \textbf{Risque Neutre ($\mathbb{Q}$)} \\
+\midrule
+\textbf{Usage :} Modèles internes (SCR), ORSA, Business Plan. & \textbf{Usage :} Calcul du \textbf{Best Estimate} (Market Consistent). \\
+\midrule
+\textbf{Calibration :} Sur historique et vues économiques. & \textbf{Calibration :} Sur prix de marché (Swaptions, Courbe EIOPA). \\
+\midrule
+\textbf{Drift Actions :} $r_t + \text{Prime de risque}$ (ex: 7\%) & \textbf{Drift Actions :} $r_t$ (Taux sans risque). \\
+\midrule
+\textbf{Principe :} "Ce qui va probablement se passer". & \textbf{Principe :} "Pas d'arbitrage financier". \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{alertblock}{Attention !}
+Utiliser un calibrage "Monde Réel" (ex: actions à 7\%) pour le BE revient à \textbf{sous-estimer} massivement le coût des options et garanties.
+\end{alertblock}
+\end{frame}
+% ============================
+
+\begin{frame}{Composantes d'un ESG}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Variables économiques modélisées :}
+\begin{enumerate}
+    \item \textbf{Taux d'intérêt} (court, long terme)
+    \item \textbf{Actions} (indices boursiers)
+    \item \textbf{Immobilier}
+    \item \textbf{Spreads de crédit}
+    \item \textbf{Inflation}
+    \item \textbf{Taux de change} (pour multi-devises)
+\end{enumerate}
+
+\column{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+    \draw[->] (0,0) -- (5,0) node[right] {Temps};
+    \draw[->] (0,0) -- (0,3.5) node[above] {Taux};
+    
+    % Scénarios multiples
+    \draw[blue, thick] (0,1.5) .. controls (1,2) and (2,1.8) .. (3,2.2) .. controls (4,2.4) .. (5,2.5);
+    \draw[blue, thick] (0,1.5) .. controls (1,1.2) and (2,1) .. (3,0.8) .. controls (4,0.7) .. (5,0.5);
+    \draw[blue, thick] (0,1.5) .. controls (1,1.8) and (2,2.5) .. (3,2.8) .. controls (4,3) .. (5,3.2);
+    \draw[blue, thick] (0,1.5) .. controls (1,1.4) and (2,1.6) .. (3,1.5) .. controls (4,1.3) .. (5,1.2);
+    \node[blue] at (2.5,3.2) {\scriptsize $N$ scénarios};
+    \draw[dashed] (0,1.5) -- (5,1.5);
+    \node[right] at (5,1.5) {\scriptsize Moyenne};
+\end{tikzpicture}
+\end{center}
+\textit{Illustration : distribution de trajectoires}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{alertblock}{Contraintes de calibration}
+\begin{itemize}
+    \item \textbf{Cohérence temporelle} : pas d'arbitrage
+    \item \textbf{Corrélations} entre variables respectées
+    \item \textbf{Calibration marché} : courbes de taux, volatilités implicites
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Modèles de Taux d'Intérêt (1/3) : Vasicek}
+\begin{block}{Modèle de Vasicek (1977)}
+\[
+dr_t = a(b - r_t)dt + \sigma dW_t
+\]
+où :
+\begin{itemize}
+    \item $r_t$ : taux court à l'instant $t$
+    \item $a$ : vitesse de retour à la moyenne (\textit{mean reversion})
+    \item $b$ : taux long terme cible
+    \item $\sigma$ : volatilité instantanée
+    \item $W_t$ : mouvement brownien
+\end{itemize}
+\end{block}
+
+\textbf{Caractéristiques :}
+\begin{itemize}
+    \item[\checkmark] Retour à la moyenne : évite explosions irréalistes
+    \item[\checkmark] Solution analytique connue
+    \item[\texttimes] Taux \textbf{peuvent devenir négatifs} (problème en pratique)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Modèles de Taux d'Intérêt (2/3) : Cox-Ingersoll-Ross (CIR)}
+\begin{block}{Modèle CIR (1985)}
+\[
+dr_t = a(b - r_t)dt + \sigma \sqrt{r_t} dW_t
+\]
+\end{block}
+
+\textbf{Différence clé avec Vasicek :}
+\begin{itemize}
+    \item Volatilité proportionnelle à $\sqrt{r_t}$ : volatilité \textbf{diminue} quand taux baisse
+    \item Garantit des taux \textbf{toujours positifs} (sous condition $2ab \geq \sigma^2$)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Avantages CIR :}
+\begin{itemize}
+    \item[\checkmark] Taux positifs
+    \item[\checkmark] Réalisme accru
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Inconvénient :}
+\begin{itemize}
+    \item[\texttimes] Moins de flexibilité pour calibrer la courbe de taux
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Modèles de Taux d'Intérêt (3/3) : Hull-White}
+\begin{block}{Modèle Hull-White (1990)}
+\[
+dr_t = \left[\theta(t) - a \cdot r_t\right]dt + \sigma dW_t
+\]
+où $\theta(t)$ est une fonction déterministe du temps.
+\end{block}
+
+\textbf{Spécificité :}
+\begin{itemize}
+    \item Permet de \textbf{calibrer exactement} la courbe de taux observée à $t=0$
+    \item $\theta(t)$ ajusté pour reproduire les prix de marché (obligations, swaps)
+    \item Très utilisé en pratique pour Solvency II
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Utilisation Solvency II}
+\begin{itemize}
+    \item Calibration sur \textbf{courbe EIOPA} sans risque
+    \item Extension : Hull-White 2 facteurs pour mieux capturer la forme de la courbe
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Comparaison des Modèles de Taux}
+\begin{table}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Critère} & \textbf{Vasicek} & \textbf{CIR} & \textbf{Hull-White} \\
+\midrule
+Retour moyenne & \checkmark & \checkmark & \checkmark \\
+Taux positifs & \texttimes & \checkmark & \texttimes \\
+Calibration courbe & \texttimes & \texttimes & \checkmark \\
+Solution analytique & \checkmark & \checkmark & \checkmark \\
+Complexité & + & ++ & +++ \\
+\midrule
+\rowcolor{green!20}
+\textbf{Usage S2} & Rare & Occasionnel & \textbf{Fréquent} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\begin{alertblock}{Recommandation pratique}
+\textbf{Hull-White} est le modèle de référence pour Solvency II en raison de sa capacité à reproduire les courbes EIOPA.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Modèles d'Actions : Mouvement Brownien Géométrique}
+\begin{block}{Modèle de Black-Scholes (1973)}
+\[
+dS_t = \mu S_t dt + \sigma S_t dW_t
+\]
+où :
+\begin{itemize}
+    \item $S_t$ : prix de l'action à l'instant $t$
+    \item $\mu$ : rendement moyen (\textit{drift})
+    \item $\sigma$ : volatilité
+\end{itemize}
+
+Solution explicite :
+\[
+S_t = S_0 \exp\left[\left(\mu - \frac{\sigma^2}{2}\right)t + \sigma W_t\right]
+\]
+\end{block}
+
+\textbf{Propriétés :}
+\begin{itemize}
+    \item Prix toujours positifs
+    \item Distribution log-normale
+    \item Volatilité constante (limitation réaliste)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Extensions : Modèles d'Actions Plus Réalistes}
+\textbf{Limites du modèle de Black-Scholes :}
+\begin{itemize}
+    \item Volatilité constante $\neq$ réalité (volatility smile)
+    \item Pas de sauts brutaux (krachs)
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Modèles avancés :}
+\begin{enumerate}
+    \item \textbf{Heston (1993)} : volatilité stochastique
+    \[
+    \begin{cases}
+    dS_t = \mu S_t dt + \sqrt{v_t} S_t dW^{(1)}_t \\
+    dv_t = \kappa(\theta - v_t)dt + \xi \sqrt{v_t} dW^{(2)}_t
+    \end{cases}
+    \]
+    où $v_t$ est la variance instantanée (stochastique).
+    \item \textbf{Merton Jump-Diffusion} : ajout de sauts discrets
+    \[
+    dS_t = \mu S_t dt + \sigma S_t dW_t + S_t dJ_t
+    \]
+    où $J_t$ est un processus de Poisson.
+\end{enumerate}
+
+\vspace{0.2cm}
+\textit{Ces modèles sont plus complexes mais capturent mieux les phénomènes extrêmes.}
+\end{frame}
+
+\begin{frame}{Simulation Monte-Carlo : Principe}
+\begin{block}{Méthode de Monte-Carlo}
+Pour calculer une espérance $\E[f(X)]$ où $X$ est aléatoire :
+\begin{enumerate}
+    \item Générer $N$ réalisations indépendantes : $X_1, X_2, \ldots, X_N$
+    \item Calculer la moyenne empirique :
+    \[
+    \E[f(X)] \approx \frac{1}{N}\sum_{i=1}^{N} f(X_i)
+    \]
+\end{enumerate}
+\end{block}
+
+\vspace{0.3cm}
+\textbf{Application au BE :}
+\begin{itemize}
+    \item Générer $N$ scénarios économiques (taux, actions, ...)
+    \item Pour chaque scénario $i$ : calculer $\BE_i$ (projection des flux)
+    \item Best Estimate stochastique :
+    \[
+    \BE_{\text{stoch}} = \frac{1}{N}\sum_{i=1}^{N} \BE_i
+    \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Discrétisation d'Euler : Implémentation Pratique}
+Les modèles continus (SDE) doivent être discrétisés pour simulation informatique.
+\begin{block}{Schéma d'Euler}
+Pour $dr_t = \mu(r_t, t)dt + \sigma(r_t, t)dW_t$, on approxime :
+\[
+r_{t+\Delta t} = r_t + \mu(r_t, t)\Delta t + \sigma(r_t, t)\sqrt{\Delta t} \cdot Z
+\]
+où $Z \sim \mathcal{N}(0,1)$ (loi normale centrée réduite).
+\end{block}
+
+\vspace{0.3cm}
+\textbf{Exemple : Vasicek avec $\Delta t = 1$ mois}
+\[
+r_{t+1} = r_t + a(b - r_t) \times \frac{1}{12} + \sigma \sqrt{\frac{1}{12}} \cdot Z_t
+\]
+
+\begin{itemize}
+    \item $Z_t$ : tirage aléatoire $\sim \mathcal{N}(0,1)$ (fonction \texttt{np.random.normal()} en Python)
+    \item Itérer sur $t = 0, 1, 2, \ldots, T$ pour obtenir la trajectoire complète
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Code Python : Simulation Vasicek}
+\begin{lstlisting}[style=pythonstyle]
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parametres Vasicek
+a = 0.3       # Vitesse retour moyenne
+b = 0.03      # Taux long terme (3%)
+sigma = 0.01  # Volatilite
+r0 = 0.02     # Taux initial
+T = 40        # Horizon (annees)
+dt = 1/12     # Pas mensuel
+N = int(T/dt) # Nombre de pas
+
+# Simulation d'une trajectoire
+r = np.zeros(N+1)
+r[0] = r0
+for t in range(N):
+    Z = np.random.normal(0, 1)
+    r[t+1] = r[t] + a*(b - r[t])*dt + sigma*np.sqrt(dt)*Z
+
+# Visualisation
+plt.plot(r)
+plt.xlabel('Mois')
+plt.ylabel('Taux court')
+plt.title('Simulation Vasicek - 1 trajectoire')
+plt.show()
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Calibration des ESG}
+\begin{block}{Calibration = Ajuster les paramètres}
+Pour que les scénarios générés soient cohérents avec le marché observé.
+\end{block}
+
+\textbf{Données utilisées :}
+\begin{itemize}
+    \item \textbf{Courbe de taux EIOPA} (sans risque) : fixe $b$, $\theta(t)$ dans Hull-White
+    \item \textbf{Volatilités implicites} (swaptions, caps/floors) : fixe $\sigma$
+    \item \textbf{Indices actions historiques} : $\mu$, $\sigma$ pour actions
+    \item \textbf{Corrélations observées} entre taux et actions
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Méthode de calibration}
+\begin{enumerate}
+    \item Optimisation des paramètres pour minimiser l'écart entre prix modèle et prix marché
+    \item Méthodes : moindres carrés, maximum de vraisemblance
+    \item Outils : logiciels spécialisés (Prophet, Barrie+Hibbert, AAA, ...)
+\end{enumerate}
+\end{exampleblock}
+\end{frame}
+
+% === NOUVELLE SLIDE (2/5) ===
+\begin{frame}{Qualité d'un ESG : Le Test de Martingale}
+\begin{block}{Le concept du Test de Martingale}
+En univers Risque Neutre, le prix actualisé de tout actif doit être égal à son prix initial (en moyenne). C'est une condition nécessaire d'absence d'arbitrage.
+\end{block}
+
+\vspace{0.3cm}
+\textbf{Le Test "1 pour 1" (Zero Coupon Test) :}
+Pour valider la diffusion des taux, on vérifie que la moyenne des facteurs d'actualisation stochastiques restitue la courbe des prix ZC initiale :
+\[
+P(0, T)_{\text{Marché}} \approx \frac{1}{N} \sum_{i=1}^{N} \exp\left(-\sum_{t=0}^{T-1} r_t^{(i)} \Delta t\right)
+\]
+
+\vspace{0.3cm}
+\begin{exampleblock}{En pratique lors du TD}
+Si après 1000 scénarios, votre prix calculé s'éloigne de plus de 1\% ou 2\% du prix théorique, votre ESG est :
+\begin{itemize}
+    \item Soit mal calibré (paramètres erronés)
+    \item Soit le nombre de scénarios est insuffisant (variance trop forte)
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+% ============================
+
+% ============================================================
+% SECTION 3 : VALORISATION STOCHASTIQUE
+% ============================================================
+\section{III. Valorisation Stochastique du BE}
+
+\begin{frame}{Principe de Valorisation Stochastique}
+\begin{definition}[BE Stochastique]
+\[
+\BE_{\text{stoch}} = \frac{1}{N_{\text{scen}}}\sum_{i=1}^{N_{\text{scen}}} \BE_i
+\]
+où $\BE_i$ est le Best Estimate calculé dans le scénario économique $i$.
+\end{definition}
+
+\vspace{0.3cm}
+\textbf{Étapes de calcul :}
+\begin{enumerate}
+    \item \textbf{Générer $N$ scénarios} économiques (taux, actions) via ESG
+    \item Pour chaque scénario $i$ :
+    \begin{itemize}
+        \item Projeter les flux futurs (prestations, primes, frais)
+        \item Appliquer les management actions conditionnelles
+        \item Actualiser les flux avec la courbe de taux du scénario $i$
+        \item Obtenir $\BE_i$
+    \end{itemize}
+    \item \textbf{Moyenne} : $\BE_{\text{stoch}} = \bar{\BE}$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Exemple : Contrat Euro avec Garantie Plancher}
+\textbf{Caractéristiques du contrat :}
+\begin{itemize}
+    \item PM initiale : 100 k€
+    \item Taux Minimum Garanti (TMG) : 1,5\% par an
+    \item Durée : 10 ans
+    \item Participation aux bénéfices (PB) : 85\% des rendements au-dessus du TMG
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Actifs sous-jacents :}
+\begin{itemize}
+    \item 60\% obligations (rendement = taux sans risque $r_t$)
+    \item 40\% actions (rendement stochastique $\mu + \sigma W_t$)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{alertblock}{Question}
+Quelle est la valeur du Best Estimate en tenant compte de la garantie plancher ?
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Projection dans un Scénario Donné}
+\textbf{Scénario $i$ : évolution du rendement actifs $R^{(i)}_t$}
+
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Année} & \textbf{PM début} & \textbf{$R^{(i)}_t$} & \textbf{TMG} & \textbf{Reval. assurée} & \textbf{PM fin} \\
+\midrule
+1 & 100 & 0,5\% & 1,5\% & 1,5\% & 101,5 \\
+2 & 101,5 & 3,2\% & 1,5\% & 2,95\% & 104,5 \\
+3 & 104,5 & -1\% & 1,5\% & 1,5\% & 106,1 \\
+... & ... & ... & ... & ... & ... \\
+10 & ... & 2\% & 1,5\% & 1,93\% & 130,2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.2cm}
+\textbf{Calculs :}
+\begin{itemize}
+    \item Si $R^{(i)}_t < \text{TMG}$ : revalorisation = TMG (garantie activée)
+    \item Si $R^{(i)}_t > \text{TMG}$ : revalorisation = TMG $+ 85\% \times (R^{(i)}_t - \text{TMG})$
+\end{itemize}
+
+\vspace{0.2cm}
+Flux sortant année 10 = 130,2 k€ $\Rightarrow$ actualisé :
+\[
+\BE_i = \frac{130,2}{(1+r_{10})^{10}}
+\]
+\end{frame}
+
+\begin{frame}{Distribution du BE sur $N$ Scénarios}
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+    % Histogramme stylisé
+    \draw[->] (0,0) -- (8,0) node[right] {$\BE_i$ (k€)};
+    \draw[->] (0,0) -- (0,4) node[above] {Fréquence};
+    
+    % Barres
+    \fill[blue!30] (1,0) rectangle (1.5,0.8);
+    \fill[blue!30] (1.5,0) rectangle (2,1.5);
+    \fill[blue!30] (2,0) rectangle (2.5,2.5);
+    \fill[blue!30] (2.5,0) rectangle (3,3.2);
+    \fill[blue!30] (3,0) rectangle (3.5,3.5);
+    \fill[blue!30] (3.5,0) rectangle (4,3.2);
+    \fill[blue!30] (4,0) rectangle (4.5,2.5);
+    \fill[blue!30] (4.5,0) rectangle (5,1.5);
+    \fill[blue!30] (5,0) rectangle (5.5,0.8);
+    
+    % Moyenne
+    \draw[red, thick, dashed] (3.25,0) -- (3.25,3.8) node[above] {$\E[\BE]$};
+    % Annotations
+    \node at (1.25,-0.5) {\scriptsize 95};
+    \node at (3.25,-0.5) {\scriptsize 105};
+    \node at (5.25,-0.5) {\scriptsize 115};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Interprétation}
+\begin{itemize}
+    \item Distribution étalée : impact de la variabilité des rendements actifs
+    \item \textbf{Moyenne} = BE stochastique (ex: 105 k€)
+    \item Queue de distribution gauche : scénarios défavorables (garantie coûteuse)
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Convergence Monte-Carlo : Nombre de Scénarios}
+\begin{block}{Erreur de Monte-Carlo}
+L'erreur standard de l'estimateur est :
+\[
+\text{Erreur} \approx \frac{\sigma_{\BE}}{\sqrt{N_{\text{scen}}}}
+\]
+où $\sigma_{\BE}$ est l'écart-type des $\BE_i$.
+\end{block}
+
+\textbf{Conséquence :}
+\begin{itemize}
+    \item Pour diviser l'erreur par 2 : multiplier $N$ par 4
+    \item Pour diviser l'erreur par 10 : multiplier $N$ par 100
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{table}
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{$N_{\text{scen}}$} & \textbf{Erreur relative} & \textbf{Usage} \\
+\midrule
+100 & $\sim$ 10\% & Tests rapides \\
+1 000 & $\sim$ 3\% & Développement \\
+\rowcolor{green!20}
+5 000 - 10 000 & $<$ 1\% & \textbf{Production S2} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Management Actions : Décisions Conditionnelles}
+\textbf{Exemples de management actions :}
+
+\begin{enumerate}
+    \item \textbf{Allocation dynamique Actif-Passif :}
+    \begin{itemize}
+        \item Si rendement actifs $<$ TMG : vendre actions, acheter obligations sûres
+        \item Si contexte favorable : augmenter exposition actions
+    \end{itemize}
+    
+    \item \textbf{Taux de Participation aux Bénéfices (PB) :}
+    \begin{itemize}
+        \item Si réserves PPB élevées : distribuer PB généreuse
+        \item Si réserves faibles : PB minimale
+    \end{itemize}
+    
+    \item \textbf{Gestion des rachats :}
+    \begin{itemize}
+        \item Offrir bonus de fidélité si risque de rachats massifs
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.3cm}
+\begin{alertblock}{Implémentation}
+Les management actions doivent être \textbf{codées explicitement} dans la projection de chaque scénario :
+\begin{itemize}
+    \item Règles "si-alors" conditionnelles
+    \item Tests de variables d'état (réserves, rendements cumulés, ...)
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Pseudo-code : Projection avec Management Actions}
+\begin{lstlisting}[style=pythonstyle, basicstyle=\ttfamily\tiny]
+for scenario in range(N_scenarios):
+    # Initialisation
+    PM = 100  # Provision Mathematique
+    PPB = 0   # Provision PB differee
+    
+    for annee in range(1, duree+1):
+        # 1. Calculer rendement actifs (depend du scenario)
+        rend_actifs = calc_rendement(scenario, annee)
+        
+        # 2. Management Action : allocation dynamique
+        if rend_actifs < TMG:
+            pct_actions = 20%  # Reduction exposition actions
+        else:
+            pct_actions = 40%  # Normal
+        
+        # 3. Calcul revalorisation contrat
+        if rend_actifs < TMG:
+            reval_contrat = TMG  # Garantie activee
+            cout_garantie = PM * (TMG - rend_actifs)
+            PPB -= cout_garantie  # Prelevement sur PPB
+        else:
+            surplus = rend_actifs - TMG
+            PB_distribuee = 0.85 * surplus
+            reval_contrat = TMG + PB_distribuee
+            PPB += 0.15 * surplus  # Dotation PPB
+        
+        # 4. Mise a jour PM
+        PM = PM * (1 + reval_contrat)
+    
+    # Actualisation flux final
+    BE_scenario[scenario] = PM / (1 + taux_actualisation)**duree
+
+# BE stochastique = moyenne
+BE_stoch = np.mean(BE_scenario)
+\end{lstlisting}
+\end{frame}
+
+% === NOUVELLE SLIDE (3/5) ===
+\begin{frame}{Défis de Production : Nested Simulations vs Proxies}
+\textbf{Le problème du calcul du SCR :}
+Le SCR est une VaR à 1 an des Fonds Propres (NAV).
+\begin{itemize}
+    \item Pour calculer la NAV en $t=1$ (dans un scénario de choc), il faut recalculer le BE.
+    \item Recalculer le BE implique de relancer 1000 scénarios (de $t=1$ à $t=T$).
+\end{itemize}
+
+\vspace{0.2cm}
+\textbf{Complexité "Stochastic in Stochastic" (Nested) :}
+\[ \text{Complexité} = N_{\text{scénarios SCR}} \times N_{\text{scénarios BE}} \approx 100\,000 \times 1\,000 = 10^8 \text{ projections} \]
+$\Rightarrow$ \alert{Impossible} en temps de calcul raisonnable.
+
+\vspace{0.3cm}
+\begin{block}{La solution industrielle : Les Proxies (Metamodèles)}
+On remplace le moteur de projection par une fonction mathématique $f$ rapide à évaluer :
+\[ \text{NAV}(X_{\text{eco}}) \approx f(\text{Taux}, \text{Actions}, \text{Volatilité}...) \]
+Techniques : \textbf{Least Squares Monte Carlo (LSMC)}, \textbf{Polynômes de Réplication}.
+\end{block}
+\end{frame}
+% ============================
+
+\begin{frame}{Limites et Améliorations}
+\textbf{Défis de la valorisation stochastique :}
+
+\begin{itemize}
+    \item[\texttimes] \textbf{Temps de calcul} : projection de milliers de scénarios $\times$ millions de polices
+    \item[\texttimes] \textbf{Complexité des modèles} : nombreux paramètres à calibrer
+    \item[\texttimes] \textbf{Modèles imparfaits} : hypothèses simplificatrices (ex: lois de rachats)
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Techniques d'accélération :}
+
+\begin{enumerate}
+    \item \textbf{Model Points} : regrouper polices similaires (déjà vu séance 4)
+    \item \textbf{Least Squares Monte-Carlo (LSMC)} : régression pour approximer valeurs futures
+    \item \textbf{Réplication de portefeuille} : approximer passif par portefeuille d'actifs répliquant
+    \item \textbf{Calcul parallèle / GPU} : exploiter puissance de calcul moderne
+\end{enumerate}
+
+\vspace{0.3cm}
+\begin{exampleblock}{En pratique}
+Compromis entre précision et temps de calcul : valorisation détaillée trimestrielle + approximations mensuelles.
+\end{exampleblock}
+\end{frame}
+
+% ============================================================
+% SECTION 4 : ALM EN ASSURANCE VIE
+% ============================================================
+\section{IV. Asset-Liability Management (ALM)}
+
+\begin{frame}{Qu'est-ce que l'ALM ?}
+\begin{definition}[ALM - Gestion Actif-Passif]
+L'\textbf{ALM} est l'ensemble des stratégies et techniques permettant de gérer conjointement les actifs (placements) et les passifs (engagements) pour :
+\begin{itemize}
+    \item Minimiser les risques de désadéquation
+    \item Maximiser la rentabilité ajustée au risque
+    \item Assurer la solvabilité à long terme
+\end{itemize}
+\end{definition}
+
+\vspace{0.3cm}
+\begin{block}{Contexte Assurance Vie}
+\begin{itemize}
+    \item \textbf{Passif} : engagements de long terme (20-40 ans) avec garanties
+    \item \textbf{Actif} : portefeuille d'obligations, actions, immobilier
+    \item \textbf{Objectif} : faire en sorte que les actifs "financent" correctement les passifs
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Les Risques en ALM}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{1. Risque de Taux :}
+\begin{itemize}
+    \item Baisse des taux : réinvestissement à taux faibles
+    \item Hausse des taux : moins-values latentes sur obligations
+\end{itemize}
+
+\textbf{2. Risque de Liquidité :}
+\begin{itemize}
+    \item Rachats massifs imprévus
+    \item Nécessité de vendre actifs en perte
+\end{itemize}
+
+\textbf{3. Risque de Marché :}
+\begin{itemize}
+    \item Chute des marchés actions
+    \item Impact sur capacité à servir PB
+\end{itemize}
+
+\column{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}[scale=0.6]
+    % Schéma Actif-Passif
+    \node[draw, fill=blue!20, rectangle, minimum width=3cm, minimum height=1.5cm] (actif) at (0,2) {\textbf{ACTIF}};
+    \node[draw, fill=red!20, rectangle, minimum width=3cm, minimum height=1.5cm] (passif) at (0,-2) {\textbf{PASSIF}};
+    
+    \node[align=center] at (0,2) {\scriptsize Obligations\\\scriptsize Actions\\\scriptsize Immobilier};
+    \node[align=center] at (0,-2) {\scriptsize Provisions\\\scriptsize Mathématiques\\\scriptsize + Risk Margin};
+    
+    % Flèches risques
+    \draw[->, thick, red] (actif) -- (passif) node[midway, right] {\scriptsize Matching};
+    \draw[->, thick, orange, dashed] (3,2) -- (3,-2) node[midway, right] {\scriptsize Risques};
+\end{tikzpicture}
+\end{center}
+\end{columns}
+\end{frame}
+
+% === NOUVELLE SLIDE (4/5) ===
+\begin{frame}{L'ALM comme outil d'optimisation du SCR}
+\textbf{Le lien direct ALM $\leftrightarrow$ SCR :}
+\begin{itemize}
+    \item Le \textbf{SCR Taux} correspond à la perte maximale de Fonds Propres (NAV) en cas de choc de taux.
+    \item $\text{NAV} = \text{Valeur Actif} - \text{Best Estimate}$.
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{block}{Mécanisme d'immunisation}
+Si l'ALM est parfaite (Duration Gap $\approx 0$ et Convexité maîtrisée) :
+\[ \Delta \text{Actif} \approx \Delta \text{Best Estimate} \]
+\[ \Rightarrow \Delta \text{NAV} \approx 0 \]
+\end{block}
+
+\vspace{0.3cm}
+\begin{alertblock}{Conséquence stratégique}
+Une bonne gestion ALM ne sert pas uniquement à sécuriser les engagements, elle permet de \textbf{réduire drastiquement le besoin en capital} (SCR Market).
+\end{alertblock}
+\end{frame}
+% ============================
+
+\begin{frame}{Duration Gap : Concept Clé}
+\begin{definition}[Duration]
+La duration d'un flux de paiements est la moyenne pondérée des échéances, pondérée par les valeurs actuelles :
+\[
+D = \frac{\sum_{t} t \cdot \text{VA}(F_t)}{\sum_{t} \text{VA}(F_t)}
+\]
+\end{definition}
+
+\vspace{0.3cm}
+\begin{block}{Duration Gap}
+\[
+\text{Duration Gap} = D_{\text{Actif}} - D_{\text{Passif}}
+\]
+
+\textbf{Interprétation :}
+\begin{itemize}
+    \item Si Gap $> 0$ : actifs plus longs que passifs $\Rightarrow$ risque si taux monte
+    \item Si Gap $< 0$ : actifs plus courts que passifs $\Rightarrow$ risque de réinvestissement
+    \item \textbf{Objectif} : Gap $\approx 0$ pour immunisation
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Exemple Chiffré : Duration Gap}
+\textbf{Passif : Rente viagère}
+\begin{itemize}
+    \item Paiements annuels de 10 k€ sur 20 ans
+    \item Taux d'actualisation 2\%
+    \item Calcul $\Rightarrow$ $D_{\text{Passif}} \approx 12$ ans
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Actif : Obligations}
+\begin{itemize}
+    \item Portefeuille d'obligations de maturités variées
+    \item Duration moyenne du portefeuille : $D_{\text{Actif}} = 8$ ans
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{alertblock}{Calcul du Gap}
+\[
+\text{Gap} = 8 - 12 = -4 \text{ ans}
+\]
+$\Rightarrow$ Actifs trop courts : \textbf{risque de réinvestissement} si taux baisse.
+\end{alertblock}
+
+\textbf{Action ALM :} Acheter obligations plus longues (maturité 15-20 ans) pour allonger $D_{\text{Actif}}$.
+\end{frame}
+
+\begin{frame}{Stratégies d'Immunisation}
+\textbf{Objectif : } Rendre le bilan insensible aux variations de taux.
+\begin{block}{Immunisation de Redington (1952)}
+Conditions pour immunisation parfaite :
+\begin{enumerate}
+    \item \textbf{Valeurs actuelles égales} : $\text{VA}_{\text{Actif}} = \text{VA}_{\text{Passif}}$
+    \item \textbf{Durations égales} : $D_{\text{Actif}} = D_{\text{Passif}}$
+    \item \textbf{Convexité supérieure} : $C_{\text{Actif}} > C_{\text{Passif}}$
+\end{enumerate}
+\end{block}
+
+\vspace{0.3cm}
+\textbf{Explication intuitive :}
+\begin{itemize}
+    \item Condition 1 : adéquation initiale
+    \item Condition 2 : sensibilité identique aux petits chocs de taux
+    \item Condition 3 : protection supplémentaire contre grands chocs (convexité = courbure)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Limite}
+Immunisation parfaite difficile en pratique : nécessite rééquilibrage fréquent du portefeuille.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Convexité : Concept Avancé}
+\begin{definition}[Convexité]
+Mesure la courbure de la relation prix-taux :
+\[
+C = \frac{1}{P}\frac{\partial^2 P}{\partial r^2}
+\]
+\end{definition}
+
+\textbf{Impact :}
+\begin{itemize}
+    \item Convexité élevée $\Rightarrow$ gains asymétriques
+    \item Si taux baisse : prix monte beaucoup (bon)
+    \item Si taux monte : prix baisse peu (protection)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+    \draw[->] (0,0) -- (5,0) node[right] {Taux};
+    \draw[->] (0,0) -- (0,4) node[above] {Prix};
+    
+    % Courbe convexe
+    \draw[thick, blue] (0.5,3.5) .. controls (2.5,2) .. (4.5,1);
+    % Tangente
+    \draw[dashed, red] (0,4) -- (5,0.5);
+    
+    \node[blue] at (1,3) {Convexe};
+    \node[red] at (3.5,0.3) {Linéaire};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Cash-Flow Matching vs Duration Matching}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Cash-Flow Matching :}
+\begin{itemize}
+    \item Faire correspondre \textbf{exactement} chaque flux d'actif à chaque flux de passif
+    \item Très contraignant
+    \item Immunisation parfaite
+\end{itemize}
+
+\textbf{Avantages :}
+\begin{itemize}
+    \item[\checkmark] Risque minimal
+\end{itemize}
+
+\textbf{Inconvénients :}
+\begin{itemize}
+    \item[\texttimes] Peu flexible
+    \item[\texttimes] Rendement sous-optimal
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Duration Matching :}
+\begin{itemize}
+    \item Égaliser les \textbf{durations} seulement
+    \item Plus flexible
+    \item Immunisation approximative
+\end{itemize}
+
+\textbf{Avantages :}
+\begin{itemize}
+    \item[\checkmark] Meilleur rendement
+    \item[\checkmark] Gestion simplifiée
+\end{itemize}
+
+\textbf{Inconvénients :}
+\begin{itemize}
+    \item[\texttimes] Risque résiduel
+    \item[\texttimes] Nécessite rééquilibrage
+\end{itemize}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{exampleblock}{En pratique}
+Compromis hybride : duration matching avec contraintes de liquidité (cash-flow partiel).
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Matching Adjustment (MA) et Volatility Adjustment (VA)}
+\textbf{Mécanismes Solvency II pour stabiliser le bilan :}
+
+\begin{block}{Matching Adjustment (MA)}
+\begin{itemize}
+    \item Permet d'actualiser le passif avec un taux \textbf{supérieur} au taux sans risque
+    \item Applicable si \textbf{adossement actif-passif très strict} (cash-flow matching)
+    \item Réduit artificiellement le BE $\Rightarrow$ améliore ratio de solvabilité
+\end{itemize}
+Formule :
+\[
+r_{\text{actualisation}} = r_{\text{EIOPA}} + \text{MA}
+\]
+où MA = spread actifs - spread de risque de crédit.
+\end{block}
+
+\vspace{0.3cm}
+\begin{block}{Volatility Adjustment (VA)}
+\begin{itemize}
+    \item Ajustement symétrique de la courbe de taux pour absorber volatilité excessive
+    \item Automatique (pas de conditions strictes comme MA)
+    \item Effet plus faible que MA
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Avantages et Critiques de MA/VA}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Avantages :}
+\begin{itemize}
+    \item[\checkmark] Stabilité du bilan face aux fluctuations de spread
+    \item[\checkmark] Évite pro-cyclicité
+    \item[\checkmark] Réduit artificialité de la valorisation économique pure
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Critiques :}
+\begin{itemize}
+    \item[\texttimes] Masque une partie du risque réel
+    \item[\texttimes] Complexité réglementaire
+    \item[\texttimes] Asymétrie : bénéfice en période de stress, mais pas en période favorable
+\end{itemize}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{alertblock}{Réforme Solvency II 2025-2026}
+\begin{itemize}
+    \item Révision des règles de MA (assouplissement conditions)
+    \item Ajustements de VA pour mieux refléter conditions de marché
+    \item Objectif : encourager investissements long terme (infrastructures, transition énergétique)
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{ALM Dynamique : Approche Stochastique}
+\textbf{ALM classique : } Statique, basée sur durations instantanées.
+\textbf{ALM dynamique : } Intègre évolution stochastique des variables économiques.
+
+\vspace{0.3cm}
+\begin{block}{Principe}
+\begin{enumerate}
+    \item Simuler $N$ scénarios économiques (taux, actions)
+    \item Pour chaque scénario :
+    \begin{itemize}
+        \item Projeter actif et passif simultanément
+        \item Appliquer règles de gestion d'actifs conditionnelles (rééquilibrage)
+        \item Calculer ratio de couverture, SCR, ...
+    \end{itemize}
+    \item Analyser distribution des résultats :
+    \begin{itemize}
+        \item VaR du ratio de couverture
+        \item Probabilité de déficit
+    \end{itemize}
+\end{enumerate}
+\end{block}
+
+\vspace{0.3cm}
+\textbf{Avantage : } Capture interactions complexes entre actifs, passifs et décisions de gestion.
+\end{frame}
+
+\begin{frame}{Indicateurs ALM Clés}
+\begin{table}
+\centering
+\small
+\begin{tabular}{lp{6cm}c}
+\toprule
+\textbf{Indicateur} & \textbf{Définition} & \textbf{Cible} \\
+\midrule
+Duration Gap & $D_A - D_P$ & $\approx 0$ \\
+\midrule
+Ratio de couverture & $\frac{\text{Valeur Actifs}}{\text{Valeur Passifs}}$ & $> 1$ \\
+\midrule
+ALM Gap (VaR) & VaR 99,5\% de $(A - P)$ & Minimiser \\
+\midrule
+Liquidité & \% actifs liquides sur total & $> 20\%$ \\
+\midrule
+Taux de recouvrement & Capacité à honorer engagements en stress & $100\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Dashboard ALM}
+Les assureurs utilisent des tableaux de bord temps réel avec ces indicateurs pour piloter l'ALM.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Cas Pratique : Étude ALM Simplifiée}
+\textbf{Contexte :}
+\begin{itemize}
+    \item Assureur Vie avec BE = 1 000 M€, Duration passif = 15 ans
+    \item Actifs : 1 050 M€, Duration actif = 10 ans
+    \item Stress taux : +100 bp (hausse 1\%)
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Impact sur Actifs :}
+\[
+\Delta A \approx -D_A \times \Delta r \times A = -10 \times 0.01 \times 1050 = -105 \text{ M€}
+\]
+$\Rightarrow$ Actifs = 945 M€
+
+\vspace{0.3cm}
+\textbf{Impact sur Passifs :}
+\[
+\Delta P \approx -D_P \times \Delta r \times P = -15 \times 0.01 \times 1000 = -150 \text{ M€}
+\]
+$\Rightarrow$ Passifs = 850 M€
+
+\vspace{0.3cm}
+\begin{alertblock}{Conclusion}
+Ratio couverture passe de $\frac{1050}{1000} = 1.05$ à $\frac{945}{850} = 1.11$. \textbf{Amélioration !}
+
+$\Rightarrow$ Duration gap négatif protège en cas de hausse de taux.
+\end{alertblock}
+\end{frame}
+
+% ============================================================
+% SECTION 5 : SYNTHÈSE ET EXERCICES
+% ============================================================
+\section{Synthèse et Travaux Dirigés}
+
+\begin{frame}{Synthèse de la Séance}
+\textbf{Concepts clés abordés :}
+
+\begin{enumerate}
+    \item \textbf{Limites déterministes} : insuffisance pour options, garanties, management actions
+    \item \textbf{ESG} : Calibration Risque Neutre, Test de Martingale
+    \item \textbf{Monte-Carlo} : simulation de scénarios multiples pour valorisation
+    \item \textbf{BE stochastique} : moyenne des BE sur tous scénarios
+    \item \textbf{ALM} : gestion actif-passif, duration gap, immunisation et lien SCR
+    \item \textbf{Proxies} : LSMC pour accélérer les calculs
+\end{enumerate}
+
+\vspace{0.3cm}
+\begin{block}{Compétences acquises}
+\begin{itemize}
+    \item Comprendre la nécessité d'approche stochastique
+    \item Implémenter simulations Monte-Carlo en Python
+    \item Analyser risques ALM et proposer stratégies d'immunisation
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Transition vers les TD}
+\textbf{Exemples de Travaux Dirigés :}
+
+\begin{block}{Exercice 5.1 : Simulations Monte-Carlo - Garantie Plancher }
+\begin{itemize}
+    \item Implémenter ESG Hull-White en Python (avec test de martingale !)
+    \item Simuler 1 000 scénarios de taux
+    \item Projeter contrat euro avec TMG
+    \item Calculer BE stochastique et comparer à approche déterministe
+\end{itemize}
+\end{block}
+
+\begin{block}{Exercice 5.2 : Management Actions et PB Dynamique }
+\begin{itemize}
+    \item Modéliser règles de PB conditionnelles
+    \item Intégrer Provision pour PB Différée (PPB)
+    \item Analyser impact sur distribution du BE
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Vers les TD}
+\begin{block}{Exercice 5.3 : Duration Gap et Stratégie ALM (35 min)}
+\begin{itemize}
+    \item Calculer durations actif et passif
+    \item Simuler impact de chocs de taux
+    \item Proposer allocation optimale pour immunisation
+\end{itemize}
+\end{block}
+
+
+\vspace{0.5cm}
+vous pouvez vous inspirer du notebook proposé.
+\end{frame}
+
+\begin{frame}{Conseils Pratiques pour les TD}
+\textbf{Pour réussir les exercices :}
+
+\begin{itemize}
+    \item \textbf{Bien lire les énoncés} : hypothèses, paramètres donnés
+    \item \textbf{Décomposer les problèmes} : étapes simples plutôt qu'un gros code
+    \item \textbf{Vérifier la cohérence} : utiliser le Test de Martingale
+    \item \textbf{Performance Python} : Utiliser la vectorisation
+    \item \textbf{Visualiser les résultats} : matplotlib pour comprendre distributions
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{alertblock}{Piège courant}
+Oublier d'actualiser les flux futurs $\Rightarrow$ toujours diviser par $(1+r)^t$ !
+\end{alertblock}
+
+\vspace{0.3cm}
+% \begin{exampleblock}{Astuce Python}
+% \texttt{np.random.seed(42)} au début pour reproductibilité des simulations aléatoires.
+% \end{exampleblock}
+\end{frame}
+
+% === NOUVELLE SLIDE (5/5) ===
+\begin{frame}[fragile]{Bonnes Pratiques de Code : La Vectorisation}
+\textbf{Pourquoi vectoriser ?}
+Python est lent sur les boucles \texttt{for}. NumPy est optimisé en C.
+Le temps de calcul peut être divisé par 100 !
+
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{\textcolor{red}{Mauvaise pratique (Lent)}}
+\begin{lstlisting}[style=pythonstyle]
+# Générer 1000 scénarios
+R = []
+for i in range(1000):
+    scenario = []
+    for t in range(40):
+        val = generer_un_pas()
+        scenario.append(val)
+    R.append(scenario)
+\end{lstlisting}
+
+\column{0.5\textwidth}
+\textbf{\textcolor{green}{Bonne pratique (Rapide)}}
+\begin{lstlisting}[style=pythonstyle]
+# Générer tout d'un coup
+# (N_scen, N_steps)
+Z = np.random.normal(0, 1, (1000, 40))
+# Calcul vectoriel
+R = r0 + drift * dt + sigma * Z
+\end{lstlisting}
+\end{columns}
+
+\vspace{0.3cm}
+\textit{En entretien technique (assurance/banque), la non-vectorisation est souvent éliminatoire.}
+\end{frame}
+% ============================
+
+\begin{frame}{Pour Aller Plus Loin}
+\textbf{Lectures recommandées :}
+
+\begin{enumerate}
+    \item \textit{Interest Rate Models - Theory and Practice} (Brigo \& Mercurio)
+    \item \textit{Stochastic Calculus for Finance II} (Shreve)
+    \item Articles EIOPA : "Guidelines on use of ESG"
+    \item IA (Institut des Actuaires) - mémoires sur ESG et ALM
+    \item Borel-Mathurin F., Vedani J., "Market-consistent valuation: a step towards calculation stability" \texttt{https://hal.science/hal-02282378}
+    \item Borel-Mathurin F., El Karoui N., Loisel S. et Vedani J. (2020), « Locality in Time of the European
+Insurance Regulation Risk-Neutral Valuation Framework, a pre- and post-Covid Analysis and Further Developments »
+\end{enumerate}
+
+\vspace{0.3cm}
+\textbf{Logiciels professionnels :}
+\begin{itemize}
+    \item \textbf{Prophet} (FIS) : modélisation actif-passif
+    \item \textbf{MoSes} (Moody's) : ESG et ALM
+    \item \textbf{AAA} (Milliman) : valorisation stochastique
+\end{itemize}
+
+% \vspace{0.3cm}
+% \textbf{Certifications :}
+% \begin{itemize}
+%     \item CFA (Chartered Financial Analyst) - niveau II/III couvre ALM
+%     \item IA (Institut des Actuaires) - mémoires sur ESG et ALM
+% \end{itemize}
+\end{frame}
+
+\begin{frame}{Questions \& Discussion}
+\begin{center}
+\Huge Merci pour votre attention !
+\vspace{1cm}
+
+\Large Questions ?
+
+\vspace{1cm}
+
+\normalsize
+\textit{Prochaine séance : Séance 6 - Risk Margin et Provisions Consolidées}
+
+\vspace{0.5cm}
+
+Contact : \texttt{fabrice.mathurin@gmail.com}
+\end{center}
+\end{frame}
+
+% ============================================================
+% ANNEXES (optionnel)
+% ============================================================
+\appendix
+
+\begin{frame}{Annexe A : Formules Mathématiques Détaillées}
+\textbf{Solution analytique Vasicek :}
+\[
+r_t = r_0 e^{-at} + b(1 - e^{-at}) + \sigma \int_0^t e^{-a(t-s)} dW_s
+\]
+
+\vspace{0.3cm}
+\textbf{Prix ZC-Bond dans Vasicek :}
+\[
+P(t, T) = A(t,T) e^{-B(t,T) r_t}
+\]
+avec :
+\[
+B(t,T) = \frac{1 - e^{-a(T-t)}}{a}, \quad A(t,T) = \exp\left[\frac{(B(t,T) - T + t)(a^2 b - \sigma^2/2)}{a^2} - \frac{\sigma^2 B(t,T)^2}{4a}\right]
+\]
+
+\vspace{0.3cm}
+\textbf{Variance asymptotique CIR :}
+\[
+\Var(r_\infty) = \frac{b\sigma^2}{2a}
+\]
+\end{frame}
+
+\begin{frame}{Annexe B : Code Python - ESG Complet}
+\textbf{Exemple de structure pour ESG multi-variables :}
+
+\begin{itemize}
+    \item Classe \texttt{ESG} avec méthodes :
+    \begin{itemize}
+        \item \texttt{calibrate()}: calibration paramètres sur marché
+        \item \texttt{generate\_scenarios(N)}: génération $N$ scénarios (vectorisé)
+        \item \texttt{martingale\_test()}: validation auto
+        \item \texttt{get\_interest\_rates()}: extraction taux
+        \item \texttt{get\_equity\_returns()}: extraction rendements actions
+    \end{itemize}
+    \item Gestion corrélations via matrice de Cholesky
+    \item Export résultats en DataFrame pandas
+\end{itemize}
+
+\vspace{0.3cm}
+\textit{Exemples de code disponibles dans le notebook Seance5\_Codes\_Python.ipynb}
+\end{frame}
+
+\begin{frame}{Annexe C : Glossaire}
+\begin{description}
+    \item[ALM] Asset-Liability Management (Gestion Actif-Passif)
+    \item[BE] Best Estimate
+    \item[CIR] Cox-Ingersoll-Ross (modèle de taux)
+    \item[ESG] Economic Scenario Generator
+    \item[MA] Matching Adjustment
+    \item[PB] Participation aux Bénéfices
+    \item[PPB] Provision pour Participation aux Bénéfices (différée)
+    \item[TMG] Taux Minimum Garanti
+    \item[VA] Volatility Adjustment
+    \item[VaR] Value at Risk
+\end{description}
+\end{frame}
+
+\end{document}
+```

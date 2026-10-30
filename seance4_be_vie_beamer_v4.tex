@@ -1,0 +1,1604 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,decorations.pathreplacing}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+
+% Configuration listings pour code Python
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    language=Python
+}
+
+% Thème
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Couleurs personnalisées
+\definecolor{bleuactu}{RGB}{0,51,102}
+\definecolor{vertactu}{RGB}{0,102,51}
+\definecolor{rougeactu}{RGB}{153,0,0}
+\definecolor{orangeactu}{RGB}{230,126,34}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\setbeamercolor{structure}{fg=bleuactu}
+\setbeamercolor{frametitle}{bg=bleuactu,fg=white}
+
+% Commandes personnalisées
+\newcommand{\highlight}[1]{\textbf{\color{rougeactu}#1}}
+\newcommand{\BE}{\text{BE}}
+\newcommand{\PM}{\text{PM}}
+\newcommand{\TMG}{\text{TMG}}
+\newcommand{\PB}{\text{PB}}
+\newcommand{\EUR}{€}
+
+% Informations du document
+\title{Best Estimate Vie}
+\subtitle{Épargne et Prévoyance sous Solvabilité II — Séance 5}
+\author[F. Borel-Mathurin]{Fabrice BOREL-MATHURIN}
+\institute[ACPR-DEAR et SAF Lyon 1] {
+    ACPR - DEAR\\
+    et\\
+    Laboratoire SAF Université Claude Bernard Lyon 1
+}
+\date{Novembre 2025}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Plan de la séance (4h)}
+\tableofcontents
+\end{frame}
+
+% ============================================
+% SECTION 1 : INTRODUCTION
+% ============================================
+\section{Introduction : Spécificités du BE Vie}
+
+\begin{frame}{Objectifs pédagogiques}
+\begin{block}{À l'issue de cette séance, vous serez capable de :}
+\begin{enumerate}
+    \item Modéliser rigoureusement les contrats d'assurance-vie (épargne, prévoyance, UC)
+    \item Projeter les flux futurs de trésorerie sur plusieurs décennies
+    \item Maîtriser les hypothèses actuarielles (mortalité, rachat, frais, participation bénéfices)
+    \item Choisir entre approche police-par-police et model points
+    \item Implémenter ces projections en Python (transition depuis Excel)
+    \item Calculer le Best Estimate conforme Solvency II
+\end{enumerate}
+\end{block}
+
+\vspace{0.3cm}
+\begin{alertblock}{Durée de la séance}
+\textbf{Cours magistral :} 2h | \textbf{Travaux dirigés :} 2h (Excel + Python)
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Cadre réglementaire Solvency II}
+\begin{block}{Base réglementaire}
+\textbf{Article 77 Directive 2009/138/CE :}\\
+« Les provisions techniques correspondent au montant actuel que les entreprises d'assurance devraient payer si elles \highlight{transféraient immédiatement} leurs droits et obligations à une autre entreprise »
+\end{block}
+
+\vspace{0.3cm}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Références complémentaires :}
+\begin{itemize}
+    \item Article 75 : valorisation market-consistent
+    \item EIOPA Guidelines on Valuation of Technical Provisions (2015)
+    \item ACPR Position-Recommandation 2013-P-01
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Décomposition S2 :}
+\[
+\boxed{\text{PT} = \BE + \text{RM}}
+\]
+\begin{itemize}
+    \item $\BE$ = Best Estimate (valeur actuelle probable)
+    \item $\text{RM}$ = Risk Margin (coût du capital)
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{BE Vie vs BE Non-Vie : différences fondamentales}
+\begin{table}
+\centering
+\small
+\begin{tabular}{l|p{5.5cm}|p{5.5cm}}
+\toprule
+\textbf{Critère} & \textbf{Non-Vie (Séance 3)} & \textbf{Vie (Séance 4)} \\
+\midrule
+\rowcolor{bleuactu!10}
+\textbf{Objet} & Sinistres survenus & Contrats en cours \\
+\textbf{Approche} & Triangle de liquidation & Projection de flux futurs \\
+\rowcolor{bleuactu!10}
+\textbf{Horizon} & 5-15 ans & 20-50 ans \\
+\textbf{Risques} & Développement, réouvertures & Biométrique + financier \\
+\rowcolor{bleuactu!10}
+\textbf{Méthode} & Chain-Ladder, Bornhuetter-Ferguson & Projection ALM \\
+\textbf{Paradigme} & Passé → Futur (run-off) & Présent → Futur (prospectif) \\
+\rowcolor{bleuactu!10}
+\textbf{Actuaire} & « Archéologue » & « Prospectiviste » \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Changement de logique}
+En Non-Vie, on \textbf{observe} le développement passé. En Vie, on \textbf{projette} les comportements futurs.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Formule générale du Best Estimate Vie}
+\begin{block}{Définition formelle}
+Le Best Estimate à la date $t=0$ est la valeur actuelle probable des flux futurs :
+\[
+\boxed{\BE_0 = \sum_{t=1}^{T} \mathbb{E}\left[\frac{CF_t}{(1+r_t)^t}\right]}
+\]
+\end{block}
+
+\textbf{Où :}
+\begin{itemize}
+    \item $CF_t$ = Cash-flows nets de l'année $t$ (flux sortants - flux entrants)
+    \item $r_t$ = Taux d'actualisation sans risque à maturité $t$ (courbe EIOPA)
+    \item $T$ = Horizon jusqu'à extinction complète du portefeuille
+    \item $\mathbb{E}[\cdot]$ = Espérance sous probabilité risque-neutre
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{alertblock}{Particularité du BE Vie}
+Contrairement au BE Non-Vie, le BE Vie peut être \highlight{négatif} si les primes futures dépassent les engagements (contrats rentables en run-off).
+\end{alertblock}
+
+\textbf{Référence :} Règlement Délégué 2015/35, Articles 28-37
+\end{frame}
+
+\begin{frame}{Décomposition détaillée des cash-flows}
+\textbf{Cash-flows sortants (année $t$) :}
+\begin{align*}
+CF_t^{\text{out}} = &\underbrace{\text{Prestations décès}_t}_{\text{capitaux + majorations}} 
++ \underbrace{\text{Prestations vie}_t}_{\text{échéances programmées}} \\
+&+ \underbrace{\text{Rachats}_t}_{\text{totaux + partiels}} 
++ \underbrace{\text{Arrérages}_t}_{\text{rentes viagères}} \\
+&+ \underbrace{\text{Frais}_t}_{\text{acquisition + gestion + inflation}} 
++ \underbrace{\PB_t}_{\text{participation bénéfices}}
+\end{align*}
+
+\vspace{0.2cm}
+\textbf{Cash-flows entrants (année $t$) :}
+\[
+CF_t^{\text{in}} = \underbrace{\text{Primes futures}_t}_{\text{périodiques uniquement}} 
++ \underbrace{\text{Pénalités rachat}_t}_{\text{si applicables}}
+\]
+
+\vspace{0.2cm}
+\begin{exampleblock}{Flux net à actualiser}
+\[
+\boxed{CF_t = CF_t^{\text{out}} - CF_t^{\text{in}}}
+\]
+\end{exampleblock}
+\end{frame}
+
+% ============================================
+% SECTION 2 : TYPOLOGIE DES PRODUITS VIE
+% ============================================
+\section{Typologie des Produits Vie}
+
+\begin{frame}{Vue d'ensemble des produits Vie}
+\begin{center}
+\begin{tikzpicture}[
+    main/.style={rectangle, draw, fill=bleuactu!30, text width=3cm, text centered, minimum height=1cm, font=\small\bfseries},
+    prod/.style={rectangle, draw, fill=vertactu!20, text width=2.5cm, text centered, minimum height=0.8cm, font=\scriptsize}
+]
+    \node[main] (vie) at (0,0) {Assurance\\Vie};
+    
+    \node[prod] (euros) at (-4.5,-2) {Contrats\\en euros};
+    \node[prod] (uc) at (-1.5,-2) {Contrats\\UC};
+    \node[prod] (prev) at (1.5,-2) {Prévoyance\\décès/invalidité};
+    \node[prod] (rente) at (4.5,-2) {Rentes\\viagères};
+    
+    \draw[->, thick] (vie) -- (euros);
+    \draw[->, thick] (vie) -- (uc);
+    \draw[->, thick] (vie) -- (prev);
+    \draw[->, thick] (vie) -- (rente);
+    
+    \node[below=0.3cm of euros, text width=2.5cm, align=center, font=\tiny] {TMG, PB\\Garantie capital};
+    \node[below=0.3cm of uc, text width=2.5cm, align=center, font=\tiny] {Support OPCVM\\Risque assuré};
+    \node[below=0.3cm of prev, text width=2.5cm, align=center, font=\tiny] {Capital\\temporaire};
+    \node[below=0.3cm of rente, text width=2.5cm, align=center, font=\tiny] {Viager\\Longévité};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{Chaque produit nécessite une modélisation spécifique du Best Estimate}
+\end{frame}
+
+\begin{frame}{I. Contrats en euros (fonds général)}
+\begin{block}{Définition}
+Contrat d'épargne où l'assureur \highlight{garantit le capital} investi et verse une rémunération annuelle minimale (TMG = Taux Minimum Garanti).
+\end{block}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Caractéristiques principales :}
+\begin{itemize}
+    \item Garantie capital à 100\%
+    \item TMG : 0\% à 3\% (historique)
+    \item Participation aux bénéfices (85-90\%)
+    \item Effet cliquet (acquis définitifs)
+    \item Liquidité (rachat possible)
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Flux à modéliser :}
+\begin{itemize}
+    \item[$+$] Primes périodiques
+    \item[$-$] Prestations décès
+    \item[$-$] Rachats (totaux/partiels)
+    \item[$-$] Frais de gestion
+    \item[$-$] Participation aux bénéfices
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{alertblock}{Risque pour l'assureur}
+Si $\text{rendement actifs} < \TMG$, l'assureur doit puiser dans ses fonds propres pour garantir le TMG !
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Mécanisme de la participation aux bénéfices}
+\begin{block}{Principe réglementaire}
+\textbf{Article A331-3 Code des Assurances :} Minimum \highlight{85\%} (pratique : 90\%) des produits financiers redistribués aux assurés sur \highlight{8 ans glissants}.
+\end{block}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+\node[draw, rectangle, fill=bleuactu!20, text width=3cm, align=center] (actifs) at (0,2) {Actifs\\Fonds Général};
+\node[draw, rectangle, fill=vertactu!20, text width=3cm, align=center] (prod) at (0,0.5) {Produits\\Financiers\\(100\%)};
+\node[draw, rectangle, fill=orangeactu!30, text width=2.5cm, align=center] (pb) at (-2.5,-1.5) {PB Assurés\\(85-90\%)};
+\node[draw, rectangle, fill=rougeactu!20, text width=2.5cm, align=center] (ass) at (2.5,-1.5) {Marge\\Assureur\\(10-15\%)};
+\node[draw, rectangle, fill=bleuactu!10, text width=2cm, align=center] (ppe) at (0,-3) {PPE\\(lissage)};
+
+\draw[->, thick] (actifs) -- (prod);
+\draw[->, thick] (prod) -- (pb);
+\draw[->, thick] (prod) -- (ass);
+\draw[<->, dashed] (pb) -- (ppe);
+\end{tikzpicture}
+\end{center}
+
+\textbf{PPE} = Provision pour Participation aux Excédents (réserve de lissage)
+\end{frame}
+
+\begin{frame}{Formules de projection : contrat euros}
+\textbf{Notation :}
+\begin{multicols}{2}
+\begin{itemize}
+    \item $\PM_t$ : Provision mathématique début année $t$
+    \item $P_t$ : Prime annuelle
+    \item $q_x^d$ : Probabilité décès à l'âge $x$
+    \item $q_t^r$ : Probabilité rachat année $t$
+    \item $i_t$ : Taux revalorisation ($\TMG + \PB$)
+    \item $f$ : Taux de frais sur PM
+    \item $N_t$ : Nombre de têtes en vie
+\end{itemize}
+\end{multicols}
+
+\vspace{0.2cm}
+\begin{block}{Système de projection}
+\begin{align}
+\text{Décès}_t &= N_t \times \overline{\PM}_t \times q_{x+t-1}^d \\
+\text{Rachats}_t &= N_t \times \overline{\PM}_t \times q_t^r \\
+\text{Frais}_t &= N_t \times \overline{\PM}_t \times f \times (1+\pi)^{t-1} \\
+N_{t+1} &= N_t \times (1 - q_{x+t-1}^d) \times (1 - q_t^r) \\
+\overline{\PM}_{t+1} &= \frac{(\overline{\PM}_t + P_t - \overline{\PM}_t \times f) \times (1+i_t)}{(1 - q_{x+t-1}^d)(1 - q_t^r)}
+\end{align}
+\end{block}
+
+$\pi$ = inflation des frais (typiquement 2\% par an)
+\end{frame}
+
+\begin{frame}{Exemple numérique : projection année 1}
+\textbf{Données contrat :}
+\begin{itemize}
+    \item Assuré : homme 40 ans, $\PM_0 = 50\,000$ \EUR, prime annuelle $P = 2\,000$ \EUR
+    \item $\TMG = 1.5\%$, frais $f = 0.8\%$, $q_{40}^d = 0.123\%$, $q_1^r = 10\%$
+    \item Inflation frais : $\pi = 2\%$
+\end{itemize}
+
+\begin{exampleblock}{Calculs année 1}
+\begin{align*}
+\text{Décès}_1 &= 50\,000 \times 0.00123 = \highlight{61.50\, \EUR} \\
+\text{Rachats}_1 &= 50\,000 \times 0.10 = \highlight{5\,000\, \EUR} \\
+\text{Frais}_1 &= 50\,000 \times 0.008 \times 1.02^0 = \highlight{400\, \EUR} \\
+\text{Flux sortants}_1 &= 61.50 + 5\,000 + 400 = \highlight{5\,461.50\, \EUR} \\
+\text{Flux entrants}_1 &= 2\,000\, \EUR \\
+\text{Flux net}_1 &= 5\,461.50 - 2\,000 = \highlight{3\,461.50\, \EUR}
+\end{align*}
+\end{exampleblock}
+
+\textbf{PM fin année 1 :}
+\[
+\PM_2 = (50\,000 + 2\,000 - 61.50 - 5\,000 - 400) \times 1.015 = \boxed{47\,236.58\, \EUR}
+\]
+\end{frame}
+
+\begin{frame}{II. Contrats en Unités de Compte (UC)}
+\begin{block}{Définition}
+Contrat où l'épargne est investie sur des supports financiers (OPCVM, actions) choisis par l'assuré. L'assureur garantit un \highlight{nombre d'UC}, pas une valeur en euros → \textbf{risque transféré à l'assuré}.
+\end{block}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Différences vs contrats euros :}
+\begin{itemize}
+    \item \textcolor{rougeactu}{Pas de garantie capital}
+    \item Pas de TMG ni PB
+    \item Risque de marché → assuré
+    \item Frais plus élevés (1-2\%)
+    \item Transparence des supports
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Garanties optionnelles :}
+\begin{enumerate}
+    \item \textbf{Plancher au décès}\\
+    {\scriptsize Ex: min 100\% versements}
+    \item \textbf{Cliquet périodique}\\
+    {\scriptsize Tous les X ans}
+    \item \textbf{Garantie à l'échéance}\\
+    {\scriptsize Ex: à 8 ans, 100\% versements}
+    \item \textbf{Stop-loss dynamique}\\
+    {\scriptsize Sécurisation progressive}
+\end{enumerate}
+\end{column}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{alertblock}{Risque réintroduit}
+Les garanties financières réintroduisent du \textbf{risque de marché} pour l'assureur, qui doit le provisionner dans le BE !
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Modélisation UC avec garantie plancher}
+\textbf{Notation :}
+\begin{itemize}
+    \item $V_t$ = Valeur des UC en année $t$
+    \item $G$ = Plancher garanti (ex: 100\% versements nets de frais)
+    \item $r_t^{UC}$ = Rendement du support UC en année $t$
+    \item $f^{UC}$ = Frais de gestion UC (annuels)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{block}{Évolution valeur UC}
+\[
+\boxed{V_{t+1} = V_t \times (1 - f^{UC}) \times (1 + r_t^{UC})}
+\]
+\end{block}
+
+\begin{block}{Coût de la garantie au décès (année $t$)}
+\[
+\boxed{\text{Coût garantie}_t = \max(0, \, G - V_t) \times q_{x+t-1}^d \times N_t}
+\]
+\end{block}
+
+\begin{block}{Best Estimate de la garantie}
+\[
+\boxed{\BE^{\text{garantie}} = \sum_{t=1}^{T} \frac{\text{Coût garantie}_t}{(1+r_t)^t}}
+\]
+\end{block}
+\end{frame}
+
+\begin{frame}{Exemple : UC avec garantie plancher en crise}
+\textbf{Scénario de crise :} $V_0 = 100\,000$ \EUR, $G = 100\,000$ \EUR, $f^{UC} = 1\%$, $r^{UC} = -3\%$ par an
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}[scale=0.75]
+\begin{axis}[
+    xlabel={Année},
+    ylabel={Valeur (\EUR)},
+    grid=major,
+    legend pos=south west,
+    width=11cm,
+    height=6cm,
+    ymin=65000,
+    ymax=105000
+]
+\addplot[color=bleuactu, thick, mark=*] coordinates {
+    (0, 100000) (1, 96030) (2, 92285) (3, 88760) (4, 85449)
+    (5, 82344) (6, 79439) (7, 76727)
+};
+\addplot[color=rougeactu, thick, dashed, line width=1.5pt] coordinates {
+    (0, 100000) (7, 100000)
+};
+\legend{Valeur UC (baisse 3\% + frais 1\%), Plancher garanti}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\textbf{Interprétation :} Après 7 ans, valeur UC = 76 727 \EUR < plancher 100 000 \EUR.\\
+Si décès en année 7 : garantie activée → \highlight{coût = 23 273 \EUR} pour l'assureur !
+\end{frame}
+
+\begin{frame}{III. Contrats de Prévoyance}
+\begin{block}{Définition}
+Contrats couvrant les \highlight{risques biométriques} : décès, incapacité, invalidité, dépendance.
+\end{block}
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{llp{6cm}}
+\toprule
+\textbf{Produit} & \textbf{Garantie} & \textbf{Caractéristiques} \\
+\midrule
+\rowcolor{bleuactu!10}
+Décès temporaire & Capital & Si décès avant échéance (ex: prêt immobilier) \\
+Décès vie entière & Capital & Quel que soit l'âge au décès \\
+\rowcolor{bleuactu!10}
+Invalidité/IPT & Rente & En cas d'Incapacité Permanente Totale \\
+Dépendance & Rente & Si perte d'autonomie (critères ADL) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Formule BE décès temporaire (durée $n$ ans)}
+\[
+\boxed{\BE = \sum_{t=1}^{n} \frac{K \times {}_{t-1}p_x \times q_{x+t-1}^d - P \times {}_{t-1}p_x \times (1-l)^{t-1}}{(1+r_t)^t}}
+\]
+
+Où : $K$ = capital garanti, $P$ = prime annuelle, $l$ = taux de résiliation, ${}_{t}p_x$ = probabilité survie jusqu'à $t$
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Tables de mortalité et ajustements}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Tables réglementaires françaises :}
+\begin{itemize}
+    \item \textbf{TH/TF 00-02}\\
+    {\scriptsize Tables d'expérience 2000-2002}
+    \item \textbf{TGH/TGF 05}\\
+    {\scriptsize Tables générationnelles (projections)}
+    \item \textbf{TD/TV 88-90}\\
+    {\scriptsize Tables pour rentes viagères}
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{alertblock}{Choix crucial}
+\textbf{Épargne/décès :} TH/TF 00-02\\
+\textbf{Rentes viagères :} TGH/TGF 05\\
+(risque de longévité)
+\end{alertblock}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Ajustement expérience propre :}
+\[
+\boxed{q_x^{\text{ajustée}} = \alpha \times q_x^{\text{table}}}
+\]
+
+\textbf{Valeurs typiques :} $\alpha \in [0.7, \, 1.3]$
+
+\vspace{0.3cm}
+\begin{itemize}
+    \item $\alpha < 1$ : mortalité plus faible\\
+    {\scriptsize (portefeuille aisé, rentes)}
+    \item $\alpha > 1$ : mortalité plus forte\\
+    {\scriptsize (garanties décès)}
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Justification requise :}
+\begin{itemize}
+    \item Études statistiques internes
+    \item Validation actuaire
+    \item Documentation ACPR
+\end{itemize}
+\end{column}
+\end{columns}
+
+\textbf{Référence :} Arrêté du 1er août 2016 (tables réglementaires)
+\end{frame}
+
+\begin{frame}{IV. Rentes viagères}
+\begin{block}{Définition}
+Contrat où l'assureur verse périodiquement une somme jusqu'au \highlight{décès du rentier}.
+\end{block}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Types de rentes :}
+\begin{itemize}
+    \item \textbf{Immédiate :} versements démarrent immédiatement
+    \item \textbf{Différée :} phase d'accumulation puis rente
+    \item \textbf{Réversible :} continue sur conjoint survivant
+    \item \textbf{Annuités garanties :} min X années versées
+    \item \textbf{Indexée :} revalorisation annuelle
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Formule rente viagère simple :}
+\[
+\boxed{\BE = R \times \sum_{t=1}^{\omega - x} \frac{{}_{t-1}p_x}{(1+r_t)^t}}
+\]
+
+Où :
+\begin{itemize}
+    \item $R$ = arrérages annuels
+    \item $\omega$ = âge limite (120 ans)
+    \item ${}_{t}p_x$ = $\prod_{k=0}^{t-1}(1-q_{x+k})$
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Calcul numérique : homme 65 ans, 12 000 \EUR/an}
+\[
+\BE = 12\,000 \times \underbrace{\sum_{t=1}^{55} \frac{{}_{t-1}p_{65}}{(1.025)^t}}_{= \ddot{a}_{65} \approx 15.8} \approx 12\,000 \times 15.8 = \boxed{189\,600\, \EUR}
+\]
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Risque de longévité : enjeu majeur}
+\begin{alertblock}{Risque systématique}
+Si les rentiers vivent \textbf{plus longtemps que prévu} dans les tables, les versements dépassent significativement les provisions constituées !
+\end{alertblock}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.75]
+\begin{axis}[
+    xlabel={Âge},
+    ylabel={Espérance de vie résiduelle (années)},
+    grid=major,
+    legend pos=north east,
+    width=11cm,
+    height=6cm
+]
+\addplot[color=bleuactu, thick, mark=square*] coordinates {
+    (65, 19.5) (70, 15.8) (75, 12.5) (80, 9.5) (85, 7.0) (90, 5.0)
+};
+\addplot[color=rougeactu, thick, dashed, mark=*] coordinates {
+    (65, 21.0) (70, 17.0) (75, 13.5) (80, 10.3) (85, 7.6) (90, 5.5)
+};
+\legend{Prévision initiale (TGH/TGF 05), Réalisation observée (+1.5 ans)}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\textbf{Impact financier :} +1.5 ans d'espérance de vie à 65 ans → \highlight{+7.7\%} sur le BE rentes !
+
+\textbf{Solutions :} réassurance longévité, tables générationnelles, clauses d'indexation limitée
+
+\textbf{Référence :} Cahiers de la Chaire transitions démographiques (2023)
+\end{frame}
+
+% ============================================
+% SECTION 3 : MODÉLISATION DES FLUX
+% ============================================
+\section{Modélisation des Flux}
+
+\begin{frame}{Approche police par police vs model points}
+\begin{table}
+\centering
+\small
+\begin{tabular}{l|p{5.5cm}|p{5.5cm}}
+\toprule
+\textbf{Critère} & \textbf{Police par police} & \textbf{Model points} \\
+\midrule
+\rowcolor{bleuactu!10}
+\textbf{Principe} & Projection individuelle de chaque contrat & Regroupement en contrats représentatifs \\
+\textbf{Précision} & Maximale (toutes options/garanties) & Approximation contrôlée \\
+\rowcolor{bleuactu!10}
+\textbf{Temps calcul} & Très élevé (plusieurs heures) & Réduit (×100 à ×1000) \\
+\textbf{Données} & Nécessite qualité parfaite & Robuste aux données manquantes \\
+\rowcolor{bleuactu!10}
+\textbf{Usage} & Portefeuilles hétérogènes, < 10 000 contrats & Production industrielle, > 10 000 contrats \\
+\textbf{Validation} & Non nécessaire & Back-testing obligatoire \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Ordre de grandeur}
+50 000 contrats réels → 200-500 model points (gain : ×100 à ×250 en rapidité)
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Construction des model points}
+\begin{block}{Critères de segmentation typiques}
+\begin{itemize}
+    \item \textbf{Âge :} [<30], [30-40], [40-50], [50-60], [60-70], [70+]  \hfill (6 classes)
+    \item \textbf{Ancienneté :} [0-2], [2-5], [5-10], [10-15], [15+]  \hfill (5 classes)
+    \item \textbf{PM :} [<10k], [10k-50k], [50k-100k], [100k-250k], [>250k]  \hfill (5 classes)
+    \item \textbf{Type :} Euros pur, Euros+UC, UC pur, Prévoyance  \hfill (4 classes)
+    \item \textbf{TMG :} [0\%], [0-1\%], [1-2\%], [2-3\%], [>3\%]  \hfill (5 classes)
+\end{itemize}
+\end{block}
+
+\textbf{Nombre théorique de MP :} $6 \times 5 \times 5 \times 4 \times 5 = 3\,000$ combinaisons possibles
+
+\vspace{0.3cm}
+\begin{alertblock}{En pratique}
+\begin{itemize}
+    \item Regroupement supplémentaire des classes peu peuplées
+    \item Élimination des combinaisons vides (ex: TMG 3\% + âge <30 ans)
+    \item \textbf{Résultat final : 200-500 model points} pour un portefeuille de 50 000 contrats
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Qualité du model pointing : critères de validation}
+\begin{block}{1. Homogénéité intra-groupe (à minimiser)}
+\[
+\boxed{\text{Var}_{\text{intra}} = \frac{1}{n_g} \sum_{i \in \text{groupe } g} (x_i - \bar{x}_g)^2}
+\]
+Les contrats d'un même MP doivent être similaires.
+\end{block}
+
+\begin{block}{2. Hétérogénéité inter-groupes (à maximiser)}
+\[
+\boxed{\text{Var}_{\text{inter}} = \sum_{g} n_g \times (\bar{x}_g - \bar{x}_{\text{total}})^2}
+\]
+Les MP doivent être bien différenciés entre eux.
+\end{block}
+
+\begin{block}{3. Conservation des agrégats (erreur < 2\%)}
+\begin{align*}
+\sum_{\text{MP}} \PM_{MP} \times n_{MP} &= \sum_{\text{polices}} \PM_i \quad \text{(test PM)} \\
+\left|\sum_{\text{MP}} \BE_{MP} \times n_{MP} - \sum_{\text{polices}} \BE_i\right| &< 2\% \times \sum_{\text{polices}} \BE_i \quad \text{(test BE)}
+\end{align*}
+\end{block}
+
+\textbf{Validation :} Back-testing sur portefeuille test (20\% des polices)
+\end{frame}
+
+\begin{frame}{Hypothèses de projection : lois de rachat}
+\begin{block}{Facteurs influençant les rachats}
+\begin{multicols}{2}
+\begin{itemize}
+    \item Ancienneté du contrat
+    \item Contexte économique
+    \item Fiscalité (seuils 4 et 8 ans)
+    \item Montant de la PM
+    \item Canal de distribution
+    \item Âge de l'assuré
+\end{itemize}
+\end{multicols}
+\end{block}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Loi de rachat statique :}
+\[
+q_t^r = 
+\begin{cases}
+15\% & t \in [1, 2] \\
+10\% & t \in [3, 4] \\
+6\% & t \in [5, 7] \\
+3\% & t \geq 8
+\end{cases}
+\]
+
+\textbf{Effet fiscal :}
+\begin{itemize}
+    \item Pic avant 4 ans (fiscalité lourde)
+    \item Stabilisation après 8 ans (abattement)
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Loi de rachat dynamique :}
+\[
+\boxed{q_t^r = q_t^{r,\text{base}} \times \left(1 + \beta \times \Delta_t\right)}
+\]
+
+Où :
+\begin{align*}
+\Delta_t &= \max\left(0, \frac{r_{\text{marché},t} - r_{\text{contrat},t}}{r_{\text{contrat},t}}\right) \\
+\beta &\in [2, 5] \text{ (élasticité)}
+\end{align*}
+
+\textbf{Interprétation :}\\
+Si taux de marché $\gg$ taux contrat, les rachats explosent !
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Exemple : rachats dynamiques en contexte de remontée des taux}
+\textbf{Hypothèses :}
+\begin{itemize}
+    \item Taux de rachat de base : $q^{r,\text{base}} = 3\%$
+    \item Taux contrat (TMG + PB) : $r_{\text{contrat}} = 1.5\%$
+    \item Taux de marché (OAT 10 ans) : $r_{\text{marché}} = 4.0\%$
+    \item Élasticité : $\beta = 3$
+\end{itemize}
+
+\begin{exampleblock}{Calcul du taux de rachat dynamique}
+\begin{align*}
+\Delta &= \frac{4.0\% - 1.5\%}{1.5\%} = \frac{2.5\%}{1.5\%} = 1.667 \\
+q^r &= 3\% \times (1 + 3 \times 1.667) = 3\% \times 6 = \boxed{\highlight{18\%}}
+\end{align*}
+\end{exampleblock}
+
+\textbf{Impact :} Le taux de rachat est \textbf{multiplié par 6} en contexte de forte remontée des taux !
+
+\vspace{0.3cm}
+\begin{alertblock}{Conséquence pour l'assureur}
+Rachats massifs → vente forcée d'actifs en moins-value latente → crise de liquidité potentielle (scénario 2022-2023)
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Hypothèses de frais}
+\begin{block}{Décomposition des frais (3 catégories)}
+\textbf{1. Frais d'acquisition $F_A$ (année 1 uniquement) :}
+\[
+F_A = \alpha_A \times P_1 \quad \text{avec } \alpha_A \in [20\%, 50\%]
+\]
+Inclut : commercialisation, médical, ouverture dossier
+
+\vspace{0.2cm}
+\textbf{2. Frais de gestion $F_{G,t}$ (annuels) :}
+\[
+F_{G,t} = \alpha_G \times \PM_t \times (1 + \pi)^{t-1} \quad \text{avec } \alpha_G \in [0.5\%, 1.0\%]
+\]
+
+\vspace{0.2cm}
+\textbf{3. Frais sur versements $F_V$ (chaque prime) :}
+\[
+F_V = \alpha_V \times P_t \quad \text{avec } \alpha_V \in [2\%, 5\%]
+\]
+\end{block}
+
+\textbf{Inflation des frais :} $\pi = 2\%$ par an (convention standard Solvency II)
+
+\vspace{0.2cm}
+\begin{alertblock}{Impact à long terme}
+Sur 30 ans avec inflation 2\% : $(1.02)^{30} = 1.81$ → \highlight{+81\%} sur les frais annuels !
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Frais unitaires vs Frais sur encours : distinction pratique}
+\begin{block}{Deux natures de frais en assurance-vie}
+Dans la réalité industrielle, les frais ne sont pas tous proportionnels à la PM. Il faut distinguer :
+\end{block}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Frais sur encours (proportionnels) :}
+\[
+F_{\text{encours},t} = \alpha_G \times \PM_t \times (1+\pi)^{t-1}
+\]
+
+\textbf{Nature :}
+\begin{itemize}
+    \item Gestion financière
+    \item Coûts IT proportionnels
+    \item Commissions de gestion
+\end{itemize}
+
+\textbf{Évolution :}
+\begin{itemize}
+    \item Proportionnels à la PM
+    \item Inflation appliquée sur $\alpha_G$
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Frais unitaires (fixes par contrat) :}
+\[
+F_{\text{unitaire},t} = F_0 \times (1+\pi)^{t-1} \times N_t
+\]
+
+\textbf{Nature :}
+\begin{itemize}
+    \item Envoi relevés annuels
+    \item Traitement administratif
+    \item Coûts IT fixes par police
+\end{itemize}
+
+\textbf{Évolution :}
+\begin{itemize}
+    \item Indépendants de la PM
+    \item Exemple : 30€/contrat/an
+    \item Inflation appliquée directement
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Formule complète des frais de gestion}
+\[
+\boxed{F_{G,t}^{\text{total}} = \underbrace{\alpha_G \times \PM_t \times (1+\pi)^{t-1} \times N_t}_{\text{Frais proportionnels}} + \underbrace{F_0 \times (1+\pi)^{t-1} \times N_t}_{\text{Frais unitaires}}}
+\]
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Impact des frais unitaires : exemple numérique}
+\textbf{Portefeuille de 1000 contrats, PM moyenne = 50 000 €}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Scénario 1 : Gros contrats}
+\begin{itemize}
+    \item $\alpha_G = 0.8\%$
+    \item $F_0 = 30$ €/contrat/an
+    \item $\PM_{\text{moy}} = 50\,000$ €
+\end{itemize}
+
+\textbf{Calcul année 1 :}
+\begin{align*}
+F_{\text{prop}} &= 0.008 \times 50\,000 \\
+&= 400\, \text{€/contrat} \\
+F_{\text{unit}} &= 30\, \text{€/contrat} \\
+\text{Poids unit.} &= \frac{30}{430} = \highlight{7\%}
+\end{align*}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Scénario 2 : Petits contrats}
+\begin{itemize}
+    \item $\alpha_G = 0.8\%$
+    \item $F_0 = 30$ €/contrat/an
+    \item $\PM_{\text{moy}} = 5\,000$ €
+\end{itemize}
+
+\textbf{Calcul année 1 :}
+\begin{align*}
+F_{\text{prop}} &= 0.008 \times 5\,000 \\
+&= 40\, \text{€/contrat} \\
+F_{\text{unit}} &= 30\, \text{€/contrat} \\
+\text{Poids unit.} &= \frac{30}{70} = \highlight{43\%}
+\end{align*}
+\end{column}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{alertblock}{Conséquence pour le BE}
+Pour les petits contrats, \textbf{ignorer les frais unitaires} peut sous-estimer significativement le BE ! C'est particulièrement critique pour les portefeuilles de prévoyance (petites primes).
+\end{alertblock}
+
+\textbf{Pratique industrielle :} Distinction systématique dans les modèles ALM de production
+\end{frame}
+
+\begin{frame}{Participation aux bénéfices : mécanisme détaillé}
+\begin{block}{Cadre réglementaire}
+\textbf{Article A331-3 Code des Assurances :}
+\begin{itemize}
+    \item Minimum \highlight{85\%} (pratique : 90\%) des produits financiers redistribués
+    \item Sur \highlight{8 ans glissants} (lissage autorisé via PPE)
+    \item Clause de PB minimale généralement contractuelle (TMG)
+\end{itemize}
+\end{block}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Formule simplifiée :}
+\[
+\boxed{\PB_t = \max\left(\TMG, \, \rho \times (r_{\text{actifs},t} - f_t) \right)}
+\]
+
+Où :
+\begin{itemize}
+    \item $\rho = 0.90$ (taux de redistribution)
+    \item $r_{\text{actifs},t}$ = rendement fonds général
+    \item $f_t$ = frais financiers
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Calcul numérique :}
+
+Hypothèses :
+\begin{itemize}
+    \item $r_{\text{actifs}} = 3.5\%$
+    \item $f = 0.5\%$
+    \item $\TMG = 1.0\%$
+\end{itemize}
+
+\begin{align*}
+\PB &= \max(1.0\%, \, 0.90 \times (3.5\% - 0.5\%)) \\
+&= \max(1.0\%, \, 0.90 \times 3.0\%) \\
+&= \max(1.0\%, \, 2.7\%) \\
+&= \boxed{\highlight{2.7\%}}
+\end{align*}
+\end{column}
+\end{columns}
+
+\vspace{0.3cm}
+\textbf{PPE} = Provision pour Participation aux Excédents (max 8 ans de produits financiers)
+\end{frame}
+
+\begin{frame}{Courbe d'actualisation EIOPA}
+\begin{block}{Principe Solvency II}
+Actualisation avec taux \highlight{sans risque} (risk-free rate curve) → Pas de prime de risque de crédit (obligation souveraine AAA uniquement).
+\end{block}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.75]
+\begin{axis}[
+    xlabel={Maturité (années)},
+    ylabel={Taux (\%)},
+    grid=major,
+    legend pos=south east,
+    width=11cm,
+    height=6cm,
+    ymin=0, ymax=4
+]
+\addplot[color=bleuactu, thick, mark=*, line width=1.5pt] coordinates {
+    (1, 1.8) (2, 2.0) (3, 2.2) (5, 2.5) (7, 2.7) (10, 2.9)
+    (15, 3.1) (20, 3.2) (30, 3.3) (50, 3.35)
+};
+\addlegendentry{Courbe EIOPA EUR 31/12/2024 (extrapolation)}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\textbf{Publication :} EIOPA publie mensuellement les courbes par devise\\
+\textbf{URL :} \url{https://www.eiopa.europa.eu/tools-and-data/risk-free-interest-rate-term-structures}\\
+\textbf{Méthode :} Extrapolation Smith-Wilson au-delà de Last Liquid Point (LLP)
+
+\textbf{Référence :} EIOPA Technical Documentation (2020), Règlement Délégué 2015/35 Art. 49
+\end{frame}
+
+\begin{frame}{Extrapolation des courbes : méthode Smith-Wilson}
+\begin{block}{Problématique industrielle}
+\textbf{Question :} Comment actualiser les flux d'un assuré de 30 ans qui vivra potentiellement jusqu'à 100 ans (horizon \highlight{70 ans}) si les marchés ne fournissent des taux liquides que jusqu'à 20-30 ans ?
+\end{block}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Last Liquid Point (LLP) :}
+\begin{itemize}
+    \item Maturité au-delà de laquelle les obligations deviennent illiquides
+    \item Pour EUR : LLP ≈ 20 ans
+    \item Pour USD : LLP ≈ 30 ans
+    \item Données de marché fiables seulement jusqu'au LLP
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Ultimate Forward Rate (UFR) :}
+\begin{itemize}
+    \item Taux long terme convergence
+    \item EUR : UFR = 3.45\% (2025)
+    \item Représente anticipations long terme de croissance + inflation
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Méthode Smith-Wilson :}
+\begin{itemize}
+    \item Interpolation/extrapolation lisse
+    \item Convergence progressive vers UFR
+    \item Convergence complète à 60 ans
+    \item Formule mathématique complexe (noyau de Wilson)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}[scale=0.65]
+\begin{axis}[
+    xlabel={\scriptsize Maturité},
+    ylabel={\scriptsize Taux},
+    width=5.5cm,
+    height=4.5cm,
+    legend style={font=\tiny}
+]
+\addplot[color=bleuactu, thick] coordinates {
+    (1, 1.8) (10, 2.9) (20, 3.2)
+};
+\addplot[color=rougeactu, thick, dashed] coordinates {
+    (20, 3.2) (30, 3.3) (40, 3.4) (60, 3.45) (80, 3.45)
+};
+\draw[dashed, gray] (axis cs:20,0) -- (axis cs:20,4);
+\node[font=\tiny] at (axis cs:20,3.8) {LLP};
+\legend{Marché, Extrapolation SW}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\end{column}
+\end{columns}
+
+\vspace{0.2cm}
+\begin{alertblock}{Impact pratique}
+Pour un contrat avec horizon 70 ans, environ \highlight{40-50\% des flux} sont actualisés avec des taux extrapolés (pas observés sur le marché) !
+\end{alertblock}
+
+\textbf{Référence :} EIOPA (2020), "Technical documentation of the methodology to derive EIOPA's risk-free interest rate term structures"
+\end{frame}
+
+\begin{frame}{Smith-Wilson : formule et paramètres}
+\begin{block}{Formule simplifiée}
+Le taux forward instantané extrapolé $f(t)$ converge vers l'UFR selon :
+\[
+f(t) = \text{UFR} + (\text{LLP\_rate} - \text{UFR}) \times e^{-\alpha(t - \text{LLP})} \quad \text{pour } t > \text{LLP}
+\]
+\end{block}
+
+\textbf{Paramètres clés (EUR, 2025) :}
+\begin{table}
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Paramètre} & \textbf{Valeur} & \textbf{Signification} \\
+\midrule
+\rowcolor{bleuactu!10}
+LLP & 20 ans & Dernière maturité liquide \\
+UFR & 3.45\% & Taux ultime de convergence \\
+\rowcolor{bleuactu!10}
+$\alpha$ & 0.10 & Vitesse de convergence \\
+Convergence & 60 ans & Maturité où $f(t) \approx$ UFR \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{exampleblock}{Conséquence pour les assureurs}
+\begin{itemize}
+    \item Les changements d'UFR par EIOPA impactent massivement le BE Vie (milliards d'euros)
+    \item Débats récurrents sur la méthode : taux extrapolés vs taux observés
+    \item Certains régulateurs (Suisse) utilisent d'autres méthodes (Nelson-Siegel-Svensson)
+\end{itemize}
+\end{exampleblock}
+
+\textbf{Point de vigilance :} L'extrapolation introduit un risque modèle significatif en Vie !
+\end{frame}
+
+\begin{frame}{Formule complète de projection (récapitulatif)}
+\textbf{Algorithme de projection année par année :}
+
+\begin{block}{Étape 1 : Calcul des flux}
+\begin{align}
+\text{Décès}_t &= N_t \times \overline{\PM}_t \times q_{x+t-1}^d \\
+\text{Rachats}_t &= N_t \times \overline{\PM}_t \times q_t^r \\
+\text{Frais}_t &= N_t \times \overline{\PM}_t \times f \times (1+\pi)^{t-1} \\
+\PB_t &= N_t \times \overline{\PM}_t \times \max(\TMG, 0.90 \times r_{\text{actifs},t}) \\
+\text{Primes}_t &= N_t \times P
+\end{align}
+\end{block}
+
+\begin{block}{Étape 2 : Mise à jour des états}
+\begin{align}
+N_{t+1} &= N_t \times (1 - q_{x+t-1}^d) \times (1 - q_t^r) \\
+\overline{\PM}_{t+1} &= \frac{(\overline{\PM}_t + P - \overline{\PM}_t \times f) \times (1 + i_t)}{(1 - q_{x+t-1}^d)(1 - q_t^r)}
+\end{align}
+\end{block}
+
+\begin{block}{Étape 3 : Calcul du BE}
+\[
+\boxed{\BE_0 = \sum_{t=1}^{T} \frac{\text{Décès}_t + \text{Rachats}_t + \text{Frais}_t + \PB_t - \text{Primes}_t}{(1+r_t)^t}}
+\]
+\end{block}
+\end{frame}
+
+% ============================================
+% SECTION 4 : INTRODUCTION À PYTHON
+% ============================================
+\section{Introduction à Python pour l'Actuariat}
+
+\begin{frame}{Limites d'Excel pour l'actuariat industriel}
+\begin{alertblock}{Problèmes rencontrés en production}
+\begin{enumerate}
+    \item \textbf{Volumétrie :} maximum 1 048 576 lignes × 16 384 colonnes
+    \begin{itemize}
+        \item 50 000 contrats × 40 ans × 100 scénarios = 200 millions de cellules \textcolor{rougeactu}{❌}
+    \end{itemize}
+    
+    \item \textbf{Performance :} calculs matriciels très lents
+    \begin{itemize}
+        \item Projection 10 000 contrats : 30 min Excel vs \highlight{10 sec} Python
+    \end{itemize}
+    
+    \item \textbf{Maintenance :} formules cachées, erreurs difficiles à détecter
+    \begin{itemize}
+        \item Risque opérationnel élevé (erreurs de copier-coller, liens cassés)
+    \end{itemize}
+    
+    \item \textbf{Reproductibilité :} difficile à versionner (Git incompatible)
+    
+    \item \textbf{Collaboration :} conflits de versions, pas de code review possible
+    
+    \item \textbf{Intégration :} connexion complexe aux bases de données / APIs
+\end{enumerate}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Pourquoi Python pour l'actuariat ?}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Avantages de Python :}
+\begin{itemize}
+    \item \textcolor{vertactu}{Gratuit} et open-source
+    \item Écosystème scientifique riche
+    \item \textbf{Performance} : vectorisation
+    \item Syntaxe claire (pseudo-code)
+    \item Intégration facile (SQL, Excel, APIs)
+    \item \textbf{Standard de l'industrie}
+    \item Traçabilité (Git, tests, CI/CD)
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Bibliothèques essentielles :}
+\begin{description}
+    \item[\texttt{NumPy}] Algèbre linéaire, matrices
+    \item[\texttt{Pandas}] DataFrames (tables)
+    \item[\texttt{Matplotlib}] Visualisations
+    \item[\texttt{SciPy}] Fonctions scientifiques
+    \item[\texttt{pyliferisk}] Calculs viagers
+    \item[\texttt{SQLAlchemy}] Connexion BDD
+\end{description}
+\end{column}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Adoption en assurance (2024)}
+\begin{itemize}
+    \item AXA, Allianz, CNP, Generali : migration Excel → Python en cours
+    \item Régulateurs : EIOPA encourage l'utilisation de code reproductible
+    \item Cabinets de conseil : Milliman, Deloitte, PWC imposent Python/R
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Bibliothèque NumPy : calcul vectorisé}
+\textbf{Création et manipulation de vecteurs/matrices :}
+
+\begin{lstlisting}
+import numpy as np
+
+# Vecteur d'âges
+ages = np.arange(25, 66)  # [25, 26, ..., 65]
+
+# Table de mortalité (formule Makeham simplifiée)
+qx = 0.0001 * np.exp(0.1 * (ages - 25))
+
+# Probabilités de survie
+px = 1 - qx
+
+# Probabilité de survie cumulative jusqu'à chaque âge
+survie_cumul = np.cumprod(px)
+
+print(f"Survie de 25 à 65 ans : {survie_cumul[-1]:.2%}")
+# Output: Survie de 25 à 65 ans : 98.73%
+\end{lstlisting}
+
+\vspace{0.3cm}
+\textbf{Avantage majeur :} Opérations vectorisées \highlight{×100 à ×1000 plus rapides} que boucles Python natives !
+
+\textbf{Référence :} \url{https://numpy.org/doc/stable/}
+\end{frame}
+
+\begin{frame}[fragile]{Bibliothèque Pandas : manipulation de données tabulaires}
+\begin{lstlisting}
+import pandas as pd
+
+# Créer un DataFrame (équivalent tableau Excel)
+contrats = pd.DataFrame({
+    'id': [1, 2, 3, 4, 5],
+    'age': [30, 45, 60, 55, 40],
+    'PM': [10000, 50000, 80000, 120000, 25000],
+    'TMG': [0.01, 0.02, 0.025, 0.015, 0.01]
+})
+
+# Filtrer les gros contrats (PM > 50k)
+gros_contrats = contrats[contrats['PM'] > 50000]
+print(f"Nombre de gros contrats : {len(gros_contrats)}")
+
+# Calculer PM moyenne par tranche d'âge
+contrats['tranche'] = pd.cut(contrats['age'], 
+                               bins=[0, 40, 60, 100],
+                               labels=['<40', '40-60', '>60'])
+pm_moyenne = contrats.groupby('tranche')['PM'].mean()
+print(pm_moyenne)
+# Output:
+# <40     17500.0
+# 40-60   85000.0
+# >60     80000.0
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Bibliothèque Matplotlib : visualisations professionnelles}
+\begin{lstlisting}
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Évolution PM avec revalorisation 3%
+annees = np.arange(0, 31)
+PM = 10000 * (1.03) ** annees
+
+plt.figure(figsize=(10, 6))
+plt.plot(annees, PM, marker='o', linewidth=2, 
+         color='steelblue', label='PM avec 3% revalorisation')
+plt.axhline(y=10000, color='red', linestyle='--', 
+            label='PM initiale')
+plt.xlabel('Année', fontsize=12)
+plt.ylabel('Provision Mathématique (euros)', fontsize=12)
+plt.title('Évolution PM sur 30 ans', fontsize=14, fontweight='bold')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.savefig('evolution_PM.png', dpi=300)
+plt.show()
+\end{lstlisting}
+
+\textbf{Résultat :} Graphique publication-ready exportable en PNG/PDF haute résolution
+\end{frame}
+
+\begin{frame}{Exercice Python 1 : Structure de la fonction}
+\begin{block}{Objectif}
+Créer une fonction \texttt{calculer\_BE\_contrat\_epargne()} qui projette les flux d'un contrat épargne euros et calcule le Best Estimate.
+\end{block}
+
+\textbf{Questions à résoudre :}
+\begin{enumerate}
+    \item Quels paramètres la fonction doit-elle accepter en entrée ?
+    \begin{itemize}
+        \item Paramètres du contrat (âge, PM, durée, primes)
+        \item Hypothèses actuarielles (mortalité, rachat, TMG, frais)
+        \item Paramètres économiques (courbe actualisation, inflation)
+    \end{itemize}
+    
+    \item Que doit retourner la fonction ?
+    \begin{itemize}
+        \item Un DataFrame détaillant les flux année par année
+        \item Le Best Estimate total (scalaire)
+    \end{itemize}
+    
+    \item Quelle structure de données utiliser pour stocker les résultats intermédiaires ?
+    \begin{itemize}
+        \item Liste de dictionnaires ? DataFrame direct ? Tableaux numpy ?
+    \end{itemize}
+\end{enumerate}
+
+\begin{alertblock}{Astuce}
+Pensez à la docstring : documentez clairement les types et significations des paramètres !
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Exercice Python 2 : Boucle de projection}
+\begin{block}{Contexte}
+Vous devez maintenant implémenter la boucle qui projette année par année les flux futurs.
+\end{block}
+
+\textbf{Questions guidées :}
+\begin{enumerate}
+    \item \textbf{Initialisation :} Quelles variables initialisez-vous avant la boucle ?
+    \begin{itemize}
+        \item Liste vide pour stocker résultats
+        \item PM initiale, nombre de têtes initial (= 1.0)
+    \end{itemize}
+    
+    \item \textbf{À chaque itération $t$ :}
+    \begin{itemize}
+        \item Comment calculer l'âge de l'assuré en année $t$ ?
+        \item Comment récupérer $q_x$ dans la table de mortalité (dictionnaire) ?
+        \item Comment récupérer $q^r_t$ dans le tableau numpy des rachats ?
+    \end{itemize}
+    
+    \item \textbf{Calcul des flux :}
+    \begin{itemize}
+        \item Décès = $PM \times q_x^d \times N_t$ (formule vue en cours)
+        \item Rachats = $PM \times q_t^r \times N_t$
+        \item Frais proportionnels = $PM \times f \times N_t \times (1 + \pi)^{t-1}$
+        \item \highlight{Frais unitaires} = $F_0 \times N_t \times (1 + \pi)^{t-1}$ (ex: 30€/contrat)
+        \item Frais totaux = frais proportionnels + frais unitaires
+        \item Primes = $P \times N_t$
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Exercice Python 3 : Actualisation et mise à jour}
+\textbf{Questions (suite) :}
+
+\begin{enumerate}
+    \setcounter{enumi}{3}
+    \item \textbf{Actualisation :}
+    \begin{itemize}
+        \item Flux net = flux sortants - flux entrants
+        \item Facteur actualisation = $\frac{1}{(1+r_t)^t}$ où $r_t$ est le taux à maturité $t$
+        \item Flux actualisé = flux net × facteur actualisation
+    \end{itemize}
+    
+    \item \textbf{Mise à jour des états :}
+    \begin{itemize}
+        \item Nouvelle PM : formule vue en cours avec revalorisation TMG
+        \item Attention : calculer PM par tête survivante !
+        \item Nouveau nombre de têtes : $N_{t+1} = N_t \times (1-q_x^d) \times (1-q_t^r)$
+    \end{itemize}
+    
+    \item \textbf{Stockage :}
+    \begin{itemize}
+        \item Créer un dictionnaire avec tous les résultats de l'année
+        \item L'ajouter à la liste résultats avec \texttt{.append()}
+    \end{itemize}
+\end{enumerate}
+
+\begin{exampleblock}{Piège classique}
+Ne pas oublier de tester \texttt{if nb\_tetes > 0} avant de diviser par nb\_tetes (éviter division par zéro) !
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Exercice Python 4 : Finalisation et utilisation}
+\textbf{Questions finales :}
+
+\begin{enumerate}
+    \item \textbf{Après la boucle :}
+    \begin{itemize}
+        \item Comment convertir la liste de dictionnaires en DataFrame pandas ?
+        \item Comment calculer le BE total à partir de la colonne des flux actualisés ?
+    \end{itemize}
+    
+    \item \textbf{Préparation des données d'entrée :}
+    \begin{itemize}
+        \item Comment créer un dictionnaire \texttt{table\_mortalite} avec formule $q_x = 0.0001 \times e^{0.08(x-18)}$ ?
+        \item Comment créer un tableau numpy pour la loi de rachat : [15\%, 15\%, 10\%, 10\%, 6\%, 6\%, 6\%, 6\%, 3\%, ...] ?
+        \item Comment créer une courbe flat à 2.5\% sur 40 ans avec numpy ?
+    \end{itemize}
+    
+    \item \textbf{Appel de la fonction :}
+    \begin{itemize}
+        \item Avec quels paramètres tester ? (exemple : homme 30 ans, PM = 100 000 €)
+        \item Comment afficher le résultat proprement ?
+    \end{itemize}
+\end{enumerate}
+
+\begin{alertblock}{Challenge supplémentaire 1 : Frais unitaires}
+Modifier votre fonction pour ajouter un paramètre \texttt{frais\_unitaires=30} et intégrer les frais fixes de 30€/contrat/an indexés sur l'inflation. Comparer le BE avec et sans frais unitaires !
+\end{alertblock}
+
+\begin{alertblock}{Challenge supplémentaire 2 : Visualisation}
+Créer un graphique matplotlib montrant l'évolution de la PM et du nombre de têtes sur deux axes !
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Comparaison Excel vs Python : tableau de synthèse}
+\begin{table}
+\centering
+\small
+\begin{tabular}{l|c|c}
+\toprule
+\textbf{Critère} & \textbf{Excel} & \textbf{Python} \\
+\midrule
+\rowcolor{bleuactu!10}
+Lisibilité du code & ⭐⭐ & ⭐⭐⭐⭐⭐ \\
+Maintenance & ⭐⭐ & ⭐⭐⭐⭐⭐ \\
+\rowcolor{bleuactu!10}
+Performance (vitesse) & ⭐⭐ & ⭐⭐⭐⭐⭐ \\
+Scalabilité (volumétrie) & ⭐ & ⭐⭐⭐⭐⭐ \\
+\rowcolor{bleuactu!10}
+Courbe d'apprentissage & ⭐⭐⭐⭐⭐ & ⭐⭐⭐ \\
+Visualisation rapide & ⭐⭐⭐⭐⭐ & ⭐⭐⭐⭐ \\
+\rowcolor{bleuactu!10}
+Traçabilité (Git) & ⭐ & ⭐⭐⭐⭐⭐ \\
+Intégration (BDD, APIs) & ⭐⭐ & ⭐⭐⭐⭐⭐ \\
+\rowcolor{bleuactu!10}
+Coût & ⭐⭐⭐ (licence Office) & ⭐⭐⭐⭐⭐ (gratuit) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\begin{block}{Recommandation pratique}
+\begin{itemize}
+    \item \textbf{Excel :} prototypes, analyses exploratoires, 1-100 contrats, présentations rapides
+    \item \textbf{Python :} production industrielle, >100 contrats, scénarios multiples, reporting ACPR
+\end{itemize}
+\end{block}
+\end{frame}
+
+% ============================================
+% SECTION 5 : SYNTHÈSE ET PERSPECTIVES
+% ============================================
+\section{Synthèse et Perspectives}
+
+\begin{frame}{Récapitulatif des concepts clés}
+\begin{block}{Compétences acquises dans cette séance}
+\begin{enumerate}
+    \item \textbf{Typologie Vie :} Distinguer euros, UC, prévoyance, rentes viagères
+    \item \textbf{Modélisation :} Projeter flux futurs (prestations, primes, frais, PB)
+    \item \textbf{Hypothèses :} Appliquer tables mortalité, lois de rachat, inflation frais
+    \item \textbf{Méthodes :} Choisir entre police-par-police et model points
+    \item \textbf{Actualisation :} Utiliser courbe EIOPA sans risque
+    \item \textbf{Best Estimate :} Calculer le BE conforme Solvency II
+    \item \textbf{Programmation :} Coder en Python pour industrialiser
+\end{enumerate}
+\end{block}
+
+\vspace{0.3cm}
+\begin{alertblock}{Compétences opérationnelles}
+\begin{itemize}
+    \item[$\checkmark$] Projeter un portefeuille vie sur Excel (petite échelle)
+    \item[$\checkmark$] Écrire un script Python de projection (industrialisable)
+    \item[$\checkmark$] Réaliser des analyses de sensibilité (TMG, rachats, mortalité)
+    \item[$\checkmark$] Interpréter les résultats et identifier les drivers du BE
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Limites de l'approche déterministe}
+\begin{alertblock}{Ce cours = simplification pédagogique}
+En production réelle pour Solvency II, les compagnies utilisent des méthodes plus avancées :
+\end{alertblock}
+
+\begin{block}{1. Projections stochastiques (Monte-Carlo)}
+\begin{itemize}
+    \item Taux d'intérêt modélisés (CIR, Hull-White, Black-Karasinski)
+    \item 1 000 à 10 000 scénarios économiques (ESG)
+    \item Valorisation options/garanties par Monte-Carlo
+\end{itemize}
+\end{block}
+
+\begin{block}{2. Rachats dynamiques comportementaux}
+\begin{itemize}
+    \item Modèles économétriques calibrés sur historique
+    \item Dépendance au contexte économique (spread taux)
+    \item Stress massif de rachats (Solvency II SCR)
+\end{itemize}
+\end{block}
+
+\begin{block}{3. Modélisation actif-passif jointe (ALM)}
+\begin{itemize}
+    \item Projection conjointe bilan actif et passif
+    \item Gestion dynamique allocation d'actifs
+    \item Calcul du SCR (capital de solvabilité requis)
+\end{itemize}
+\end{block}
+
+\textbf{Ces techniques seront vues en Master 2 Actuariat}
+\end{frame}
+
+\begin{frame}{Niveaux de complexité : du cours à la production}
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Axes
+\draw[->] (0,0) -- (11,0) node[right] {\scriptsize Complexité};
+\draw[->] (0,0) -- (0,6) node[above] {\scriptsize Temps calcul};
+
+% Points
+\node[circle, fill=vertactu, minimum size=0.4cm, label=below:{\scriptsize Excel simple}] (excel) at (2, 1) {};
+\node[circle, fill=bleuactu, minimum size=0.4cm, label=below:{\scriptsize Python déterministe}] (python) at (5, 2) {};
+\node[circle, fill=orangeactu, minimum size=0.4cm, label=below:{\scriptsize Python stochastique}] (stoch) at (8, 4) {};
+\node[circle, fill=rougeactu, minimum size=0.4cm, label=below:{\scriptsize Production ALM}] (prod) at (10, 5.5) {};
+
+% Flèches progression
+\draw[->, thick, dashed] (excel) -- (python);
+\draw[->, thick, dashed] (python) -- (stoch);
+\draw[->, thick, dashed] (stoch) -- (prod);
+
+% Annotations
+\node[align=center, font=\tiny] at (2, 2.5) {1 contrat\\10 min\\Séance 4};
+\node[align=center, font=\tiny] at (5, 3.5) {100 contrats\\5 min\\Séance 4};
+\node[align=center, font=\tiny] at (8, 5.5) {1000 scénarios\\1 h\\Master 2};
+\node[align=center, font=\tiny] at (10, 6.8) {Full ALM\\12 h\\Production};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{Votre progression :}
+\begin{itemize}
+    \item \textcolor{vertactu}{\textbf{Étape 1-2 (ce cours) :}} maîtrise Excel et Python déterministe
+    \item \textcolor{orangeactu}{\textbf{Étape 3 (M2, stage) :}} méthodes stochastiques avancées
+    \item \textcolor{rougeactu}{\textbf{Étape 4 (carrière) :}} production industrielle full ALM
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pour aller plus loin : ressources}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Réglementation :}
+\begin{itemize}
+    \item Directive 2009/138/CE (Solvency II)
+    \item Règlement Délégué 2015/35
+    \item EIOPA Guidelines on Technical Provisions (2015)
+    \item ACPR Position 2013-P-01
+    \item QIS5 Technical Specifications
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Ouvrages techniques :}
+\begin{itemize}
+    \item Planchet \& Thérond, \textit{Modélisation statistique des phénomènes de durée}
+    \item Devineau \& Loisel, \textit{Risque de taux en assurance-vie}
+    \item Wüthrich \& Merz, \textit{Stochastic Claims Reserving}
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Python pour actuaires :}
+\begin{itemize}
+    \item Doc NumPy/Pandas/Matplotlib
+    \item Bibliothèque \texttt{pyliferisk}
+    \item Bibliothèque \texttt{actuarialmath}
+    \item Cours Coursera/DataCamp
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Sites de référence :}
+\begin{itemize}
+    \item Institut des Actuaires (France)
+    \item Society of Actuaries (USA)
+    \item Actuarial Outpost (forum)
+    \item EIOPA website (données/guidelines)
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{block}{Formation continue}
+\textbf{Veille réglementaire :} Bulletin ACPR, EIOPA Opinions, Guidelines mises à jour\\
+\textbf{Veille technique :} Conférences IA, nouveaux packages Python, GPU computing
+\end{block}
+\end{frame}
+
+\begin{frame}{De l'étudiant à l'actuaire opérationnel}
+\begin{block}{Dans un service actuariat production d'une compagnie :}
+\begin{multicols}{2}
+\begin{itemize}
+    \item Portefeuilles 100 000 - 500 000 contrats
+    \item Projections sur clusters HPC (10-100 cœurs)
+    \item Temps de calcul : plusieurs heures
+    \item Code Python versionné (Git)
+    \item Tests unitaires, CI/CD
+    \item Peer review obligatoire
+    \item BDD SQL (PostgreSQL, Oracle)
+    \item Dashboards (Tableau, Power BI)
+    \item Reporting ACPR/EIOPA (QRT)
+\end{itemize}
+\end{multicols}
+\end{block}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Le chemin pour y arriver}
+\begin{enumerate}
+    \item[$\checkmark$] \textbf{Concepts théoriques :} maîtrisés (ce cours)
+    \item[$\checkmark$] \textbf{Implémentation simple :} Excel et Python basique (TD)
+    \item[$\rightarrow$] \textbf{Projets complexes :} stages, alternance, mémoire actuariat
+    \item[$\rightarrow$] \textbf{Bonnes pratiques dev :} Git, tests, documentation, review
+    \item[$\rightarrow$] \textbf{Formation continue :} veille réglementaire, nouveaux outils
+\end{enumerate}
+\end{exampleblock}
+
+\textbf{Vous êtes maintenant équipés pour devenir des actuaires opérationnels !}
+\end{frame}
+
+\begin{frame}[standout]
+\Huge Questions ?
+
+\vspace{1.5cm}
+
+\Large
+\textbf{Prochaine séance :}\\
+Risk Margin et SCR Vie
+
+\vspace{1cm}
+
+\normalsize
+\textit{« Un actuaire n'est pas quelqu'un qui aime les mathématiques, \\
+mais quelqu'un qui aime résoudre des problèmes avec des mathématiques »}
+
+\vspace{1.5cm}
+
+Contact : \texttt{fabrice.borel-mathurin@acpr.banque-france.fr}
+\end{frame}
+
+\end{document}
