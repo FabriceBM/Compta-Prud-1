@@ -1,0 +1,2 @@
+# Fichiers de code que `make code` (tools/executer_code.py) n'exécute pas. Une ligne par chemin, raison après #.
+seances/07_scr-mcr-fonds-propres/corriges/td-7-3_management-actions.ipynb  # waterfallcharts 3.8 incompatible avec pandas >= 2 : voir relecture.md

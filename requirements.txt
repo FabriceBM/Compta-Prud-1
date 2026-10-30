@@ -1,0 +1,11 @@
+# Environnement du cours : le site (Quarto) et le code des séances (notebooks, corrigés).
+#   python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt
+quarto-cli==1.10.20     # quarto render / preview ; même version qu'en CI
+jupyter>=1.0            # ouvrir les notebooks
+nbclient>=0.10          # make code : exécuter les notebooks sans navigateur
+numpy>=1.26
+pandas>=2.0
+matplotlib>=3.7
+seaborn>=0.13
+scipy>=1.11
+tabulate>=0.9           # DataFrame.to_markdown (TD 7.3)
