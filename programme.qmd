@@ -11,7 +11,7 @@ validés pour l'année en cours : établissement, calendrier, modalités d'éval
 
 ## Public et format
 
-- **Public** : Master 2 en alternance, Université Paris 1 Panthéon-Sorbonne *(à confirmer)*.
+- **Public** : Master SAFIR, M2 en alternance, Université Paris 1 Panthéon-Sorbonne *(à confirmer)*.
 - **Format** : séances de 4 heures, en général 2 h de cours puis 2 h de travaux dirigés sur Excel et en Python.
 - **Prérequis** : actualisation, probabilités, notions de comptabilité d'assurance. Le
   [polycopié de prérequis](prerequis/index.qmd) les reprend pas à pas, avec des exercices corrigés.
@@ -38,7 +38,7 @@ validés pour l'année en cours : établissement, calendrier, modalités d'éval
 | N° | Thème | Supports disponibles |
 |:--:|-------|----------------------|
 | 1 | [Pourquoi la comptabilité prudentielle ?](seances/01_introduction/index.qmd) | cours (PDF), étude de cas |
-| 2 | *(à préciser)* | |
+| 2 | [Valorisation des produits financiers](seances/02_valorisation-financiere/index.qmd) *(place à confirmer)* | énoncé du TD (PDF), corrigé |
 | 3 | [Meilleure estimation non-vie](seances/03_be-non-vie/index.qmd) | corrigé du TD 3.5 |
 | 4 | [Meilleure estimation vie](seances/04_be-vie/index.qmd) | diapositives, notebook, corrigé des TD |
 | 5–6 | [Approche stochastique et ALM](seances/05_stochastique-alm/index.qmd) | diapositives, codes du cours |
