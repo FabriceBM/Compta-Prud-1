@@ -1,0 +1,156 @@
+\section{Un flux certain}
+\label{sec:U1}
+
+Toute la comptabilité prudentielle repose sur une seule opération, répétée et
+généralisée : ramener à aujourd'hui la valeur d'un montant disponible plus tard.
+Cette unité en pose la forme la plus simple. Les cinq suivantes ne feront
+qu'y ajouter, une par une, les complications du monde réel.
+
+\subsection{La notion : valeur actuelle d'un flux unique}
+
+\begin{notion}{Actualisation et capitalisation}
+Un montant $C$ disponible dans $n$ années n'a pas la même valeur qu'un montant
+$C$ disponible aujourd'hui. Au taux annuel $r$, un euro placé aujourd'hui vaut
+$(1+r)^n$ euros dans $n$ ans : c'est la \emph{capitalisation}\index{capitalisation}.
+
+L'opération inverse, l'\emph{actualisation}\index{actualisation}, ramène un flux
+futur à sa valeur d'aujourd'hui :
+\[
+  V_0 \;=\; \frac{C}{(1+r)^n} \;=\; C \times v^{\,n},
+  \qquad\text{avec}\qquad v \;=\; \frac{1}{1+r}.
+\]
+Le terme $v^{\,n}$ est le \emph{facteur d'actualisation}\index{facteur d'actualisation}
+à l'horizon $n$. Il est toujours compris entre $0$ et $1$ dès que $r>0$.
+\end{notion}
+
+Deux propriétés doivent devenir des réflexes, car elles se retrouveront à chaque
+étage de la progression : la valeur actuelle \emph{décroît} quand le taux
+augmente, et elle \emph{décroît} quand l'échéance s'éloigne.
+
+\begin{center}
+\begin{tikzpicture}[x=1.35cm, y=1cm]
+  \draw[timeaxis] (0,0) -- (5.4,0);
+  \foreach \x/\l in {0/0, 1/1, 2/2, 3/{\dots}, 4/n}
+    { \node[timenode] at (\x,0) {}; \node[etiq, below=3pt] at (\x,0) {\l}; }
+  \draw[flux] (4,0) -- (4,1.15);
+  \node[etiq, above] at (4,1.15) {$C$};
+  \draw[fluxneg] (0,0.95) -- (0,0.05);
+  \node[etiq, above] at (0,0.95) {$V_0 = C\,v^{\,n}$};
+  \draw[->, dashed, grisactu] (3.85,1.0) to[bend right=18] (0.15,1.0);
+\end{tikzpicture}
+\end{center}
+
+\begin{exercice}[valeur actuelle]
+Un flux certain de $25\,000$~\euro{} sera perçu dans $7$~ans. Le taux
+d'actualisation annuel est de $3{,}20\,\%$. Calculer sa valeur actuelle.
+\end{exercice}
+
+\begin{corrige}
+\[
+  V_0 = \frac{25\,000}{(1{,}032)^{7}} = \frac{25\,000}{1{,}24669} \approx 20\,053\ \text{\euro}.
+\]
+Autrement dit, disposer de $20\,053$~\euro{} aujourd'hui équivaut à disposer de
+$25\,000$~\euro{} dans sept ans, si l'on peut placer son argent à $3{,}20\,\%$.
+\end{corrige}
+
+\begin{exercice}[capitalisation]
+Un capital de $15\,000$~\euro{} est placé pendant $12$~ans au taux annuel de
+$2{,}50\,\%$. Quel montant sera disponible au terme ?
+\end{exercice}
+
+\begin{corrige}
+\[
+  C_{12} = 15\,000 \times (1{,}025)^{12} = 15\,000 \times 1{,}34489 \approx 20\,173\ \text{\euro}.
+\]
+C'est l'opération réciproque de la précédente : on multiplie au lieu de diviser.
+\end{corrige}
+
+\subsection{Généralisation : les conventions de taux}
+
+\begin{generalisation}{Un taux n'a de sens qu'avec sa convention}
+Annoncer « $4\,\%$ » ne suffit pas. Il faut préciser la périodicité de
+capitalisation et la règle de comptage des jours. Deux distinctions suffisent
+pour la suite du cours.
+
+\medskip
+\textbf{Taux proportionnel et taux équivalent.} Pour passer d'un taux annuel
+$r$ à un taux sur une fraction $1/k$ d'année, deux conventions coexistent :
+\[
+  \underbrace{r^{\text{prop}}_{k} = \frac{r}{k}}_{\text{proportionnel}}
+  \qquad\text{et}\qquad
+  \underbrace{r^{\text{éq}}_{k} = (1+r)^{1/k} - 1}_{\text{équivalent}}.
+\]
+Seul le taux équivalent respecte la capitalisation : $(1+r^{\text{éq}}_{k})^{k} = 1+r$.
+Le taux proportionnel, lui, surestime toujours le rendement réel.
+
+\medskip
+\textbf{Base de calcul des jours.} /!\ Attention /!\ La convention des marché monétaire est que pour les durées inférieures à un an, on n’utilise pas l’actualisation pour le calcul des intérêts courus, mais la formule suivante : 
+\[
+  I = C \times r \times \frac{\text{nombre de jours}}{\text{base}}.
+\]
+La base de calcul des jours peut être de $360$ ou $365$ jours : \emph{exact/360}\index{exact/360} (base monétaire) ou \emph{exact/365}\index{exact/365} (base obligataire) ; la base $360$ produit mécaniquement des intérêts plus élevés que la base $365$ pour un même taux affiché.
+\end{generalisation}
+
+\begin{exercice}[proportionnel contre équivalent]
+Le taux annuel est de $4{,}00\,\%$. Calculer le taux semestriel proportionnel et
+le taux semestriel équivalent. Un capital de $200\,000$~\euro{} est placé un an,
+avec capitalisation semestrielle : chiffrer l'écart entre les deux conventions.
+\end{exercice}
+
+\begin{corrige}
+Taux proportionnel : $r^{\text{prop}}_{2} = 4{,}00/2 = 2{,}0000\,\%$.
+
+Taux équivalent : $r^{\text{éq}}_{2} = (1{,}04)^{1/2} - 1 = 1{,}98039\,\%$.
+
+\medskip
+Au bout d'un an, soit deux semestres :
+\begin{align*}
+  \text{convention proportionnelle} &: 200\,000 \times (1{,}02)^{2} = 208\,080{,}00\ \text{\euro} \\
+  \text{convention équivalente}     &: 200\,000 \times (1{,}04)\phantom{^{2}} = 208\,000{,}00\ \text{\euro}
+\end{align*}
+L'écart est de $80$~\euro{} sur un an. Il paraît anodin ; rapporté à un
+portefeuille de provisions techniques de plusieurs centaines de millions et à un
+horizon de projection de trente ans, il ne l'est plus.
+\end{corrige}
+
+\begin{exercice}[bases de calcul]
+Un placement de $500\,000$~\euro{} est effectué pour $91$~jours au taux de
+$3{,}00\,\%$. Calculer les intérêts en base exact/360 puis en base exact/365, et
+commenter l'écart.
+\end{exercice}
+
+\begin{corrige}
+\begin{align*}
+  \text{exact}/360 &: 500\,000 \times 0{,}03 \times \tfrac{91}{360} = 3\,791{,}67\ \text{\euro} \\
+  \text{exact}/365 &: 500\,000 \times 0{,}03 \times \tfrac{91}{365} = 3\,739{,}73\ \text{\euro}
+\end{align*}
+L'écart atteint $51{,}94$~\euro, soit $1{,}39\,\%$ des intérêts. Le rapport des
+deux bases vaut exactement $365/360$, quel que soit le montant, le taux ou la
+durée : c'est un écart de convention, pas un écart économique.
+\end{corrige}
+
+\begin{pont}{Où cela sert dans Solvabilité~II}
+Le facteur $v^{\,n}$ de cette unité est très exactement celui qui sera appliqué
+à chaque flux de prestation dans le calcul de la meilleure estimation. La seule
+différence, à ce stade purement technique, est que le taux $r$ n'y est pas choisi
+librement : il est lu sur la courbe des taux sans risque publiée chaque mois par
+l'EIOPA, et il varie selon l'échéance du flux. C'est l'objet de l'unité~3.
+\end{pont}
+
+\begin{refreg}
+\textbf{Références.} Directive 2009/138/CE, article~77, paragraphe~2 : la
+meilleure estimation est la moyenne pondérée des flux de trésorerie futurs
+compte tenu de la valeur temporelle de l'argent, obtenue au moyen de la courbe
+des taux sans risque pertinente. \\
+Les structures par terme sans risque sont publiées mensuellement par l'EIOPA,
+accompagnées de leur documentation technique.
+\end{refreg}
+
+\subsection*{Notations introduites}
+\begin{description}[leftmargin=3cm, style=nextline, font=\normalfont]
+  \notation{C}{montant nominal d'un flux}
+  \notation{r}{taux d'actualisation annuel}
+  \notation{n}{horizon, en années}
+  \notation{v = (1+r)^{-1}}{facteur d'actualisation à un an}
+  \notation{V_0}{valeur actuelle}
+\end{description}

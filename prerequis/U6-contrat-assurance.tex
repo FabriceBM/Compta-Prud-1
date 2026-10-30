@@ -1,0 +1,309 @@
+\section{Un contrat d'assurance}
+\label{sec:U6}
+
+Les cinq unités précédentes ont introduit, une par une, toutes les pièces
+nécessaires : l'actualisation, les dates multiples, la dépendance aux taux de
+marché, l'aléa, l'optionalité. Il n'y a rien de neuf à apprendre ici. On les
+assemble.
+
+Le résultat porte un nom réglementaire --- la meilleure estimation --- mais il
+n'est rien d'autre que la valeur actuelle probable d'un échéancier. Cette unité
+est l'atterrissage de toute la progression.
+
+\subsection{La notion : l'échéancier probabilisé d'un contrat}
+
+\begin{notion}{Un contrat est une variable aléatoire}
+Un contrat d'assurance engage l'assureur à verser des prestations dont le
+montant et la date sont incertains. Il est donc décrit par une suite de flux
+\emph{attendus} $(\mathbb{E}[F_1],\dots,\mathbb{E}[F_n])$, et sa valeur est
+\[
+  \mathrm{BE} \;=\; \sum_{k=1}^{n} \frac{\mathbb{E}[F_k]}{(1+z_k)^{k}} .
+\]
+Chaque ingrédient a été vu séparément : l'espérance vient de l'unité~4, les
+dates multiples de l'unité~2, les taux $z_k$ lus sur la courbe de l'unité~3.
+
+\medskip
+En assurance non-vie, les flux attendus se déduisent d'une \emph{cadence de
+règlement}\index{cadence de règlement} : la charge ultime $S$ d'un exercice de
+survenance se règle progressivement selon un profil $c_1,\dots,c_n$ observé sur
+l'historique, avec $\sum_k c_k = 1$. Alors $\mathbb{E}[F_k] = S \times c_k$.
+\end{notion}
+
+\begin{center}
+\begin{tikzpicture}[x=1.15cm, y=0.75cm]
+  \draw[timeaxis] (-0.4,0) -- (5.9,0);
+  \foreach \x/\l in {0/0, 1/1, 2/2, 3/3, 4/4, 5/5}
+    { \node[timenode] at (\x,0) {}; \node[etiq, below=3pt] at (\x,0) {\l}; }
+  \draw[flux] (1,0) -- (1,1.75); \node[etiq, above] at (1,1.75) {$Sc_1$};
+  \draw[flux] (2,0) -- (2,1.30); \node[etiq, above] at (2,1.30) {$Sc_2$};
+  \draw[flux] (3,0) -- (3,0.95); \node[etiq, above] at (3,0.95) {$Sc_3$};
+  \draw[flux] (4,0) -- (4,0.65); \node[etiq, above] at (4,0.65) {$Sc_4$};
+  \draw[flux] (5,0) -- (5,0.40); \node[etiq, above] at (5,0.40) {$Sc_5$};
+  \draw[fluxneg] (0,1.55) -- (0,0.05);
+  \node[etiq, above] at (0,1.6) {$\mathrm{BE}$};
+\end{tikzpicture}
+\end{center}
+
+\begin{exercice}[meilleure estimation en non-vie]
+Un portefeuille de responsabilité civile automobile présente une charge ultime
+estimée à $8\,000\,000$~\euro{} au titre des sinistres déjà survenus. La cadence
+de règlement observée est de $40\,\%$, $25\,\%$, $18\,\%$, $12\,\%$ et $5\,\%$,
+les règlements intervenant en fin d'année. Le taux d'actualisation est de
+$2{,}20\,\%$, constant.
+
+Calculer la meilleure estimation de la provision pour sinistres à payer, puis la
+comparer à la provision non actualisée.
+\end{exercice}
+
+\begin{corrige}
+\begin{center}\small
+\begin{tabular}{crrrr}
+\toprule
+Année & Part réglée & Flux attendu & Facteur & Flux actualisé \\
+\midrule
+1 & $40\,\%$ & $3\,200\,000$ & $0{,}97847$ & $3\,131\,115$ \\
+2 & $25\,\%$ & $2\,000\,000$ & $0{,}95741$ & $1\,914\,821$ \\
+3 & $18\,\%$ & $1\,440\,000$ & $0{,}93680$ & $1\,348\,993$ \\
+4 & $12\,\%$ & $960\,000$    & $0{,}91663$ & $879\,970$ \\
+5 & $5\,\%$  & $400\,000$    & $0{,}89690$ & $358\,761$ \\
+\midrule
+\multicolumn{3}{r}{\textbf{Meilleure estimation}} & & $\mathbf{7\,633\,661}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+La provision non actualisée s'élève à $8\,000\,000$~\euro. L'écart, soit
+$366\,339$~\euro{} ou $4{,}58\,\%$, est le seul effet de l'actualisation.
+
+\medskip
+Cet écart dépend de deux choses : le niveau des taux, et la longueur de la
+cadence. Sur une branche à déroulement long --- la responsabilité civile
+médicale, la construction --- où les règlements s'étalent sur quinze ou vingt
+ans, il peut dépasser $15\,\%$.
+\end{corrige}
+
+\begin{exercice}[l'écart avec la provision comptable]
+Le même portefeuille est provisionné en normes françaises à $8\,600\,000$~\euro,
+la réglementation imposant une évaluation prudente et sans actualisation.
+
+Décomposer l'écart entre cette provision et la meilleure estimation calculée
+ci-dessus, en distinguant ses deux sources.
+\end{exercice}
+
+\begin{corrige}
+\[
+  8\,600\,000 - 7\,633\,661 = 966\,339\ \text{\euro}.
+\]
+Cet écart se décompose exactement en deux termes :
+\begin{center}\small
+\begin{tabular}{lrl}
+\toprule
+Source & Montant & Origine \\
+\midrule
+Marge de prudence   & $600\,000$ & hypothèses prudentes contre réalistes \\
+Actualisation       & $366\,339$ & valeur temporelle de l'argent \\
+\midrule
+\textbf{Écart total} & $\mathbf{966\,339}$ & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+Les deux sources sont de nature différente et se justifient devant un contrôleur
+par des arguments distincts. La marge de prudence relève du choix des hypothèses,
+étudié à l'unité~4 ; l'actualisation relève de la mécanique financière, étudiée
+à l'unité~2.
+
+Le passage à la meilleure estimation \emph{libère} donc des fonds propres --- ici
+près d'un million d'euros. C'est l'un des effets les plus visibles du passage
+en normes prudentielles, et l'une des questions les plus fréquentes en contrôle.
+\end{corrige}
+
+\subsection{Généralisation : frontière des contrats et marge de risque}
+
+\begin{generalisation}{Ce que l'on projette, et ce que l'on ajoute}
+\textbf{La frontière des contrats.} Tous les flux futurs ne sont pas à
+provisionner. La \emph{frontière du contrat}\index{frontière des contrats}
+délimite les engagements que l'assureur ne peut plus refuser : les primes
+futures ne sont incluses que s'il ne dispose ni du droit de résilier, ni de
+celui de refuser la prime, ni de celui d'en modifier librement le niveau. Un
+contrat annuel tacitement reconductible, résiliable à l'échéance, a donc une
+frontière d'un an --- même si le client restera vraisemblablement dix ans.
+
+C'est une frontière \emph{juridique}, pas comportementale. Elle produit des
+résultats contre-intuitifs, et elle est la source d'erreur la plus fréquente
+dans un calcul de meilleure estimation vie.
+
+\medskip
+\textbf{La meilleure estimation est nette.} On projette tous les flux liés au
+contrat : prestations, frais de gestion et d'acquisition, et primes à recevoir
+en signe opposé.
+\[
+  \mathrm{BE} \;=\; \sum_{k} \frac{\mathbb{E}[\text{prestations}_k] + \mathbb{E}[\text{frais}_k]
+    - \mathbb{E}[\text{primes}_k]}{(1+z_k)^{k}} .
+\]
+Une meilleure estimation peut donc être négative, ce qu'aucune provision
+comptable ne permet.
+
+\medskip
+\textbf{La marge de risque.} La meilleure estimation est une espérance : par
+construction, elle sera insuffisante une fois sur deux. Les provisions
+techniques y ajoutent une \emph{marge de risque}\index{marge de risque},
+définie comme le coût d'immobilisation du capital qu'un repreneur exigerait
+pour porter les engagements jusqu'à leur extinction :
+\[
+  \mathrm{MR} \;=\; \mathrm{CoC} \times \sum_{k \geq 0}
+    \frac{\mathrm{SCR}_k}{(1+z_{k+1})^{k+1}},
+  \qquad \mathrm{CoC} = 6\,\% .
+\]
+On retrouve, une fois encore, une somme de flux actualisés --- les $\mathrm{SCR}_k$
+étant les capitaux requis projetés année après année.
+
+\medskip
+\[
+  \boxed{\ \text{Provisions techniques} \;=\; \mathrm{BE} \;+\; \mathrm{MR}\ }
+\]
+\end{generalisation}
+
+\begin{exercice}[frontière des contrats]
+Pour chacune des situations suivantes, indiquer si les primes futures entrent
+dans la meilleure estimation, et justifier.
+
+\textbf{(a)} Un contrat automobile annuel, tacitement reconductible, que
+l'assureur peut résilier à chaque échéance.
+
+\textbf{(b)} Un contrat d'épargne à versements libres, sans engagement de
+l'assuré ni faculté de refus par l'assureur.
+
+\textbf{(c)} Un contrat de prévoyance décès à prime nivelée sur vingt ans, que
+l'assureur ne peut ni résilier ni retarifer.
+\end{exercice}
+
+\begin{corrige}
+\textbf{(a)} \emph{Non.} La faculté de résiliation annuelle place la frontière à
+l'échéance suivante. Le fait que le contrat sera vraisemblablement reconduit dix
+ans est sans effet : le critère est juridique, non comportemental.
+
+\medskip
+\textbf{(b)} \emph{Non} pour les versements futurs, qui ne sont pas des
+engagements : l'assuré est libre de ne pas verser. En revanche, l'épargne déjà
+constituée est intégralement provisionnée, avec toutes les garanties qui s'y
+attachent.
+
+\medskip
+\textbf{(c)} \emph{Oui}, sur vingt ans. L'assureur est engagé pour toute la
+durée sans pouvoir modifier le tarif : les primes futures sont dans la frontière
+et viennent en déduction de la meilleure estimation.
+
+\medskip
+Le cas (c) illustre la possibilité d'une meilleure estimation négative : si la
+valeur actuelle des primes excède celle des prestations et des frais, le contrat
+constitue un actif, non un passif. C'est économiquement juste et comptablement
+impossible en normes françaises.
+\end{corrige}
+
+\begin{exercice}[provisions techniques complètes]
+Reprendre le portefeuille de l'exercice~6.1, dont la meilleure estimation
+s'établit à $7\,633\,661$~\euro. Le capital de solvabilité requis au titre de ce
+portefeuille est projeté comme suit, en fin de chaque année :
+\begin{center}\small
+\begin{tabular}{lrrrrr}
+\toprule
+Année $k$ & $0$ & $1$ & $2$ & $3$ & $4$ \\
+$\mathrm{SCR}_k$ & $1\,200\,000$ & $780\,000$ & $460\,000$ & $220\,000$ & $80\,000$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Le taux d'actualisation reste de $2{,}20\,\%$ et le coût du capital de $6\,\%$.
+
+Calculer la marge de risque, puis les provisions techniques.
+\end{exercice}
+
+\begin{corrige}
+Chaque $\mathrm{SCR}_k$ est actualisé sur $k+1$ périodes :
+\begin{center}\small
+\begin{tabular}{crrr}
+\toprule
+$k$ & $\mathrm{SCR}_k$ & Facteur $(1{,}022)^{-(k+1)}$ & Montant actualisé \\
+\midrule
+0 & $1\,200\,000$ & $0{,}97847$ & $1\,174\,168$ \\
+1 & $780\,000$    & $0{,}95741$ & $746\,780$ \\
+2 & $460\,000$    & $0{,}93680$ & $430\,928$ \\
+3 & $220\,000$    & $0{,}91663$ & $201\,660$ \\
+4 & $80\,000$     & $0{,}89690$ & $71\,752$ \\
+\midrule
+\multicolumn{3}{r}{\textbf{Somme}} & $\mathbf{2\,625\,289}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\[
+  \mathrm{MR} = 6\,\% \times 2\,625\,289 = 157\,517\ \text{\euro}.
+\]
+\[
+  \text{Provisions techniques} = 7\,633\,661 + 157\,517 = 7\,791\,178\ \text{\euro}.
+\]
+
+\medskip
+La marge de risque représente ici $2{,}06\,\%$ de la meilleure estimation. Sur
+une branche à déroulement long, où les $\mathrm{SCR}$ projetés restent élevés
+pendant quinze ans, cette proportion est sensiblement plus forte.
+
+Noter que même après ajout de la marge de risque, les provisions techniques
+restent inférieures de $808\,822$~\euro{} à la provision comptable de
+$8\,600\,000$~\euro.
+\end{corrige}
+
+\begin{pont}{Où cela sert dans Solvabilité~II}
+Cette unité \emph{est} le passif du bilan prudentiel. Rien de plus n'est requis
+pour le construire, du moins en assurance non-vie.
+
+\medskip
+La progression complète se relit d'un trait. Un flux certain, actualisé
+(unité~1). Plusieurs dates, donc une somme (unité~2). Des taux lus sur la courbe
+EIOPA plutôt qu'un taux plat (unité~3). Des flux pondérés par leur probabilité
+d'occurrence (unité~4). Une pondération risque-neutre lorsque le contrat comporte
+des options (unité~5). Enfin l'assemblage, augmenté de la marge de risque
+(unité~6). Chaque étage n'ajoutait qu'un ingrédient, et le dernier ne fait que
+les réunir.
+
+\medskip
+Deux prolongements restent à construire, et ils forment la suite du cours.
+
+\emph{L'actif face au passif.} Une meilleure estimation ne se calcule pas
+isolément : sa valeur dépend du rendement des placements qui la couvrent, et
+réciproquement les décisions d'investissement dépendent du profil des
+engagements. Cette interaction est l'objet de la gestion actif-passif, à
+l'unité~7.
+
+\emph{La projection stochastique.} En assurance vie, les options de l'unité~5
+--- garanties de taux, participation aux bénéfices, rachats --- interdisent la
+projection déterministe employée ici. Il faut simuler des milliers de
+trajectoires et moyenner : c'est l'unité~8.
+
+\medskip
+La méthode reste pourtant la même dans les deux cas : une espérance de flux
+actualisés. Seule la manière de calculer l'espérance change.
+\end{pont}
+
+\begin{refreg}
+\textbf{Références.} Directive 2009/138/CE, article~76 : les provisions
+techniques correspondent au montant que les entreprises devraient payer pour
+transférer immédiatement leurs engagements à une autre entreprise. \\
+Article~77 : la valeur des provisions techniques est égale à la somme de la
+meilleure estimation et de la marge de risque, cette dernière étant calculée de
+manière à garantir que la valeur des provisions équivaut au montant exigé pour
+reprendre et honorer les engagements. \\
+Le coût du capital retenu pour la marge de risque est fixé réglementairement. \\
+Règlement délégué (UE) 2015/35 : frontière des contrats, segmentation et
+méthodes de calcul de la marge de risque. \emph{[Références d'articles et taux
+de coût du capital à vérifier avant diffusion.]}
+\end{refreg}
+
+\subsection*{Notations introduites}
+\begin{description}[leftmargin=2.6cm, style=nextline, font=\normalfont]
+  \notation{S}{charge ultime d'un exercice de survenance}
+  \notation{c_k}{part de la charge réglée en année $k$}
+  \notation{\mathbb{E}[F_k]}{flux attendu de la période $k$}
+  \notation{\mathrm{BE}}{meilleure estimation}
+  \notation{\mathrm{MR}}{marge de risque}
+  \notation{\mathrm{CoC}}{coût du capital}
+\end{description}

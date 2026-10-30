@@ -1,0 +1,283 @@
+\section{Un échéancier lié aux taux}
+\label{sec:U3}
+
+Les deux unités précédentes supposaient un taux donné, unique et constant. On
+lève ici cette hypothèse : le taux devient une \emph{donnée de marché}, il dépend
+de l'échéance, et il bouge. L'échéancier, lui, ne change pas --- ce qui change
+est ce avec quoi on l'actualise.
+
+C'est le premier étage où l'on rencontre un objet coté : l'obligation. Elle sert
+de laboratoire, parce qu'elle rend visible sur un actif ce qui restera invisible
+sur un passif d'assurance.
+
+\subsection{La notion : prix d'une obligation à taux fixe}
+
+\begin{notion}{Une obligation est un échéancier}
+Une obligation à taux fixe de nominal $N$, de taux facial $c$ et de maturité $n$
+verse un coupon $C = c\,N$ en fin de chacune des $n$ périodes, puis rembourse le
+nominal à l'échéance. Son prix est la valeur actuelle de cet échéancier :
+\[
+  P \;=\; \sum_{k=1}^{n} \frac{C}{(1+r)^{k}} \;+\; \frac{N}{(1+r)^{n}}
+      \;=\; C \times a_{\overline{n}|r} \;+\; N\,(1+r)^{-n}.
+\]
+Aucune formule nouvelle : c'est la VAN de l'unité~2 appliquée à une rente
+certaine augmentée d'un flux terminal.
+
+\medskip
+La position du prix par rapport au nominal se lit immédiatement sur le rapport
+entre taux facial et taux de marché : si $c > r$, l'obligation cote
+\emph{au-dessus du pair} ; si $c < r$, \emph{au-dessous}.
+\end{notion}
+
+\begin{center}
+\begin{tikzpicture}[x=1.25cm, y=0.8cm]
+  \draw[timeaxis] (-0.4,0) -- (5.4,0);
+  \foreach \x/\l in {0/0, 1/1, 2/2, 3/3, 4/4, 5/n}
+    { \node[timenode] at (\x,0) {}; \node[etiq, below=3pt] at (\x,0) {\l}; }
+  \draw[fluxneg] (0,0) -- (0,-1.0);
+  \node[etiq, below] at (0,-1.05) {$P$};
+  \foreach \x in {1,2,3,4}
+    { \draw[flux] (\x,0) -- (\x,0.75); \node[etiq, above] at (\x,0.75) {$C$}; }
+  \draw[flux] (5,0) -- (5,1.7);
+  \node[etiq, above] at (5,1.7) {$C+N$};
+\end{tikzpicture}
+\end{center}
+
+\begin{exercice}[prix d'une obligation]
+Une obligation de nominal $1\,000$~\euro{} porte un taux facial de $3{,}20\,\%$
+et arrive à échéance dans $5$~ans. Le taux de marché est de $2{,}60\,\%$.
+Calculer son prix et commenter sa position par rapport au pair.
+\end{exercice}
+
+\begin{corrige}
+Le coupon annuel vaut $C = 32$~\euro. Avec $(1{,}026)^{-5} = 0{,}87956$ :
+\[
+  a_{\overline{5}|2{,}6\%} = \frac{1-0{,}87956}{0{,}026} = 4{,}63242,
+  \qquad
+  P = 32 \times 4{,}63242 + 1\,000 \times 0{,}87956 \approx 1\,027{,}79\ \text{\euro}.
+\]
+L'obligation cote au-dessus du pair, à $102{,}78\,\%$, parce que son taux facial
+excède le taux de marché : elle sert un coupon plus généreux que ce que le
+marché exige aujourd'hui, et cet avantage se paie.
+\end{corrige}
+
+\begin{exercice}[lecture inverse]
+La même obligation se négocie à $985$~\euro. Déterminer son taux actuariel.
+\end{exercice}
+
+\begin{corrige}
+On cherche $r$ tel que $32\,a_{\overline{5}|r} + 1\,000\,(1+r)^{-5} = 985$.
+Deux essais encadrent la solution :
+\[
+  P(3{,}50\,\%) = 986{,}45\ \text{\euro},
+  \qquad
+  P(3{,}60\,\%) = 981{,}99\ \text{\euro}.
+\]
+Une interpolation linéaire donne
+$r \approx 3{,}50 + 0{,}10 \times \tfrac{986{,}45-985}{986{,}45-981{,}99}
+ \approx 3{,}53\,\%$.
+
+C'est le taux de rendement interne de l'unité~2, appliqué à une obligation. On
+l'appelle alors \emph{taux actuariel} ou \emph{rendement à l'échéance}.
+\end{corrige}
+
+\subsection{Généralisation : courbe des taux, coupon couru, sensibilité}
+
+\begin{generalisation}{Trois compléments indispensables}
+\textbf{La courbe des taux.} Il n'existe pas un taux, mais un taux par échéance.
+Le taux \emph{zéro-coupon}\index{taux zéro-coupon} $z_k$ est celui qui actualise
+un flux unique disponible en $k$. Le prix exact s'écrit alors
+\[
+  P \;=\; \sum_{k=1}^{n} \frac{C_k}{(1+z_k)^{k}} .
+\]
+Le taux actuariel $r$ n'est pas une donnée de marché : c'est le taux unique qui,
+appliqué à tous les flux, reproduit ce prix. C'est un \emph{résumé} de la courbe,
+pas un ingrédient du calcul.
+
+\medskip
+\textbf{Le coupon couru.} Entre deux détachements, le porteur acquiert
+progressivement le droit au coupon suivant. Le \emph{coupon
+couru}\index{coupon couru} est cette fraction acquise :
+\[
+  \mathrm{CC} \;=\; C \times \frac{\text{jours écoulés depuis le dernier détachement}}{\text{base}} .
+\]
+Les obligations se cotent \emph{pied de coupon}, c'est-à-dire hors coupon couru.
+Le montant effectivement réglé est la somme des deux.
+
+\medskip
+\textbf{Duration et sensibilité.} La \emph{duration de
+Macaulay}\index{duration} est la moyenne des dates de flux, pondérée par leurs
+valeurs actuelles :
+\[
+  D \;=\; \frac{1}{P}\sum_{k=1}^{n} k \,\frac{C_k}{(1+r)^{k}} .
+\]
+Elle s'exprime en années et mesure la maturité \emph{économique} du titre. La
+\emph{sensibilité}\index{sensibilité} $S = D/(1+r)$ en donne la lecture
+opérationnelle : pour une variation $\Delta r$ du taux,
+\[
+  \frac{\Delta P}{P} \;\approx\; -\,S \times \Delta r .
+\]
+Cette relation est une approximation du premier ordre. La relation prix-taux
+étant convexe, elle surestime toujours la baisse et sous-estime toujours la
+hausse.
+\end{generalisation}
+
+\begin{center}
+\begin{tikzpicture}[x=1.15cm, y=1.5cm]
+  \draw[timeaxis] (0,0) -- (5.7,0);
+  \draw[timeaxis] (0,0) -- (0,1.5);
+  \node[etiq, right] at (5.4,-0.25) {échéance};
+  \draw[thick, bleuactu] plot[smooth] coordinates
+    {(1,0.55) (2,0.72) (3,0.88) (4,1.00) (5,1.10)};
+  \foreach \x/\y/\l in {1/0.55/{2{,}0}, 2/0.72/{2{,}3}, 3/0.88/{2{,}6},
+                        4/1.00/{2{,}8}, 5/1.10/{3{,}0}}
+    { \node[timenode] at (\x,\y) {}; \node[etiq, above left=-1pt] at (\x,\y) {\l}; }
+  \foreach \x in {1,2,3,4,5} { \node[etiq, below=3pt] at (\x,0) {\x}; }
+  \node[etiq, above right] at (0,1.5) {$z_k$ en \%};
+\end{tikzpicture}
+\end{center}
+
+\begin{exercice}[courbe non plate et coupon couru]
+\textbf{(a)} Reprendre l'obligation précédente --- nominal $1\,000$~\euro, taux
+facial $3{,}20\,\%$, maturité $5$~ans --- et la valoriser avec la courbe
+zéro-coupon ci-dessus : $2{,}0\,\%$, $2{,}3\,\%$, $2{,}6\,\%$, $2{,}8\,\%$ et
+$3{,}0\,\%$.
+
+\medskip
+\textbf{(b)} L'obligation cote $101{,}05\,\%$ pied de coupon. L'achat intervient
+$73$~jours après le dernier détachement, en base exact/365. Déterminer le montant
+réglé par l'acheteur.
+\end{exercice}
+
+\begin{corrige}
+\textbf{(a)} Chaque flux est actualisé à \emph{son} taux :
+\begin{center}\small
+\begin{tabular}{ccrr}
+\toprule
+Année & Flux & $z_k$ & Flux actualisé \\
+\midrule
+1 & $32$    & $2{,}0\,\%$ & $31{,}37$ \\
+2 & $32$    & $2{,}3\,\%$ & $30{,}58$ \\
+3 & $32$    & $2{,}6\,\%$ & $29{,}63$ \\
+4 & $32$    & $2{,}8\,\%$ & $28{,}65$ \\
+5 & $1\,032$ & $3{,}0\,\%$ & $890{,}21$ \\
+\midrule
+\multicolumn{3}{r}{\textbf{Prix}} & $\mathbf{1\,010{,}44}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Le prix tombe à $1\,010{,}44$~\euro, contre $1\,027{,}79$~\euro{} avec un taux
+plat de $2{,}6\,\%$. La pente de la courbe pénalise les flux longs, et le
+remboursement du nominal représente ici près de $88\,\%$ du prix.
+
+\medskip
+\textbf{(b)} Coupon couru : $\mathrm{CC} = 32 \times \tfrac{73}{365} = 6{,}40$~\euro.
+\[
+  \text{montant réglé} = 1\,010{,}50 + 6{,}40 = 1\,016{,}90\ \text{\euro}.
+\]
+La cotation pied de coupon existe pour que le prix affiché ne chute pas
+artificiellement à chaque détachement : elle isole la variation de valeur
+économique du simple écoulement du temps.
+\end{corrige}
+
+\begin{exercice}[choc de taux, approché puis exact]
+Reprendre l'obligation valorisée à $1\,027{,}79$~\euro{} au taux plat de
+$2{,}60\,\%$.
+
+\textbf{(a)} Calculer sa duration de Macaulay et sa sensibilité.
+
+\textbf{(b)} Estimer l'effet d'une hausse instantanée des taux de $100$~points de
+base par la formule de sensibilité, puis recalculer le prix exact. Commenter
+l'écart.
+\end{exercice}
+
+\begin{corrige}
+\textbf{(a)} On pondère chaque date par la valeur actuelle de son flux :
+\begin{center}\small
+\begin{tabular}{crrr}
+\toprule
+$k$ & Flux & Valeur actuelle & $k \times$ VA \\
+\midrule
+1 & $32$    & $31{,}19$  & $31{,}19$ \\
+2 & $32$    & $30{,}40$  & $60{,}80$ \\
+3 & $32$    & $29{,}63$  & $88{,}89$ \\
+4 & $32$    & $28{,}88$  & $115{,}51$ \\
+5 & $1\,032$ & $907{,}70$ & $4\,538{,}50$ \\
+\midrule
+  & & $1\,027{,}79$ & $4\,834{,}89$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\[
+  D = \frac{4\,834{,}89}{1\,027{,}79} = 4{,}704\ \text{ans},
+  \qquad
+  S = \frac{4{,}704}{1{,}026} = 4{,}585 .
+\]
+La duration est inférieure à la maturité de cinq ans, puisque les coupons
+avancent le centre de gravité des flux.
+
+\medskip
+\textbf{(b)} Estimation par la sensibilité :
+\[
+  \frac{\Delta P}{P} \approx -4{,}585 \times 0{,}01 = -4{,}585\,\%
+  \quad\Longrightarrow\quad
+  \Delta P \approx -47{,}12\ \text{\euro},
+  \quad P \approx 980{,}67\ \text{\euro}.
+\]
+Calcul exact à $3{,}60\,\%$ : $P = 981{,}99$~\euro, soit $\Delta P = -45{,}80$~\euro,
+c'est-à-dire $-4{,}457\,\%$.
+
+\medskip
+L'approximation surestime la perte de $1{,}32$~\euro, soit près de $3\,\%$ de
+l'effet estimé. C'est la \emph{convexité} : la courbe prix-taux étant convexe,
+la tangente passe sous elle des deux côtés. Sur un portefeuille obligataire de
+plusieurs milliards et pour un choc réglementaire pouvant dépasser $100$~points
+de base, cet écart cesse d'être une subtilité.
+\end{corrige}
+
+\begin{pont}{Où cela sert dans Solvabilité~II}
+Cette unité se retrouve dans un bilan prudentiel à trois endroits distincts.
+
+\medskip
+\emph{À l'actif.} Les placements obligataires sont inscrits en juste valeur.
+Le prix calculé ici est celui qui figure au bilan.
+
+\emph{Au passif.} La courbe zéro-coupon de cette unité a une version
+réglementaire : la structure par terme des taux sans risque publiée par l'EIOPA.
+C'est elle, et non un taux plat, qui actualise les flux de prestations dans la
+meilleure estimation.
+
+\emph{Dans le capital requis.} Le sous-module de risque de taux consiste à
+déformer la courbe à la hausse puis à la baisse et à recalculer le bilan complet.
+L'exercice~3.4 en est la version élémentaire, appliquée à un seul titre.
+
+\medskip
+Enfin, la duration est l'instrument qui permet de comparer un actif et un passif
+sur la même échelle. Une compagnie dont les engagements ont une duration de
+douze ans et les placements une duration de cinq ans subit une perte lorsque les
+taux baissent, quand bien même chaque poste, pris isolément, se comporterait
+normalement. Cette confrontation est l'objet de la gestion actif-passif, traitée
+à l'unité~7.
+\end{pont}
+
+\begin{refreg}
+\textbf{Références.} Directive 2009/138/CE, article~75 : les actifs sont
+valorisés au montant pour lequel ils pourraient être échangés dans le cadre
+d'une transaction conclue entre parties informées et consentantes. \\
+Article~77, paragraphe~2 : actualisation des flux de trésorerie futurs au moyen
+de la courbe des taux sans risque pertinente, publiée mensuellement par l'EIOPA
+avec sa documentation technique. \\
+Règlement délégué (UE) 2015/35 : sous-module de risque de taux d'intérêt.
+\emph{[Références d'articles à préciser avant diffusion.]}
+\end{refreg}
+
+\subsection*{Notations introduites}
+\begin{description}[leftmargin=3cm, style=nextline, font=\normalfont]
+  \notation{N}{nominal de l'obligation}
+  \notation{c,\ C = cN}{taux facial et coupon}
+  \notation{P}{prix de l'obligation}
+  \notation{z_k}{taux zéro-coupon d'échéance $k$}
+  \notation{\mathrm{CC}}{coupon couru}
+  \notation{D}{duration de Macaulay, en années}
+  \notation{S = D/(1+r)}{sensibilité}
+\end{description}

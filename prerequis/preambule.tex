@@ -1,0 +1,109 @@
+% ===========================================================================
+%  Polycopié de prérequis — Comptabilité prudentielle (M2 alternance)
+%  Préambule partagé
+%  F. Borel-Mathurin — Université Paris 1 Panthéon-Sorbonne
+% ===========================================================================
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\IfFileExists{french.ldf}{\usepackage[french]{babel}}{}
+\IfFileExists{lmodern.sty}{\usepackage{lmodern}}{}
+\usepackage[a4paper,margin=2.4cm]{geometry}
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\usepackage{makeidx}
+\makeindex
+\IfFileExists{eurosym.sty}{\usepackage{eurosym}}{\providecommand{\euro}{\texteuro}}
+
+% ---------------------------------------------------------------- couleurs
+% À remplacer par les valeurs exactes de la charte si besoin.
+\definecolor{bleuactu}{RGB}{0,84,150}
+\definecolor{vertactu}{RGB}{0,132,100}
+\definecolor{rougeactu}{RGB}{175,30,45}
+\definecolor{orangeactu}{RGB}{230,140,0}
+\definecolor{grisactu}{RGB}{110,110,110}
+
+% ------------------------------------------------- version étudiant/corrigé
+% \correctiontrue  -> corrigés inclus
+% \correctionfalse -> version étudiant
+\newif\ifcorrection
+\correctiontrue
+
+% ------------------------------------------------------------------ boîtes
+\newtcolorbox{notion}[1]{%
+  breakable, enhanced, colback=bleuactu!4, colframe=bleuactu,
+  boxrule=0.4pt, left=8pt, right=8pt, top=6pt, bottom=6pt,
+  fonttitle=\bfseries\sffamily, coltitle=white, title={#1}}
+
+\newtcolorbox{generalisation}[1]{%
+  breakable, enhanced, colback=orangeactu!5, colframe=orangeactu!85!black,
+  boxrule=0.4pt, left=8pt, right=8pt, top=6pt, bottom=6pt,
+  fonttitle=\bfseries\sffamily, coltitle=white, title={#1}}
+
+\newtcolorbox{pont}[1]{%
+  breakable, enhanced, colback=rougeactu!4, colframe=rougeactu,
+  boxrule=0.4pt, left=8pt, right=8pt, top=6pt, bottom=6pt,
+  fonttitle=\bfseries\sffamily, coltitle=white, title={#1}}
+
+\newtcolorbox{refreg}{%
+  breakable, enhanced, colback=grisactu!6, colframe=grisactu!60,
+  boxrule=0.4pt, left=8pt, right=8pt, top=6pt, bottom=6pt,
+  fontupper=\small}
+
+% --------------------------------------------------------------- exercices
+\newcounter{exo}[section]
+\renewcommand{\theexo}{\thesection.\arabic{exo}}
+
+\newenvironment{exercice}[1][]{%
+  \refstepcounter{exo}%
+  \par\medskip\noindent
+  \begin{tcolorbox}[breakable, enhanced, colback=white, colframe=vertactu,
+     boxrule=0.4pt, left=8pt, right=8pt, top=6pt, bottom=6pt,
+     fonttitle=\bfseries\sffamily, coltitle=white,
+     title={Exercice \theexo\ifx\relax#1\relax\else\ --- #1\fi}]}%
+  {\end{tcolorbox}\par\medskip}
+
+\newenvironment{corrige}{%
+  \ifcorrection
+    \par\smallskip\noindent
+    \begin{tcolorbox}[breakable, enhanced, colback=vertactu!4,
+       colframe=vertactu!50, boxrule=0.4pt, left=8pt, right=8pt,
+       top=6pt, bottom=6pt, fontupper=\small,
+       title={\itshape Corrigé}, fonttitle=\small\itshape,
+       coltitle=vertactu!80!black, colbacktitle=vertactu!10]%
+  \else
+    \setbox0\vbox\bgroup
+  \fi}%
+  {\ifcorrection\end{tcolorbox}\par\smallskip\else\egroup\fi}
+
+% ------------------------------------------------------------- échéanciers
+\tikzset{
+  timeaxis/.style={-{Latex[length=2mm]}, thick, grisactu},
+  timenode/.style={circle, fill=bleuactu, inner sep=1.1pt},
+  flux/.style={-{Latex[length=2mm]}, thick, vertactu},
+  fluxneg/.style={-{Latex[length=2mm]}, thick, rougeactu},
+  etiq/.style={font=\scriptsize, inner sep=1pt}
+}
+
+% ------------------------------------------------------------------ titres
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\sffamily\color{bleuactu}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\sffamily\color{bleuactu!80!black}}{\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily\color{grisactu}Prérequis --- Comptabilité prudentielle}
+\fancyhead[R]{\small\sffamily\color{grisactu}\thepage}
+\renewcommand{\headrulewidth}{0.2pt}
+
+\newcommand{\notation}[2]{\item[{$#1$}] #2}  % accolades : #1 peut contenir des crochets

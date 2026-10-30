@@ -1,4 +1,4 @@
-\documentclass[10pt,aspectratio=169]{beamer}
+\documentclass[10pt,aspectratio=169,xcolor={dvipsnames}]{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
@@ -75,6 +75,21 @@
     Laboratoire SAF Université Claude Bernard Lyon 1
 }
 \date{Novembre 2025}
+
+% --- Compilation pdfLaTeX sans erreur (ajouté à la mise en dépôt, voir README « LaTeX ») -------------
+% Caractères absents de l'encodage T1, et accents dans les blocs de code (listings ne lit pas l'UTF-8).
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+\DeclareUnicodeCharacter{2B50}{\ensuremath{\star}}
+\DeclareUnicodeCharacter{274C}{\ensuremath{\times}}
+\lstset{literate=
+  {é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {ë}{{\"e}}1 {à}{{\`a}}1 {â}{{\^a}}1 {î}{{\^i}}1 {ï}{{\"i}}1
+  {ô}{{\^o}}1 {ù}{{\`u}}1 {û}{{\^u}}1 {ü}{{\"u}}1 {ç}{{\c c}}1 {œ}{{\oe}}1 {É}{{\'E}}1 {È}{{\`E}}1
+  {À}{{\`A}}1 {Â}{{\^A}}1 {Ç}{{\c C}}1 {€}{{\texteuro}}1 {°}{{\textdegree}}1 {×}{{$\times$}}1
+  {≤}{{$\leq$}}1 {≥}{{$\geq$}}1 {≈}{{$\approx$}}1 {→}{{$\rightarrow$}}1 {—}{{---}}1 {«}{{\guillemotleft}}1
+  {»}{{\guillemotright}}1}
+% ------------------------------------------------------------------------------------------------------
 
 \begin{document}
 
@@ -309,7 +324,7 @@ Produire un \textbf{ensemble de scénarios plausibles} représentant l'incertitu
 \renewcommand{\arraystretch}{1.5}
 \begin{tabular}{p{5.5cm}|p{5.5cm}}
 \toprule
-\rowcolor{blue!10} \textbf{Monde Réel ($\mathbb{P}$)} & \rowcolor{green!10} \textbf{Risque Neutre ($\mathbb{Q}$)} \\
+\cellcolor{blue!10} \textbf{Monde Réel ($\mathbb{P}$)} & \cellcolor{green!10} \textbf{Risque Neutre ($\mathbb{Q}$)} \\
 \midrule
 \textbf{Usage :} Modèles internes (SCR), ORSA, Business Plan. & \textbf{Usage :} Calcul du \textbf{Best Estimate} (Market Consistent). \\
 \midrule

@@ -1,0 +1,191 @@
+\section{Un échéancier certain}
+\label{sec:U2}
+
+L'unité précédente traitait un flux isolé. On ajoute ici le premier ingrédient :
+\emph{plusieurs dates}. Rien de conceptuellement neuf --- on additionne des
+valeurs actuelles --- mais cette addition est la forme sous laquelle se
+présentent la quasi-totalité des engagements d'assurance.
+
+\subsection{La notion : valeur actuelle nette d'un échéancier}
+
+\begin{notion}{Sommer des flux actualisés}
+Un \emph{échéancier}\index{échéancier} est une suite de flux $(C_1,\dots,C_n)$
+associés à des dates $(t_1,\dots,t_n)$. Sa valeur actuelle est la somme des
+valeurs actuelles de chaque flux :
+\[
+  V_0 \;=\; \sum_{k=1}^{n} \frac{C_k}{(1+r)^{t_k}}.
+\]
+Lorsque l'échéancier comprend un décaissement initial $C_0$, on parle de
+\emph{valeur actuelle nette}\index{valeur actuelle nette} :
+\[
+  \mathrm{VAN} \;=\; -\,C_0 \;+\; \sum_{k=1}^{n} \frac{C_k}{(1+r)^{t_k}}.
+\]
+Une opération est créatrice de valeur si sa VAN est positive.
+\end{notion}
+
+Deux conventions doivent être fixées avant tout calcul, et elles le seront de
+même dans les projections prudentielles : les flux sont-ils supposés survenir en
+début ou en fin de période, et le taux est-il constant sur tout l'horizon ? Sauf
+mention contraire, on retient ici des flux de fin de période et un taux constant.
+
+\begin{center}
+\begin{tikzpicture}[x=1.25cm, y=0.85cm]
+  \draw[timeaxis] (-0.4,0) -- (5.2,0);
+  \foreach \x/\l in {0/0, 1/1, 2/2, 3/3, 4/4}
+    { \node[timenode] at (\x,0) {}; \node[etiq, below=3pt] at (\x,0) {\l}; }
+  \draw[fluxneg] (0,0) -- (0,-1.1);
+  \node[etiq, below] at (0,-1.15) {$C_0$};
+  \draw[flux] (1,0) -- (1,0.75); \node[etiq, above] at (1,0.75) {$C_1$};
+  \draw[flux] (2,0) -- (2,1.05); \node[etiq, above] at (2,1.05) {$C_2$};
+  \draw[flux] (3,0) -- (3,1.35); \node[etiq, above] at (3,1.35) {$C_3$};
+  \draw[flux] (4,0) -- (4,1.6);  \node[etiq, above] at (4,1.6)  {$C_4$};
+\end{tikzpicture}
+\end{center}
+
+\begin{exercice}[valeur actuelle d'un échéancier]
+Un projet génère les flux suivants, en fin d'année : $12\,000$~\euro,
+$15\,000$~\euro, $18\,000$~\euro{} et $20\,000$~\euro. Le taux d'actualisation
+est de $3{,}50\,\%$. Calculer la valeur actuelle de cet échéancier.
+\end{exercice}
+
+\begin{corrige}
+\begin{center}\small
+\begin{tabular}{ccrr}
+\toprule
+Année & Flux & Facteur $v^{k}$ & Flux actualisé \\
+\midrule
+1 & $12\,000$ & $0{,}96618$ & $11\,594{,}20$ \\
+2 & $15\,000$ & $0{,}93351$ & $14\,002{,}33$ \\
+3 & $18\,000$ & $0{,}90194$ & $16\,234{,}86$ \\
+4 & $20\,000$ & $0{,}87144$ & $17\,428{,}84$ \\
+\midrule
+\multicolumn{3}{r}{\textbf{Total}} & $\mathbf{59\,260{,}23}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+La valeur actuelle est d'environ $59\,260$~\euro, contre $65\,000$~\euro{} en
+somme nominale. L'écart de $5\,740$~\euro{} est l'effet d'actualisation : c'est
+lui, et lui seul, qui expliquera plus tard une part importante de la différence
+entre une provision en normes françaises et une meilleure estimation.
+\end{corrige}
+
+\subsection{Généralisation : rentes certaines et taux de rendement}
+
+\begin{generalisation}{Deux raccourcis et une lecture inverse}
+\textbf{La rente certaine.} Lorsque tous les flux sont égaux à $C$ et versés en
+fin de chacune des $n$ périodes, la somme admet une forme fermée :
+\[
+  V_0 \;=\; C \times a_{\overline{n}|r},
+  \qquad
+  a_{\overline{n}|r} \;=\; \frac{1-(1+r)^{-n}}{r}.
+\]
+Le coefficient $a_{\overline{n}|r}$\index{annuité} se lit comme le « nombre
+d'années équivalent » que représente la rente en valeur d'aujourd'hui.
+
+\medskip
+\textbf{Le taux de rendement interne.} On peut inverser la question : quel taux
+annule la VAN ? Ce taux $\rho$, appelé \emph{taux de rendement interne} ou
+\emph{taux actuariel}\index{taux actuariel}, est solution de
+\[
+  -\,C_0 + \sum_{k=1}^{n} \frac{C_k}{(1+\rho)^{t_k}} \;=\; 0 .
+\]
+Il n'a pas d'expression analytique au-delà de deux périodes et s'obtient par
+approximations successives.
+
+\medskip
+\textbf{L'absence d'opportunité d'arbitrage.} Deux échéanciers produisant
+exactement les mêmes flux aux mêmes dates ont nécessairement le même prix. Sans
+quoi il suffirait d'acheter le moins cher et de vendre le plus cher pour
+encaisser un gain sans risque et sans mise de fonds. Ce principe, dit
+d'\emph{absence d'opportunité d'arbitrage}\index{absence d'opportunité d'arbitrage},
+est ce qui autorise à valoriser un engagement par ses flux plutôt que par son
+prix de marché --- lequel n'existe pas, s'agissant d'un contrat d'assurance.
+\end{generalisation}
+
+\begin{exercice}[rente certaine et taux actuariel]
+\textbf{(a)} Calculer la valeur actuelle d'une rente de $8\,000$~\euro{} par an
+versée pendant $10$~ans, au taux de $2{,}80\,\%$.
+
+\medskip
+\textbf{(b)} Un investissement de $50\,000$~\euro{} rapporte $14\,000$~\euro{}
+par an pendant $5$~ans. Déterminer son taux de rendement interne.
+\end{exercice}
+
+\begin{corrige}
+\textbf{(a)} $(1{,}028)^{-10} = 0{,}75870$, donc
+\[
+  a_{\overline{10}|2{,}8\%} = \frac{1-0{,}75870}{0{,}028} = 8{,}6179
+  \quad\Longrightarrow\quad
+  V_0 = 8\,000 \times 8{,}6179 \approx 68\,943\ \text{\euro}.
+\]
+
+\medskip
+\textbf{(b)} On cherche $\rho$ tel que $a_{\overline{5}|\rho} = 50\,000/14\,000 = 3{,}5714$.
+Deux essais encadrent la solution :
+\[
+  a_{\overline{5}|12\%} = 3{,}6048
+  \qquad
+  a_{\overline{5}|13\%} = 3{,}5172 .
+\]
+Une interpolation linéaire entre ces deux points donne
+$\rho \approx 12{,}0 + \frac{3{,}6048-3{,}5714}{3{,}6048-3{,}5172} \approx 12{,}4\,\%$.
+
+L'interpolation linéaire n'est ici qu'une approximation : la fonction est
+convexe, et le résultat exact se situe légèrement en deçà.
+\end{corrige}
+
+\begin{exercice}[d'un contrat décrit en mots à un échéancier]
+Un contrat de capitalisation prévoit le versement d'une prime unique de
+$100\,000$~\euro{} à la souscription, puis le service de $25\,000$~\euro{} en fin
+de chacune des cinq années suivantes. Le taux de marché est de $4{,}00\,\%$.
+
+Construire l'échéancier, calculer la VAN, et dire ce que l'on peut en conclure
+sur le prix de ce contrat.
+\end{exercice}
+
+\begin{corrige}
+Échéancier : $-100\,000$ en $t=0$, puis $+25\,000$ en $t=1,\dots,5$.
+\[
+  a_{\overline{5}|4\%} = \frac{1-(1{,}04)^{-5}}{0{,}04} = 4{,}45182
+  \quad\Longrightarrow\quad
+  \mathrm{VAN} = -100\,000 + 25\,000 \times 4{,}45182 = +11\,295{,}6\ \text{\euro}.
+\]
+La VAN est positive : au taux de marché retenu, le contrat vaut $111\,296$~\euro{}
+alors qu'il se paie $100\,000$~\euro.
+
+Par absence d'opportunité d'arbitrage, un tel écart ne peut pas se maintenir sur
+un marché liquide : il signale soit que le taux de $4\,\%$ n'est pas le bon taux
+d'actualisation pour cet engagement, soit que le contrat comporte un élément non
+modélisé --- un risque de défaut, une option de rachat, une condition de survie.
+Chacune de ces trois pistes fait l'objet d'une unité ultérieure.
+\end{corrige}
+
+\begin{pont}{Où cela sert dans Solvabilité~II}
+Une \emph{cadence de règlement} en assurance non-vie n'est rien d'autre qu'un
+échéancier : la charge ultime d'un exercice de survenance se règle sur plusieurs
+années selon un profil observé, et la meilleure estimation des provisions pour
+sinistres à payer est la valeur actuelle de cet échéancier. La formule employée
+sera littéralement celle de cette unité.
+
+Le passage d'une provision en normes françaises, non actualisée, à une meilleure
+estimation actualisée produit un écart dont on a vu ci-dessus la mécanique :
+c'est le premier des deux grands facteurs de divergence entre bilan comptable et
+bilan prudentiel.
+\end{pont}
+
+\begin{refreg}
+\textbf{Références.} Directive 2009/138/CE, article~77 : la meilleure estimation
+correspond à la moyenne pondérée par leur probabilité des flux de trésorerie
+futurs, compte tenu de la valeur temporelle de l'argent. \\
+Règlement délégué (UE) 2015/35 : dispositions relatives à la projection des flux
+de trésorerie et à la frontière des contrats. \emph{[Références d'articles à
+préciser avant diffusion.]}
+\end{refreg}
+
+\subsection*{Notations introduites}
+\begin{description}[leftmargin=2.2cm, style=nextline, font=\normalfont]
+  \notation{C_k}{flux de la période $k$}
+  \notation{\mathrm{VAN}}{valeur actuelle nette}
+  \notation{a_{\overline{n}|r}}{valeur actuelle d'une rente certaine de 1 par an sur $n$ ans}
+  \notation{\rho}{taux de rendement interne, ou taux actuariel}
+\end{description}
