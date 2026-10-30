@@ -1,0 +1,18 @@
+---
+title: "Séances"
+toc: false
+listing:
+  contents: "*/index.qmd"
+  type: table
+  sort: "numero"
+  fields: [numero, title, subtitle]
+  field-display-names:
+    numero: "N°"
+    title: "Séance"
+    subtitle: "Contenu"
+  sort-ui: false
+  filter-ui: false
+---
+
+Chaque page de séance donne les objectifs, les supports (diapositives, notebooks, données) et les
+travaux dirigés. Les corrigés y apparaissent une fois la séance passée.

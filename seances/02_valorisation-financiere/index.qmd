@@ -1,0 +1,37 @@
+---
+title: "Valorisation des produits financiers"
+subtitle: "Zéro-coupons, absence d'arbitrage, arbres binomiaux et Monte-Carlo"
+numero: 2
+corriges: false
+---
+
+::: {.callout-note}
+TD présenté comme « annexe au cours » ; sa place en séance 2 est proposée, à confirmer. Il prépare
+la valorisation des actifs du bilan prudentiel et la valorisation stochastique des séances 5 et 6.
+:::
+
+## Objectifs *(proposés d'après le TD, à valider)*
+
+À l'issue de ce TD, vous serez capable de :
+
+1. Valoriser une obligation à taux fixe avec une courbe des taux zéro-coupon, et reconstituer cette
+   courbe à partir de prix d'obligations (*bootstrap*).
+2. Appliquer l'absence d'opportunité d'arbitrage : détecter un arbitrage, calculer un taux de change
+   à terme et un prix *forward*.
+3. Valoriser une option par réplication dans un arbre binomial à une puis plusieurs périodes
+   (Cox-Ross-Rubinstein), et constater la convergence vers Black-Scholes.
+4. Estimer un prix par Monte-Carlo, mesurer sa précision et la réduire (variables antithétiques,
+   variable de contrôle), y compris pour une option exotique.
+
+## Travaux dirigés
+
+- [Énoncé du TD (PDF, 14 pages)](../../editions/2025-2026/02_valorisation-financiere_td.pdf),
+  version 2025-2026 : six parties progressives, des obligations aux options exotiques, et un
+  récapitulatif des formules.
+
+::: {.corrige}
+## Corrigé
+- Notebook `td-valorisation-produits-financiers.ipynb`, une fonction Python par exercice
+  ({{< colab seances/02_valorisation-financiere/corriges/td-valorisation-produits-financiers.ipynb >}} ·
+  {{< github seances/02_valorisation-financiere/corriges/td-valorisation-produits-financiers.ipynb >}}).
+:::

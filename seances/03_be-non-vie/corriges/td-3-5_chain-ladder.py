@@ -265,7 +265,7 @@ def visualiser_comparaison_triangles(triangle_initial, triangle_complete):
     visualiser_triangle(triangle_complete, "Triangle Complété", ax=axes[1])
     
     plt.tight_layout()
-    plt.savefig('/home/claude/triangles_comparaison.png', dpi=150, bbox_inches='tight')
+    plt.savefig('triangles_comparaison.png', dpi=150, bbox_inches='tight')
     print("\nGraphique sauvegardé : triangles_comparaison.png")
     plt.show()
 
@@ -295,7 +295,7 @@ def visualiser_be_par_annee(resultats_be):
     ax.grid(axis='y', alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('/home/claude/be_par_annee.png', dpi=150, bbox_inches='tight')
+    plt.savefig('be_par_annee.png', dpi=150, bbox_inches='tight')
     print("Graphique sauvegardé : be_par_annee.png")
     plt.show()
 
@@ -338,7 +338,7 @@ def analyse_sensibilite_taux(triangle_initial, taux_min=0.0, taux_max=0.05, n_po
     ax.axhline(be_base, color='green', linestyle='--', alpha=0.5)
     
     plt.tight_layout()
-    plt.savefig('/home/claude/sensibilite_taux.png', dpi=150, bbox_inches='tight')
+    plt.savefig('sensibilite_taux.png', dpi=150, bbox_inches='tight')
     print("Graphique sauvegardé : sensibilite_taux.png")
     plt.show()
     
@@ -434,12 +434,12 @@ def main():
         index=[f'Année {2018+i}' for i in range(6)],
         columns=[f'Dev {i}' for i in range(6)]
     )
-    df_triangle.to_csv('/home/claude/triangle_complete.csv')
+    df_triangle.to_csv('triangle_complete.csv')
     print("Triangle complété sauvegardé : triangle_complete.csv")
     
     # Détail BE en CSV
     df_be = pd.DataFrame(resultats['resultats_be']['detail_par_annee'])
-    df_be.to_csv('/home/claude/be_detail.csv', index=False)
+    df_be.to_csv('be_detail.csv', index=False)
     print("Détail BE sauvegardé : be_detail.csv")
     
     print("\n" + "=" * 70)

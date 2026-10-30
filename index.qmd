@@ -1,0 +1,43 @@
+---
+title: "Comptabilité prudentielle en assurance"
+subtitle: "Solvabilité II : bilan prudentiel, meilleure estimation, SCR, MCR et fonds propres"
+toc: false
+---
+
+Ce site rassemble tout le cours : le programme, les supports de chaque séance, les travaux dirigés
+(Excel et Python), les données, puis les corrigés une fois la séance passée.
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-4}
+### [Programme](programme.qmd)
+Acquis visés, déroulé des séances, évaluation, outils et règles du jeu.
+:::
+
+::: {.g-col-12 .g-col-md-4}
+### [Séances](seances/index.qmd)
+Pour chaque séance : objectifs, diapositives, notebooks, TD, puis corrigés.
+:::
+
+::: {.g-col-12 .g-col-md-4}
+### [Prérequis](prerequis/index.qmd)
+Polycopié de rappels (actualisation, flux aléatoires, options, contrat d'assurance), avec exercices.
+:::
+
+:::
+
+## Comment travailler avec ce site
+
+1. **Avant la séance** : lire les objectifs de la page de la séance et revoir l'unité de prérequis indiquée.
+2. **Pendant** : diapositives en PDF, TD sur Excel puis en Python. Les notebooks s'ouvrent dans
+   Google Colab en un clic (« Ouvrir dans Colab »), sans rien installer.
+3. **Après** : refaire le TD sans le corrigé, puis le comparer au corrigé publié sur la page de la séance.
+
+Le [glossaire français–anglais](ressources/glossaire.qmd) donne les équivalents des termes
+réglementaires, souvent rencontrés en anglais dans les textes de l'EIOPA et en entreprise.
+
+::: {.callout-note appearance="simple"}
+## Enseignant
+Fabrice Borel-Mathurin (ACPR-DEAR ; Laboratoire SAF, Université Claude Bernard Lyon 1). Les opinions exprimées dans ce cours sont celles de l'auteur et
+n'engagent pas l'ACPR.
+:::

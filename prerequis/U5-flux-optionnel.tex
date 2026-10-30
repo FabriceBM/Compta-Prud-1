@@ -1,0 +1,320 @@
+\section{Un flux optionnel}
+\label{sec:U5}
+
+L'unité~4 a montré qu'un flux aléatoire se valorise en pondérant chaque issue par
+sa probabilité. On ajoute ici le dernier ingrédient avant le contrat d'assurance
+complet : le montant versé ne dépend plus seulement du hasard, mais d'un
+\emph{choix} exercé au vu de ce hasard.
+
+Ce déplacement est plus profond qu'il n'y paraît. Il invalide la méthode
+précédente : espérer les issues sous leur probabilité réelle donnera désormais
+un résultat faux. La raison de cet échec, et sa réparation, sont l'objet de
+cette unité --- et le prérequis direct des modèles stochastiques de l'unité~8.
+
+\subsection{La notion : payoff et asymétrie}
+
+\begin{notion}{Un flux qui ne peut pas être négatif}
+Une option d’achat (\emph{call}\index{call}) au prix d'exercice $K$ donne le droit d'acheter un \textit{sous-jacent} à ce prix $K$. Toutefois cet achat n’est pas obligatoire : le détenteur de l’option ne l’exerce que si cela lui profite. Le flux terminal, ou \emph{payoff}, vaut donc
+\[
+  C_T \;=\; \max(S_T - K,\; 0),
+\]
+et symétriquement pour une option de vente (\emph{put}\index{put}), droit de vendre, avec un flux terminal :
+$P_T = \max(K - S_T,\; 0)$.
+
+\medskip
+L'opérateur $\max(\cdot,0)$ est tout ce qui distingue cette unité des
+précédentes, et il change tout. La relation entre le sous-jacent et le flux
+cesse d'être linéaire : les issues défavorables sont tronquées, les favorables
+conservées. C'est l'\emph{asymétrie}\index{asymétrie}, et c'est très exactement
+la forme d'une garantie d'assurance.
+\end{notion}
+
+\begin{center}
+\begin{tikzpicture}[x=0.055cm, y=0.045cm]
+  \draw[timeaxis] (0,0) -- (135,0);
+  \draw[timeaxis] (0,-12) -- (0,58);
+  \node[etiq, right] at (120,-9) {$S_T$};
+  \node[etiq, above] at (0,58) {payoff};
+  \draw[dashed, grisactu] (60,0) -- (60,-9);
+  \node[etiq, below] at (60,-9) {$K$};
+  \draw[very thick, vertactu] (0,0) -- (60,0) -- (120,52);
+  \node[etiq, above left, vertactu] at (120,52) {call};
+  \draw[very thick, rougeactu] (8,45) -- (60,0) -- (120,0);
+  \node[etiq, above right, rougeactu] at (8,45) {put};
+\end{tikzpicture}
+\end{center}
+
+\begin{exercice}[lecture d'un payoff]
+Un call de prix d'exercice $K = 100$ est acheté $7{,}50$~\euro. Établir le payoff
+puis le résultat net pour l'acheteur si le sous-jacent vaut à l'échéance
+$88$, $100$, $104$ ou $121$. Déterminer le point mort.
+\end{exercice}
+
+\begin{corrige}
+\begin{center}\small
+\begin{tabular}{rrrr}
+\toprule
+$S_T$ & Payoff & Prime & Résultat net \\
+\midrule
+$88$  & $0$  & $-7{,}50$ & $-7{,}50$ \\
+$100$ & $0$  & $-7{,}50$ & $-7{,}50$ \\
+$104$ & $4$  & $-7{,}50$ & $-3{,}50$ \\
+$121$ & $21$ & $-7{,}50$ & $+13{,}50$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Le point mort s'établit à $S_T = K + 7{,}50 = 107{,}50$.
+
+\medskip
+La perte est plafonnée à la prime, le gain ne l'est pas. Une compagnie qui
+\emph{vend} une garantie occupe la position exactement inverse : gain plafonné à
+la prime encaissée, perte non bornée. C'est la structure économique de tout
+contrat d'assurance.
+\end{corrige}
+
+\begin{exercice}[pourquoi l'espérance réelle échoue]
+Un actif vaut $100$ aujourd'hui. Dans un an, il vaudra $120$ avec une probabilité
+de $60\,\%$, ou $90$ avec une probabilité de $40\,\%$. Le taux sans risque est de
+$3\,\%$.
+
+\textbf{(a)} Calculer l'espérance actualisée du sous-jacent selon la méthode de
+l'unité~4. Comparer au prix observé, $100$. Que constate-t-on ?
+
+\textbf{(b)} Un call de prix d'exercice $K=100$ est écrit sur cet actif. Calculer
+son espérance actualisée par la même méthode.
+\end{exercice}
+
+\begin{corrige}
+\textbf{(a)} $\mathbb{E}[S_1] = 0{,}6 \times 120 + 0{,}4 \times 90 = 108$, d'où
+\[
+  \frac{108}{1{,}03} = 104{,}85 \;\neq\; 100 .
+\]
+La méthode de l'unité~4 ne reproduit pas le prix de marché. L'écart n'est pas une erreur : il rémunère le risque supporté par le détenteur de l'actif. Un actif risqué ne s'actualise pas au taux sans risque.
+
+\medskip
+\textbf{(b)} Payoffs : $\max(120-100,0) = 20$ et $\max(90-100,0) = 0$.
+\[
+  \frac{0{,}6 \times 20 + 0{,}4 \times 0}{1{,}03} = \frac{12}{1{,}03} = 11{,}65 .
+\]
+Ce résultat est \emph{faux}, et pour la même raison qu'en (a) : il actualise un
+flux risqué au taux sans risque. Mais il est ici impossible de le corriger par
+une prime de risque ad hoc --- le risque d'une option n'est pas celui de son
+sous-jacent, et il change à chaque instant. Il faut une autre méthode.
+\end{corrige}
+
+\subsection{Généralisation : réplication et repondération}
+
+\begin{generalisation}{Ne pas prévoir, mais reproduire}
+\textbf{L'idée.} Plutôt que de prédire la valeur de l'option, on construit un
+portefeuille qui verse \emph{exactement} les mêmes flux dans tous les états de la nature.
+Par absence d'opportunité d'arbitrage --- principe posé à l'unité~2 --- l'option
+et ce portefeuille ont nécessairement le même prix.
+
+\medskip
+\textbf{Le modèle à une période.} Le sous-jacent vaut $S_0$ et prendra la valeur
+$S_u = u\,S_0$ ou $S_d = d\,S_0$, avec $d < 1+r < u$. On cherche un portefeuille
+composé de $\Delta$ unités de sous-jacent et de $B$ placé au taux sans risque,
+qui reproduise les flux terminaux $(C_u, C_d)$. Ce portefeuille doit donc être tel que :\\
+\begin{description}[leftmargin=3cm, style=nextline, font=\normalfont]
+  \notation{\text{(cas de hausse)}}{$\Pi_u = \Delta S_u + B(1+r) = C_u$}
+  \notation{\text{(cas de baisse)}}{$\Pi_d = \Delta S_d + B(1+r) = C_d$}
+\end{description}
+
+En résolvant, on trouve :\\
+
+\[
+  \Delta \;=\; \frac{C_u - C_d}{S_u - S_d},
+  \qquad
+  B \;=\; \frac{C_u - \Delta\,S_u}{1+r},
+\]
+
+L’hypothèse d’absence d'opportunité d'arbitrage – principe posé à l'unité 2 — conduit à la conclure que l'option et ce portefeuille ont nécessairement le même prix :\\
+\[
+  C_0 \;=\; \Delta\,S_0 + B .
+\]
+
+
+\medskip
+\textbf{La repondération.} En réorganisant ces trois relations, le prix se
+réécrit sous une forme remarquable :
+\[
+  C_0 \;=\; \frac{q\,C_u + (1-q)\,C_d}{1+r},
+  \qquad\text{avec}\qquad
+  q \;=\; \frac{(1+r) - d}{u - d}.
+\]
+Le prix est donc une espérance actualisée, comme à l'unité~4 --- mais calculée
+avec $q$ au lieu de la probabilité réelle $p$.
+
+\medskip
+\textbf{Ce qu'est $q$, et ce qu'il n'est pas.} La quantité $q$, dite
+\emph{probabilité risque-neutre}\index{probabilité risque-neutre}, est comprise
+entre $0$ et $1$ et se manipule comme une probabilité. Mais elle ne décrit
+\emph{aucune} croyance sur l'avenir : elle ne dépend pas de $p$, et $p$
+n'apparaît nulle part dans le prix. C'est un artefact de calcul, la pondération
+qui rend l'actualisation au taux sans risque légitime.
+
+\medskip
+\textbf{L'extension.} Sur plusieurs périodes, on répète l'opération de proche en
+proche, en partant des dates terminales et en remontant. Lorsque le nombre de
+périodes devient très grand, cette récurrence converge vers une intégrale : c'est
+la formule de Black-Scholes. Lorsque les branches deviennent trop nombreuses pour
+être énumérées, on tire au sort des trajectoires sous $q$ et l'on moyenne : c'est
+la \emph{simulation de Monte-Carlo}\index{Monte-Carlo}.
+\end{generalisation}
+
+\begin{center}
+\begin{tikzpicture}[x=1.6cm, y=0.95cm]
+  \node[etiq] (a) at (0,0) {$S_0 = 100$};
+  \node[etiq] (u) at (1.6,1.15) {$120$};
+  \node[etiq] (d) at (1.6,-1.15) {$90$};
+  \draw[flux] (a) -- (u) node[midway, above left, etiq] {$q$};
+  \draw[fluxneg] (a) -- (d) node[midway, below left, etiq] {$1-q$};
+  \node[etiq, right] at (2.0,1.15) {$C_u = 20$};
+  \node[etiq, right] at (2.0,-1.15) {$C_d = 0$};
+  \draw[dashed, grisactu] (0,-2.0) -- (0,-2.4) node[below, etiq] {$t=0$};
+  \draw[dashed, grisactu] (1.6,-2.0) -- (1.6,-2.4) node[below, etiq] {$t=1$};
+\end{tikzpicture}
+\end{center}
+
+\begin{exercice}[réplication et repondération]
+Reprendre les données de l'exercice~5.2 : $S_0 = 100$, $u = 1{,}20$,
+$d = 0{,}90$, $r = 3\,\%$, call de prix d'exercice $K = 100$.
+
+\textbf{(a)} Construire le portefeuille de réplication et en déduire le prix.
+
+\textbf{(b)} Calculer $q$ et retrouver le prix par la formule de repondération.
+
+\textbf{(c)} Que devient le prix si la probabilité réelle de hausse passe de
+$60\,\%$ à $80\,\%$ ?
+\end{exercice}
+
+\begin{corrige}
+\textbf{(a)} Payoffs : $C_u = 20$, $C_d = 0$.
+\[
+  \Delta = \frac{20-0}{120-90} = 0{,}6667,
+  \qquad
+  B = \frac{20 - 0{,}6667 \times 120}{1{,}03} = \frac{-60}{1{,}03} = -58{,}25 .
+\]
+\[
+  C_0 = 0{,}6667 \times 100 - 58{,}25 = 8{,}41 .
+\]
+Le portefeuille consiste à détenir deux tiers d'unité de sous-jacent, financés
+pour $58{,}25$ par emprunt. Vérification dans l'issue basse :
+$0{,}6667 \times 90 - 58{,}25 \times 1{,}03 = 60 - 60 = 0 = C_d$.
+
+\medskip
+\textbf{(b)} $q = \dfrac{1{,}03 - 0{,}90}{1{,}20-0{,}90} = \dfrac{0{,}13}{0{,}30} = 0{,}4333$.
+\[
+  C_0 = \frac{0{,}4333 \times 20 + 0{,}5667 \times 0}{1{,}03} = \frac{8{,}6667}{1{,}03} = 8{,}41 .
+\]
+Les deux méthodes coïncident, comme elles le doivent.
+
+\medskip
+\textbf{(c)} Le prix ne change pas : il reste $8{,}41$. La probabilité réelle
+n'entre dans aucune des deux formules.
+
+\medskip
+Ce résultat déconcerte, et c'est normal. Il signifie qu'anticiper une hausse ne
+rend pas l'option plus chère : ce qui la valorise n'est pas l'espérance de gain,
+mais le coût de sa reproduction. Noter au passage l'écart avec le calcul erroné
+de l'exercice~5.2 : $8{,}41$ contre $11{,}65$, soit une surestimation de $38{,}5\,\%$.
+\end{corrige}
+
+\begin{exercice}[garantie plancher sur un contrat d'épargne]
+Un contrat d'épargne investit $10\,000$~\euro{} sur un support dont la valeur
+peut, chaque année, progresser de $15\,\%$ ou reculer de $10\,\%$. Le taux sans
+risque est de $2\,\%$. Le contrat garantit à l'assuré de récupérer au minimum sa
+mise au terme de deux ans.
+
+\textbf{(a)} Construire l'arbre des valeurs du support sur deux périodes.
+
+\textbf{(b)} Valoriser la garantie, c'est-à-dire l'engagement de l'assureur de
+combler l'écart si la valeur finale est inférieure à $10\,000$~\euro.
+
+\textbf{(c)} Commenter ce que représente ce montant pour l'assureur.
+\end{exercice}
+
+\begin{corrige}
+\textbf{(a)} Avec $u = 1{,}15$ et $d = 0{,}90$ :
+\begin{center}\small
+\begin{tabular}{lrr}
+\toprule
+Trajectoire & Valeur en $t=2$ & Coût de la garantie \\
+\midrule
+$uu$ & $13\,225$ & $0$ \\
+$ud$ et $du$ & $10\,350$ & $0$ \\
+$dd$ & $8\,100$ & $1\,900$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+\textbf{(b)} $q = \dfrac{1{,}02-0{,}90}{1{,}15-0{,}90} = \dfrac{0{,}12}{0{,}25} = 0{,}48$.
+
+La garantie ne se déclenche que sur la trajectoire $dd$, de probabilité
+risque-neutre $(1-q)^2 = 0{,}52^2 = 0{,}2704$ :
+\[
+  V_0 = \frac{0{,}2704 \times 1\,900}{(1{,}02)^{2}}
+      = \frac{513{,}76}{1{,}0404} \approx 493{,}81\ \text{\euro}.
+\]
+
+\medskip
+\textbf{(c)} Ce montant, soit $4{,}94\,\%$ de la mise, est ce que coûterait à
+l'assureur la couverture de sa promesse sur le marché. Il ne s'agit pas d'une
+perte probable, mais du prix d'un engagement.
+
+C'est très exactement la nature de la \emph{valeur temps des options et
+garanties} incluse dans une meilleure estimation : un contrat d'épargne à
+garantie plancher vaut davantage que la seule projection de son support, et
+l'écart est une option que l'assureur a vendue sans toujours l'avoir facturée.
+\end{corrige}
+
+\begin{pont}{Où cela sert dans Solvabilité~II}
+Les contrats d'assurance sont truffés d'options, le plus souvent implicites et
+détenues par l'assuré : garantie de taux minimum, participation aux bénéfices,
+faculté de rachat, option de conversion en rente. Toutes ont la forme
+asymétrique de cette unité, et toutes sont exercées au moment le moins favorable
+à l'assureur.
+
+\medskip
+Trois conséquences directes.
+
+\emph{La meilleure estimation ne peut pas ignorer ces options.} La directive
+impose de tenir compte de la valeur des garanties financières et des options
+contractuelles. Une projection en scénario central les manquerait par
+construction : dans un scénario moyen, une garantie plancher ne se déclenche
+jamais.
+
+\emph{C'est pourquoi les modèles vie sont stochastiques.} Là où un portefeuille
+non-vie se projette sur une cadence déterministe, un portefeuille épargne exige
+de simuler des milliers de trajectoires --- sous la probabilité $q$ de cette
+unité --- et de moyenner. L'unité~8 en fait la mise en \oe uvre.
+
+\emph{Les hypothèses comportementales redeviennent réelles.} Le taux de rachat
+des assurés, lui, n'est pas une probabilité risque-neutre : c'est une hypothèse
+d'expérience au sens de l'unité~4. Un modèle vie fait donc coexister les deux
+natures de probabilité, et les confondre est l'une des erreurs les plus
+fréquentes.
+\end{pont}
+
+\begin{refreg}
+\textbf{Références.} Directive 2009/138/CE, article~77, paragraphe~2 : le calcul
+de la meilleure estimation tient compte de la valeur des garanties financières et
+de toute option contractuelle incluse dans les contrats. \\
+Article~79 : évaluation des garanties financières et des options contractuelles,
+et exigence que les hypothèses relatives à leur exercice soient réalistes et
+fondées sur des informations actuelles et crédibles. \\
+Règlement délégué (UE) 2015/35 : méthodes de valorisation et cohérence avec les
+données de marché observables. \emph{[Références d'articles à préciser avant
+diffusion.]}
+\end{refreg}
+
+\subsection*{Notations introduites}
+\begin{description}[leftmargin=2.4cm, style=nextline, font=\normalfont]
+  \notation{K}{prix d'exercice}
+  \notation{S_T}{valeur du sous-jacent à l'échéance}
+  \notation{u,\ d}{facteurs de hausse et de baisse}
+  \notation{\Delta}{quantité de sous-jacent du portefeuille de réplication}
+  \notation{B}{montant placé au taux sans risque}
+  \notation{q}{probabilité risque-neutre}
+\end{description}

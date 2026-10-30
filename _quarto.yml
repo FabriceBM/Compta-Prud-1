@@ -1,0 +1,67 @@
+# Site du cours : `make site` (quarto render) -> _site/, publié sur GitHub Pages par .github/workflows/site.yml.
+project:
+  type: website
+  output-dir: _site
+  # Pages publiées : les .qmd et les notebooks des dossiers notebooks/. Les .md (README…) documentent le
+  # dépôt et ne sont pas publiés. Les corrigés (dossiers corriges/) ne sont pas des pages : la page de la
+  # séance les met en lien quand elle déclare `corriges: true` (voir filtres/corriges.lua).
+  render:
+    - "*.qmd"
+    - "seances/**/*.qmd"
+    - "seances/*/notebooks/*.ipynb"
+    - "prerequis/*.qmd"
+    - "ressources/*.qmd"
+
+lang: fr
+
+# Dépôt et branche publiés : liens « Ouvrir dans Colab » et « Voir sur GitHub » (filtres/liens.lua)
+depot: FabriceBM/Compta-Prud-1
+branche: main
+
+website:
+  title: "Comptabilité prudentielle"
+  description: "Cours de comptabilité prudentielle en assurance (Solvabilité II), Master 2."
+  site-url: https://fabricebm.github.io/Compta-Prud-1/
+  repo-url: https://github.com/FabriceBM/Compta-Prud-1
+  repo-actions: [issue]
+  search: true
+  reader-mode: true
+  page-navigation: true
+  back-to-top-navigation: true
+  navbar:
+    left:
+      - text: Programme
+        href: programme.qmd
+      - text: Séances
+        href: seances/index.qmd
+      - text: Prérequis
+        href: prerequis/index.qmd
+      - text: Ressources
+        menu:
+          - text: Glossaire français–anglais
+            href: ressources/glossaire.qmd
+          - text: Textes de référence
+            href: ressources/textes.qmd
+    right:
+      - icon: github
+        href: https://github.com/FabriceBM/Compta-Prud-1
+        aria-label: Dépôt GitHub du cours
+  page-footer:
+    left: "Fabrice Borel-Mathurin. Les opinions exprimées n'engagent pas l'ACPR."
+    right: "Erreur, coquille ? [Signalez-la](https://github.com/FabriceBM/Compta-Prud-1/issues/new/choose)."
+
+format:
+  html:
+    theme:
+      light: [cosmo, styles/cours.scss]
+      dark: [darkly, styles/cours-sombre.scss]
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    link-external-newwindow: true
+    anchor-sections: true
+
+filters:
+  - filtres/corriges.lua
+shortcodes:
+  - filtres/liens.lua

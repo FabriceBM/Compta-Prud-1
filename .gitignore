@@ -1,0 +1,44 @@
+# ---- Produits de compilation LaTeX : les PDF de référence vont dans editions/, jamais ici ----
+*.aux
+*.log
+*.nav
+*.snm
+*.toc
+*.out
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.idx
+*.ilg
+*.ind
+seances/*/diapos.pdf
+prerequis/prerequis*.pdf
+prerequis/unites/
+
+# ---- Site (make site) ----
+_site/
+_site-enseignant/
+_build/
+.quarto/
+**/*.quarto_ipynb
+
+# ---- Python ----
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+
+# ---- Privé : sujets d'examen, notes, listes d'étudiants. Le dépôt est public : jamais dans git ----
+prive/
+
+# ---- Bureautique / système ----
+~$*
+.~lock.*#
+*.tmp
+.DS_Store
+Thumbs.db
+
+/.quarto/

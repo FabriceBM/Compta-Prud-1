@@ -1,0 +1,36 @@
+---
+# Modèle de page de séance. Ne pas modifier ici : `make seance N=08 SLUG=orsa` le copie dans
+# seances/08_orsa/. Les dossiers commençant par « _ » ne sont pas publiés.
+title: "Titre de la séance"
+subtitle: "Ce que la séance couvre, en une ligne"
+numero: 0
+corriges: false   # passer à true après la séance : les blocs {.corrige} sont alors publiés
+---
+
+## Objectifs
+
+À l'issue de cette séance, vous serez capable de :
+
+1. *verbe d'action observable* (calculer, construire, expliquer, comparer, critiquer…) + contenu ;
+2. …
+
+**Durée** : 2 h de cours, 2 h de TD.
+
+## Avant la séance
+
+- Unité *n* du [polycopié de prérequis](../../prerequis/index.qmd).
+
+## Supports
+
+- [Diapositives (PDF)](diapos.pdf) : compilées depuis `diapos.tex` par `make pdf`.
+- Notebook [Titre](notebooks/nom.ipynb) ({{< colab seances/NN_slug/notebooks/nom.ipynb >}}).
+
+## Travaux dirigés
+
+- **TD n.1** Énoncé… Données : [`donnees.csv`](donnees.csv).
+
+::: {.corrige}
+## Corrigés
+- TD n.1 : [`td-n-1_sujet.py`](corriges/td-n-1_sujet.py)
+  ({{< github seances/NN_slug/corriges/td-n-1_sujet.py >}}).
+:::

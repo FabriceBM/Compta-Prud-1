@@ -1,0 +1,28 @@
+---
+title: "Approche stochastique et ALM"
+subtitle: "Séances 5 et 6 : scénarios économiques, valeur des options et garanties, adossement actif-passif"
+numero: 5
+corriges: false
+---
+
+## Objectifs *(proposés d'après les diapositives, à valider)*
+
+À l'issue de ces deux séances, vous serez capable de :
+
+1. Expliquer pourquoi les options et garanties des contrats d'épargne imposent une valorisation stochastique.
+2. Distinguer probabilité risque neutre et probabilité monde réel, et l'usage de chacune.
+3. Simuler des trajectoires de taux (Vasicek) et d'actions (Black-Scholes) par Monte-Carlo, et
+   contrôler un générateur de scénarios par le test de martingale.
+4. Calculer une meilleure estimation stochastique pour un contrat en euros avec taux minimum garanti
+   et participation aux bénéfices, avec et sans décisions de gestion (*management actions*).
+5. Mesurer un écart de duration actif-passif et l'effet d'un choc de taux sur le ratio de couverture.
+
+## Supports
+
+- [Diapositives (PDF)](diapos.pdf) : limites de l'approche déterministe ; générateurs de scénarios
+  économiques (Vasicek, CIR, Hull-White, mouvement brownien géométrique, discrétisation d'Euler,
+  calibration) ; valorisation stochastique de la meilleure estimation (convergence Monte-Carlo,
+  décisions de gestion, simulations imbriquées et *proxies*) ; ALM (duration, convexité, immunisation,
+  ajustement égalisateur et correction pour volatilité).
+- Notebook [Codes Python du cours](notebooks/codes-du-cours.ipynb) : chaque partie des diapositives
+  en code exécutable ({{< colab seances/05_stochastique-alm/notebooks/codes-du-cours.ipynb >}}).

@@ -1,4 +1,7 @@
-# TD 7.0 - Calcul du Symmetric Adjustment : De la Donnée de Marché au SCR
+---
+title: "TD 7.0 : calcul de l'ajustement symétrique"
+subtitle: "De la donnée de marché au SCR"
+---
 
 ## Objectif pédagogique
 

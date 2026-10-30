@@ -1,0 +1,13 @@
+{
+  // GitHub Codespaces / VS Code : Python, Quarto et les bibliothèques du cours, sans rien installer.
+  // `make preview` pour voir le site, `make code` pour exécuter les notebooks.
+  // LaTeX n'est pas inclus : compiler les diapositives sur Overleaf ou laisser la CI le faire.
+  "name": "Comptabilité prudentielle",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "postCreateCommand": "pip install -r requirements.txt",
+  "customizations": {
+    "vscode": {
+      "extensions": ["quarto.quarto", "ms-python.python", "ms-toolsai.jupyter"]
+    }
+  }
+}

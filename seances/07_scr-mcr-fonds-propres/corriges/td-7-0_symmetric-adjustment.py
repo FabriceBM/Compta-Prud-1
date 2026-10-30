@@ -544,7 +544,7 @@ def main():
     print("=" * 70)
     
     # 1. Chargement des données
-    df = charger_donnees_marche('/home/claude/data_eurostoxx50_36mois.csv')
+    df = charger_donnees_marche('data_eurostoxx50_36mois.csv')
     
     # 2. Calcul moyenne mobile
     df = calculer_moyenne_mobile_36m(df)
@@ -558,7 +558,7 @@ def main():
     
     # 5. Visualisations
     print("\n[Génération des graphiques...]")
-    visualiser_complet_sa(df, save_path='/home/claude/sa_analyse_complete.png')
+    visualiser_complet_sa(df, save_path='sa_analyse_complete.png')
     
     # 6. Application au SCR (données TD 7.1)
     resultats_scr = calculer_scr_equity(
@@ -573,7 +573,7 @@ def main():
         actions_type1=150,
         actions_type2=30,
         sa_actuel=sa_actuel,
-        save_path='/home/claude/sensibilite_sa_scr.png'
+        save_path='sensibilite_sa_scr.png'
     )
     
     # 8. Rapport de synthèse
@@ -581,7 +581,7 @@ def main():
     
     # 9. Export des données
     print("\n[Export des données...]")
-    df.to_csv('/home/claude/sa_resultats_complets.csv', index=False)
+    df.to_csv('sa_resultats_complets.csv', index=False)
     print("Fichier sauvegardé : sa_resultats_complets.csv")
     
     print("\n" + "=" * 70)

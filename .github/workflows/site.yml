@@ -1,0 +1,91 @@
+name: site
+
+# À chaque push sur main : PDF, vérifications, puis publication du site sur GitHub Pages.
+# Sur une pull request : mêmes vérifications, sans publication.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  liens:
+    name: Liens Markdown (make check-links)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make check-links
+
+  pdf:
+    name: PDF (make pdf)
+    runs-on: ubuntu-latest
+    container: texlive/texlive:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: make disponible
+        run: command -v make || (apt-get update && apt-get install -y --no-install-recommends make)
+      - name: Compiler diapositives et polycopié
+        run: make pdf
+      - name: Erreurs LaTeX (signalées, sans bloquer la publication)
+        run: make check-latex
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pdf
+          path: |
+            seances/*/diapos.pdf
+            prerequis/prerequis*.pdf
+
+  code:
+    name: Notebooks et scripts (make code)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: make code
+
+  site:
+    name: Site (make check)
+    needs: pdf
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: pdf
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Construire le site, échouer sur tout avertissement
+        run: make check
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  publier:
+    name: Publication (GitHub Pages)
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: [liens, site]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v4

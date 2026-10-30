@@ -1,0 +1,12 @@
+/*-- scss:defaults --*/
+// Bleu des diapositives Beamer du cours (\definecolor{bleuactu}{RGB}{0,51,102})
+$primary: #003366;
+$link-color: #0b5394;
+$navbar-bg: #003366;
+
+/*-- scss:rules --*/
+.corrige-masque {
+  color: $gray-600;
+  border-left: 3px solid $gray-400;
+  padding-left: .75rem;
+}

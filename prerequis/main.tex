@@ -1,0 +1,51 @@
+\documentclass[11pt,a4paper]{article}
+\input{preambule}
+
+% Version étudiant par défaut ; `make pdf` produit aussi la version corrigée
+% (prerequis-corrige.pdf) en définissant \Corrige avant la compilation.
+\ifdefined\Corrige\correctiontrue\else\correctionfalse\fi
+
+\title{\vspace{-1.5cm}\sffamily\bfseries\color{bleuactu}
+       Prérequis de comptabilité prudentielle\\[2mm]
+       \large\mdseries\color{black}Rappels et exercices corrigés}
+\author{\sffamily Fabrice Borel-Mathurin \\+ crew}
+\date{\sffamily\small Université Paris 1 Panthéon-Sorbonne \\ Master 2 en alternance}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{center}
+\begin{minipage}{0.86\textwidth}
+\small
+Ce polycopié se parcourt dans l'ordre. Chaque unité reprend la précédente et lui
+ajoute un seul ingrédient : plusieurs dates, puis la dépendance aux taux, puis
+l'aléa, puis l'optionalité. Au terme de cette progression, le calcul d'une
+meilleure estimation n'est plus qu'un cas particulier de la toute première
+formule.
+
+\medskip
+Chaque unité suit la même trame --- une notion, un exercice d'application, la
+généralisation de la notion, des exercices plus complexes --- et se termine par
+le lien explicite avec le dispositif Solvabilité~II et les références
+réglementaires correspondantes.
+\end{minipage}
+\end{center}
+
+\vspace{6mm}
+\tableofcontents
+\newpage
+
+\input{U1-flux-certain}
+\newpage
+\input{U2-echeancier-certain}
+\newpage
+\input{U3-echeancier-taux}
+\newpage
+\input{U4-flux-aleatoire}
+\newpage
+\input{U5-flux-optionnel}
+\newpage
+\input{U6-contrat-assurance}
+
+\end{document}

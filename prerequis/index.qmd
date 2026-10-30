@@ -1,0 +1,32 @@
+---
+title: "Prérequis de comptabilité prudentielle"
+subtitle: "Rappels et exercices corrigés : de la valeur actuelle d'un flux à la meilleure estimation d'un contrat"
+corriges: false
+---
+
+> Ce polycopié se parcourt dans l'ordre. Chaque unité reprend la précédente et lui ajoute un seul
+> ingrédient : plusieurs dates, puis la dépendance aux taux, puis l'aléa, puis l'optionalité. Au terme
+> de cette progression, le calcul d'une meilleure estimation n'est plus qu'un cas particulier de la
+> toute première formule.
+
+Chaque unité suit la même trame : une notion, un exercice d'application, la généralisation de la
+notion, des exercices plus complexes. Elle se termine par le lien avec Solvabilité II et les
+références réglementaires correspondantes.
+
+- [Polycopié, version étudiant (PDF)](prerequis.pdf)
+
+| Unité | Ingrédient ajouté | Notion | Généralisation |
+|:-----:|-------------------|--------|----------------|
+| 1 | un flux certain | valeur actuelle d'un flux unique | conventions de taux |
+| 2 | plusieurs dates | valeur actuelle nette d'un échéancier | rentes certaines, taux de rendement |
+| 3 | la dépendance aux taux | prix d'une obligation à taux fixe | courbe des taux, coupon couru, sensibilité |
+| 4 | l'aléa | espérance actualisée d'un flux conditionnel | rentes viagères, flux croissants |
+| 5 | l'optionalité | *payoff* et asymétrie | réplication et repondération |
+| 6 | (assemblage) | l'échéancier probabilisé d'un contrat | frontière des contrats, marge de risque |
+
+: Les six unités {tbl-colwidths="[8,20,36,36]"}
+
+::: {.corrige}
+## Corrigés
+- [Polycopié avec les corrigés (PDF)](prerequis-corrige.pdf)
+:::
