@@ -1,0 +1,34 @@
+---
+title: "Textes de référence"
+subtitle: "Où trouver les textes cités en cours"
+---
+
+## Union européenne
+
+Les liens EUR-Lex ouvrent la version française ; l'onglet « Versions consolidées » donne le texte à jour.
+
+| Texte | Objet |
+|-------|-------|
+| [Directive 2009/138/CE](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32009L0138) (« Solvabilité II ») | Le cadre : valorisation, fonds propres, SCR, MCR, gouvernance, information |
+| [Directive (UE) 2025/2](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32025L0002) | Révision de Solvabilité II, à appliquer à partir de janvier 2027 |
+| [Règlement délégué (UE) 2015/35](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32015R0035) | Les règles de calcul : provisions techniques, formule standard, MCR, fonds propres |
+| [Règlement d'exécution (UE) 2023/894](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32023R0894) | Les états quantitatifs (QRT) transmis au superviseur |
+| [Règlement d'exécution (UE) 2023/895](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32023R0895) | Le rapport public (SFCR) |
+| [Règlement (UE) n° 1094/2010](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32010R1094) | Création de l'EIOPA (en français AEAPP) |
+
+## EIOPA
+
+- [Courbes des taux sans risque](https://www.eiopa.europa.eu/tools-and-data/risk-free-interest-rate-term-structures_en),
+  publiées chaque mois, avec la correction pour volatilité.
+- [Ajustement symétrique du choc actions](https://www.eiopa.europa.eu/tools-and-data/symmetric-adjustment-equity-capital-charge_en),
+  publié chaque mois (TD 7.0).
+- EIOPA (2014), *The underlying assumptions in the standard formula for the Solvency Capital
+  Requirement calculation* : la justification de chaque module de la formule standard.
+
+## France
+
+- [Code des assurances](https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000006073984/), qui transpose la directive.
+- [ACPR](https://acpr.banque-france.fr/) : instructions, notices et questions-réponses sur Solvabilité II, remise des états.
+- Comptes sociaux : règlement de l'[ANC](https://www.anc.gouv.fr/) n° 2015-11 relatif aux comptes
+  annuels des entreprises d'assurance. Comptes consolidés IFRS : norme IFRS 17 *Contrats d'assurance*,
+  applicable depuis le 1^er^ janvier 2023.

@@ -1,0 +1,45 @@
+---
+title: "Meilleure estimation vie"
+subtitle: "Épargne, prévoyance et rentes : projection des flux et actualisation"
+numero: 4
+corriges: false
+---
+
+## Objectifs
+
+À l'issue de cette séance, vous serez capable de :
+
+1. Modéliser rigoureusement les contrats d'assurance vie (épargne, prévoyance, UC).
+2. Projeter les flux futurs de trésorerie sur plusieurs décennies.
+3. Maîtriser les hypothèses actuarielles (mortalité, rachat, frais, participation aux bénéfices).
+4. Choisir entre approche police par police et *model points*.
+5. Implémenter ces projections en Python (transition depuis Excel).
+6. Calculer la meilleure estimation conforme à Solvabilité II.
+
+**Durée** : 2 h de cours, 2 h de TD (Excel puis Python).
+
+## Supports
+
+- [Diapositives (PDF)](diapos.pdf) : spécificités de la meilleure estimation vie ; typologie des
+  produits (contrats en euros et participation aux bénéfices, unités de compte avec garantie
+  plancher, prévoyance, rentes viagères et longévité) ; modélisation des flux (*model points*, lois
+  de rachat, frais, courbe EIOPA et extrapolation de Smith-Wilson) ; introduction à Python pour l'actuariat.
+- Notebook [Premiers pas en Python actuariel](notebooks/premiers-pas-python.ipynb) : vecteurs
+  d'âges et loi de Makeham, tableaux de contrats avec pandas, évolution d'une provision mathématique
+  ({{< colab seances/04_be-vie/notebooks/premiers-pas-python.ipynb >}}).
+
+## Travaux dirigés
+
+Énoncés dans les diapositives (exercices Python 1 à 4) :
+
+- **4.1** Projection d'un contrat d'épargne en euros et calcul de la meilleure estimation ;
+- **4.2** Valorisation d'une temporaire décès ;
+- **4.3** Coût d'une garantie plancher sur un contrat en unités de compte ;
+- **Bonus** Rachats dynamiques en cas de remontée des taux.
+
+::: {.corrige}
+## Corrigé
+- TD 4.1 à 4.3 : notebook `td-4_be-vie.ipynb`
+  ({{< colab seances/04_be-vie/corriges/td-4_be-vie.ipynb >}} ·
+  {{< github seances/04_be-vie/corriges/td-4_be-vie.ipynb >}}).
+:::

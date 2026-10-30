@@ -1,0 +1,62 @@
+---
+title: "Glossaire français–anglais"
+subtitle: "Les termes de Solvabilité II tels qu'on les rencontre dans les textes français et en anglais"
+---
+
+Les textes de l'EIOPA et la pratique des entreprises emploient souvent les termes anglais. Le
+français est celui de la version française de la directive 2009/138/CE (« directive ») et du
+règlement délégué (UE) 2015/35 (« RD »). Les numéros d'article renvoient à ces textes, dont les
+liens figurent dans les [textes de référence](textes.qmd).
+
+## Bilan prudentiel et provisions techniques
+
+| Français | Anglais | En bref | Référence |
+|----------|---------|---------|-----------|
+| Bilan prudentiel | Solvency II balance sheet | Actifs et passifs valorisés au montant d'un échange entre parties informées et consentantes, dans des conditions de concurrence normales | directive art. 75 |
+| Provisions techniques (PT) | Technical provisions (TP) | Meilleure estimation + marge de risque | directive art. 76–77 |
+| Meilleure estimation | Best estimate (BE) | Moyenne pondérée par les probabilités des flux de trésorerie futurs, actualisés avec la courbe des taux sans risque ; calculée brute de réassurance | directive art. 77 |
+| Marge de risque | Risk margin (RM) | Complément à la meilleure estimation pour que les PT correspondent à ce qu'exigerait un repreneur ; méthode du coût du capital | directive art. 77 ; RD art. 37–39 |
+| Limite des contrats | Contract boundaries | Primes et engagements futurs à retenir dans la projection | RD art. 18 |
+| Courbe des taux sans risque | Risk-free interest rate term structure | Publiée chaque mois par l'EIOPA, extrapolée vers l'UFR par la méthode de Smith-Wilson | directive art. 77 bis |
+| Taux à terme ultime | Ultimate forward rate (UFR) | Taux vers lequel converge l'extrapolation de la courbe | |
+| Ajustement égalisateur | Matching adjustment (MA) | Correction de la courbe pour un portefeuille d'actifs adossé à des engagements prévisibles | directive art. 77 ter |
+| Correction pour volatilité | Volatility adjustment (VA) | Correction de la courbe qui atténue l'effet des écarts de crédit sur les PT | directive art. 77 quinquies |
+| Prestations discrétionnaires futures | Future discretionary benefits (FDB) | Part de la meilleure estimation correspondant aux participations aux bénéfices futures non garanties | |
+| Décisions de gestion futures | Future management actions | Décisions que la direction prendrait selon les scénarios (allocation, taux servi…), retenues dans la projection | RD art. 23 |
+| Générateur de scénarios économiques | Economic scenario generator (ESG) | Simule taux, actions, inflation… ; en univers risque neutre pour la meilleure estimation | |
+| Mesures transitoires | Transitional measures | Étalement de l'effet du passage à Solvabilité II sur les taux ou sur les PT | directive art. 308 quater et quinquies |
+
+## Fonds propres
+
+| Français | Anglais | En bref | Référence |
+|----------|---------|---------|-----------|
+| Excédent d'actif sur passif | Excess of assets over liabilities | Différence entre actifs et passifs du bilan prudentiel | directive art. 75 |
+| Fonds propres de base | Basic own funds | Excédent d'actif sur passif et passifs subordonnés | directive art. 88 |
+| Fonds propres auxiliaires | Ancillary own funds | Éléments non versés, appelables pour absorber des pertes, sur autorisation du superviseur | directive art. 89–90 |
+| Réserve de réconciliation | Reconciliation reserve | Excédent d'actif sur passif diminué des autres éléments de fonds propres de base, des actions propres et des dividendes prévisibles | RD art. 70 |
+| Niveau 1, 2, 3 | Tier 1, 2, 3 | Classement selon la disponibilité permanente et la subordination des éléments | directive art. 93–94 ; RD art. 69–78 |
+| Limites d'éligibilité | Eligibility limits | Pour le SCR : niveau 1 ≥ 50 %, niveau 3 < 15 %, niveaux 2 + 3 ≤ 50 %. Pour le MCR : niveau 1 ≥ 80 %, niveau 3 exclu | RD art. 82 |
+
+## Exigences de capital
+
+| Français | Anglais | En bref | Référence |
+|----------|---------|---------|-----------|
+| Capital de solvabilité requis | Solvency capital requirement (SCR) | Valeur en risque des fonds propres de base, niveau de confiance 99,5 %, horizon d'un an | directive art. 101 |
+| Formule standard | Standard formula | Calcul du SCR par modules de risque agrégés par des matrices de corrélation | directive art. 103–111, annexe IV |
+| SCR de base | Basic SCR (BSCR) | Agrégation des modules marché, contrepartie, vie, santé et non-vie, plus le risque des immobilisations incorporelles | directive art. 104 ; RD art. 87 |
+| Ajustement symétrique | Symmetric adjustment (SA) | Correction du choc actions (39 % type 1, 49 % type 2) selon l'écart de l'indice à sa moyenne sur 36 mois, bornée à ± 10 % | directive art. 106 ; RD art. 172 |
+| Capacité d'absorption des pertes des PT et des impôts différés | Loss-absorbing capacity of TP and deferred taxes (LAC TP, LAC DT) | Réduction du SCR liée à la baisse des prestations discrétionnaires futures et des impôts différés après le choc | directive art. 108 ; RD art. 206–207 |
+| Modèle interne | Internal model | Calcul du SCR par un modèle propre à l'entreprise, approuvé par le superviseur | directive art. 112–127 |
+| Paramètres propres à l'entreprise | Undertaking-specific parameters (USP) | Paramètres de la formule standard remplacés par des paramètres estimés sur les données de l'entreprise | directive art. 104 |
+| Minimum de capital requis | Minimum capital requirement (MCR) | Seuil sous lequel l'agrément peut être retiré ; formule linéaire bornée entre 25 % et 45 % du SCR, avec un plancher absolu | directive art. 128–129 ; RD art. 248–253 |
+| Ratio de couverture | Solvency ratio, SCR coverage ratio | Fonds propres éligibles / SCR | |
+
+## Gouvernance et information
+
+| Français | Anglais | En bref | Référence |
+|----------|---------|---------|-----------|
+| Évaluation interne des risques et de la solvabilité (EIRS) | Own risk and solvency assessment (ORSA) | Évaluation par l'entreprise de son besoin global de solvabilité, sur son horizon de planification | directive art. 45 |
+| Fonctions clés | Key functions | Gestion des risques, conformité, audit interne, fonction actuarielle | directive art. 44, 46–48 |
+| États quantitatifs | Quantitative reporting templates (QRT) | Tableaux transmis au superviseur au format XBRL | règlement d'exécution (UE) 2023/894 |
+| Rapport sur la solvabilité et la situation financière (RSSF) | Solvency and financial condition report (SFCR) | Rapport public annuel | directive art. 51 ; RD art. 290–303 |
+| Rapport régulier au contrôleur | Regular supervisory report (RSR) | Rapport non public au superviseur | directive art. 35 ; RD art. 304–311 |

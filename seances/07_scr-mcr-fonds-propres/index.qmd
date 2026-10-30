@@ -1,0 +1,45 @@
+---
+title: "SCR, MCR et fonds propres"
+subtitle: "Formule standard, minimum de capital requis, classement et éligibilité des fonds propres"
+numero: 7
+corriges: false
+---
+
+## Objectifs *(proposés d'après les diapositives, à valider)*
+
+À l'issue de cette séance, vous serez capable de :
+
+1. Définir le SCR (valeur en risque à 99,5 % sur un an) et décrire la structure modulaire de la formule standard.
+2. Calculer les sous-modules du risque de marché (actions, taux, spread, immobilier) et les agréger
+   avec les matrices de corrélation.
+3. Expliquer les ajustements pour capacité d'absorption des pertes des provisions techniques et des impôts différés.
+4. Calculer le MCR, classer les fonds propres par niveau (*tier*) et vérifier leur éligibilité.
+5. Mesurer l'effet d'une décision de gestion (*management action*) et la sensibilité du SCR à ses facteurs de risque.
+
+## Supports
+
+- [Diapositives (PDF, 50 pages)](../../editions/2025-2026/07_scr-mcr-fonds-propres_diapos.pdf),
+  version 2025-2026.
+- [Notes de cours : SCR, MCR et fonds propres](notes.qmd), version texte, TD 7.1 à 7.3 compris.
+
+## Travaux dirigés
+
+- **TD 7.0** [Calculer l'ajustement symétrique du choc actions](td-7-0_symmetric-adjustment.qmd), de
+  la donnée de marché au SCR, sur Excel puis en Python. Données :
+  [`data_eurostoxx50_36mois.csv`](data_eurostoxx50_36mois.csv).
+- **TD 7.1** Calcul complet du SCR en formule standard (énoncé dans les diapositives et les notes).
+- **TD 7.2** Calcul du MCR et classement des fonds propres.
+- **TD 7.3** Décisions de gestion et sensibilité du SCR (Python).
+
+::: {.corrige}
+## Corrigés
+- TD 7.0 : script Python [`td-7-0_symmetric-adjustment.py`](corriges/td-7-0_symmetric-adjustment.py)
+  ({{< github seances/07_scr-mcr-fonds-propres/corriges/td-7-0_symmetric-adjustment.py >}}).
+- TD 7.3 : notebook `td-7-3_management-actions.ipynb`
+  ({{< colab seances/07_scr-mcr-fonds-propres/corriges/td-7-3_management-actions.ipynb >}} ·
+  {{< github seances/07_scr-mcr-fonds-propres/corriges/td-7-3_management-actions.ipynb >}}).
+:::
+
+## Séance suivante
+
+Séance 8 : l'ORSA (évaluation interne des risques et de la solvabilité).

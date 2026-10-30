@@ -1,0 +1,89 @@
+---
+title: "Programme"
+subtitle: "Ce que vous saurez faire, comment le cours se déroule, comment il est évalué"
+---
+
+::: {.callout-warning}
+## Page en construction
+Les éléments marqués *(à confirmer)* sont repris des supports de l'année 2025-2026 et doivent être
+validés pour l'année en cours : établissement, calendrier, modalités d'évaluation.
+:::
+
+## Public et format
+
+- **Public** : Master 2 en alternance, Université Paris 1 Panthéon-Sorbonne *(à confirmer)*.
+- **Format** : séances de 4 heures, en général 2 h de cours puis 2 h de travaux dirigés sur Excel et en Python.
+- **Prérequis** : actualisation, probabilités, notions de comptabilité d'assurance. Le
+  [polycopié de prérequis](prerequis/index.qmd) les reprend pas à pas, avec des exercices corrigés.
+
+## Acquis d'apprentissage
+
+À l'issue du cours, vous serez capable de :
+
+1. **Expliquer** la finalité de la comptabilité prudentielle et la situer par rapport aux comptes
+   sociaux et aux normes IFRS ;
+2. **Construire** un bilan prudentiel simplifié : valorisation économique des actifs, provisions
+   techniques (meilleure estimation et marge de risque), fonds propres ;
+3. **Calculer** une meilleure estimation en non-vie (Chain-Ladder, actualisation) et en vie
+   (projection des flux, hypothèses de mortalité, de rachat, de frais et de participation aux bénéfices) ;
+4. **Mettre en œuvre** une valorisation stochastique simple (générateur de scénarios, Monte-Carlo) et
+   **analyser** l'adossement actif-passif (ALM) ;
+5. **Calculer** le SCR en formule standard, le MCR et l'éligibilité des fonds propres, et
+   **interpréter** le ratio de couverture ;
+6. **Automatiser** ces calculs en Python et **vérifier** leur cohérence avec un calcul sur tableur ;
+7. **Critiquer** les résultats : sensibilités, décisions de gestion (*management actions*), effets procycliques.
+
+## Séances
+
+| N° | Thème | Supports disponibles |
+|:--:|-------|----------------------|
+| 1 | [Pourquoi la comptabilité prudentielle ?](seances/01_introduction/index.qmd) | cours (PDF), étude de cas |
+| 2 | *(à préciser)* | |
+| 3 | [Meilleure estimation non-vie](seances/03_be-non-vie/index.qmd) | corrigé du TD 3.5 |
+| 4 | [Meilleure estimation vie](seances/04_be-vie/index.qmd) | diapositives, notebook, corrigé des TD |
+| 5–6 | [Approche stochastique et ALM](seances/05_stochastique-alm/index.qmd) | diapositives, codes du cours |
+| 7 | [SCR, MCR et fonds propres](seances/07_scr-mcr-fonds-propres/index.qmd) | diapositives, notes, TD 7.0–7.3 |
+| 8 | ORSA *(annoncée en fin de séance 7)* | |
+
+: Déroulé du cours {tbl-colwidths="[8,52,40]"}
+
+## Comment le cours fonctionne
+
+Le cours applique quelques principes dont l'effet sur l'apprentissage est bien établi :
+
+- **Des objectifs explicites, alignés sur les TD et l'évaluation.** Chaque page de séance commence
+  par ce que vous devez savoir faire à la fin ; les TD et l'examen portent sur ces mêmes compétences.
+- **Se tester plutôt que relire.** Chaque séance s'ouvre sur quelques questions de rappel sur la
+  précédente : retrouver une notion de mémoire la consolide bien plus qu'une relecture.
+- **Un même fil d'une séance à l'autre.** Les notions reviennent et se complètent : la meilleure
+  estimation vue en séance 3 et 4 sert au bilan prudentiel, puis au SCR de la séance 7.
+- **De l'exemple résolu à l'exercice autonome.** Le cours montre un calcul complet, le TD le fait
+  refaire sur Excel, puis en Python sur des données nouvelles.
+- **Les corrigés après l'effort.** Ils sont publiés sur la page de la séance une fois celle-ci passée.
+
+## Évaluation *(à confirmer)*
+
+| Composante | Poids | Contenu |
+|------------|:-----:|---------|
+| Contrôle continu | *à fixer* | rendus de TD (fichier Excel, script Python, note d'analyse de deux pages ; exemple : TD 7.0) |
+| Examen final | *à fixer* | calculs et questions d'interprétation sur l'ensemble du programme |
+
+## Outils
+
+- **Excel** (ou LibreOffice Calc) pour les premiers calculs de chaque TD.
+- **Python** : sans installation, chaque notebook s'ouvre dans Google Colab depuis la page de la
+  séance. Pour travailler sur votre machine : Python 3.10 ou plus, puis
+  `pip install numpy pandas matplotlib seaborn scipy jupyter`.
+
+## Usage de l'IA générative *(à confirmer)*
+
+Les assistants d'IA générative sont autorisés pour comprendre une notion, déboguer du code ou
+reformuler un texte. Tout rendu indique s'ils ont été utilisés et pour quoi faire. Vous restez
+responsable de chaque chiffre et de chaque affirmation rendus : un résultat que vous ne savez pas
+justifier n'est pas acquis. Ils ne sont pas autorisés pendant l'examen.
+
+## Signaler une erreur
+
+Une coquille, un lien cassé, un résultat qui ne tombe pas juste ?
+[Ouvrez un signalement](https://github.com/FabriceBM/Compta-Prud-1/issues/new/choose) (compte GitHub
+gratuit) ou écrivez à l'enseignant.

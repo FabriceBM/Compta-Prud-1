@@ -1,0 +1,23 @@
+---
+title: "Meilleure estimation non-vie"
+subtitle: "Triangles de liquidation, Chain-Ladder et actualisation des flux"
+numero: 3
+corriges: false
+---
+
+::: {.callout-note}
+Les diapositives et l'énoncé du TD de cette séance ne sont pas encore en ligne.
+:::
+
+## Travaux dirigés
+
+**TD 3.5 : refactoriser le Chain-Ladder en Python.** À partir d'un triangle de sinistres cumulés,
+calculer les facteurs de développement, compléter le triangle, en déduire les flux futurs et la
+meilleure estimation actualisée, mesurer sa sensibilité au taux d'actualisation et rapprocher le
+résultat du calcul Excel.
+
+::: {.corrige}
+## Corrigé
+- TD 3.5 : script Python [`td-3-5_chain-ladder.py`](corriges/td-3-5_chain-ladder.py)
+  ({{< github seances/03_be-non-vie/corriges/td-3-5_chain-ladder.py >}}).
+:::

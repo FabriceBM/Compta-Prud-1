@@ -1,0 +1,11 @@
+/*-- scss:defaults --*/
+$primary: #6fa8dc;
+$link-color: #9fc5e8;
+$navbar-bg: #0d2440;
+
+/*-- scss:rules --*/
+.corrige-masque {
+  color: $gray-500;
+  border-left: 3px solid $gray-600;
+  padding-left: .75rem;
+}

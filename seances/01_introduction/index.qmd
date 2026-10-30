@@ -1,0 +1,30 @@
+---
+title: "Pourquoi la comptabilité prudentielle ?"
+subtitle: "Finalité, acteurs et textes ; du bilan comptable au bilan prudentiel"
+numero: 1
+corriges: false
+---
+
+## Objectifs
+
+1. Comprendre la finalité de la comptabilité prudentielle.
+2. Identifier ses différences avec la comptabilité financière.
+3. Connaître les institutions (EIOPA, ACPR) et les textes fondateurs.
+4. Maîtriser les concepts du bilan prudentiel.
+5. Préparer la mise en pratique sur Excel.
+
+## Supports
+
+- [Cours complet (PDF, 30 pages)](../../editions/2025-2026/01_introduction_cours.pdf), version 2025-2026.
+
+Le cours suit sept parties : contexte historique et acteurs (EIOPA, ACPR) ; de la comptabilité
+financière à la comptabilité prudentielle ; les trois piliers de Solvabilité II et le ratio de
+solvabilité ; le bilan prudentiel (juste valeur, meilleure estimation, marge de risque, fonds
+propres) ; textes et reporting (QRT, SFCR, RSR) ; une étude de cas ; une synthèse.
+
+## Travaux dirigés : mini-bilan prudentiel
+
+Étude de cas de la partie VI du cours, sur Excel : partir du bilan comptable d'un assureur vie
+fictif (« Assureur Bêta »), revaloriser les actifs en valeur de marché, recalculer les provisions
+techniques, construire le bilan prudentiel, calculer un SCR simplifié et le ratio de solvabilité,
+puis simuler des chocs. Les étapes chiffrées figurent dans la partie VI du cours.
