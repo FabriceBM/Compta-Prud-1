@@ -1,0 +1,13 @@
+poste;libelle;cote;valeur_comptable;valeur_prudentielle
+obligations_etat;Obligations d'État;actif;500000;480000
+obligations_entreprises;Obligations d'entreprises;actif;200000;195000
+actions;Actions cotées;actif;100000;90000
+immobilier;Immobilier;actif;200000;210000
+tresorerie;Trésorerie;actif;50000;50000
+creances;Créances;actif;20000;19000
+provisions_techniques;Provisions techniques (comptes sociaux);passif;950000;
+meilleure_estimation;Meilleure estimation;passif;;920000
+dettes_subordonnees;Dettes subordonnées (échéance 12 ans);passif;50000;50000
+autres_dettes;Autres dettes;passif;20000;20000
+capital_social;Capital social;capitaux_propres;30000;
+reserves_resultat;Réserves et résultat;capitaux_propres;20000;

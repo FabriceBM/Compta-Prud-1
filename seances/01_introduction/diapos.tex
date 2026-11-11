@@ -1,0 +1,771 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,arrows.meta}
+\usepackage{eurosym}
+
+% Thème : celui des autres séances
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\definecolor{bleuactu}{RGB}{0,51,102}
+\definecolor{vertactu}{RGB}{0,102,51}
+\definecolor{rougeactu}{RGB}{153,0,0}
+\definecolor{orangeactu}{RGB}{230,126,34}
+
+\setbeamercolor{structure}{fg=bleuactu}
+\setbeamercolor{frametitle}{bg=bleuactu,fg=white}
+
+\newcommand{\highlight}[1]{\textbf{\color{rougeactu}#1}}
+\newcommand{\BE}{\mathrm{BE}}
+\newcommand{\MR}{\mathrm{MR}}
+\newcommand{\SCR}{\mathrm{SCR}}
+\newcommand{\keur}{\,k\euro}
+
+% Compilation pdfLaTeX sans erreur : caractères absents de l'encodage T1 (voir README « LaTeX »)
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+
+\title[Séance 1 -- Pourquoi la comptabilité prudentielle ?]{Séance 1 : Pourquoi la comptabilité prudentielle ?}
+\subtitle{Comptabilité prudentielle en assurance}
+\author[F. Borel-Mathurin]{Fabrice BOREL-MATHURIN}
+\institute[ACPR-DEAR et SAF Lyon 1]{
+    ACPR - DEAR\\
+    et\\
+    Laboratoire SAF Université Claude Bernard Lyon 1
+}
+\date{2026-2027}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Plan de la séance (4 h)}
+\tableofcontents
+\end{frame}
+
+\begin{frame}{Objectifs pédagogiques}
+\begin{block}{À l'issue de cette séance, vous serez capable de :}
+\begin{enumerate}
+  \item Expliquer la finalité de la comptabilité prudentielle
+  \item Identifier ce qui la distingue de la comptabilité financière
+  \item Situer les institutions (EIOPA, ACPR) et les textes fondateurs
+  \item Construire un bilan prudentiel simplifié à partir d'un bilan comptable
+  \item Calculer et interpréter un ratio de couverture du SCR
+\end{enumerate}
+\end{block}
+\vspace{0.3cm}
+\begin{alertblock}{Déroulé}
+\textbf{Cours :} 2 h \quad | \quad \textbf{Travaux dirigés :} 2 h sur tableur (TD 1 : le mini-bilan prudentiel de l'Assureur Bêta)
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Pour commencer : trois questions}
+\begin{block}{À discuter à deux, 5 minutes}
+\begin{enumerate}
+  \item Une obligation achetée 100\,\euro{} cote aujourd'hui 85\,\euro. Que vaut-elle dans les
+        comptes de l'assureur ? Et pour quelqu'un qui voudrait la racheter ?
+  \item Un assureur encaisse la prime \emph{avant} de payer les sinistres. Qu'est-ce que cela
+        change pour celui qui le contrôle ?
+  \item Qui a intérêt à ce qu'un assureur reste solvable ?
+\end{enumerate}
+\end{block}
+\vspace{0.2cm}
+\small Nous reviendrons sur vos réponses au fil de la séance.
+\end{frame}
+
+% =====================================================================
+\section{Pourquoi une comptabilité prudentielle ?}
+% =====================================================================
+
+\begin{frame}{Le cycle de production inversé de l'assurance}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Ce qui fait la spécificité de l'assureur}
+\begin{itemize}
+  \item Il \textbf{encaisse d'abord} la prime, il \textbf{paie ensuite}, parfois des décennies plus tard
+  \item Le coût de revient n'est connu qu'\textbf{a posteriori}
+  \item Ses engagements sont \textbf{longs} et \textbf{aléatoires}
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Conséquence}
+Le résultat de l'année ne dit pas si l'assureur pourra payer ses assurés \textbf{même en cas de
+choc}. Il faut une mesure \textbf{prospective} de sa solidité.
+\end{alertblock}
+\end{column}
+\end{columns}
+\vspace{0.4cm}
+\begin{center}
+\fbox{\parbox{0.8\textwidth}{\centering
+Fonds propres = valeur des actifs $-$ valeur des engagements\\[1mm]
+\small\emph{les deux évalués à leur valeur économique (directive 2009/138/CE, art.~75)}}}
+\end{center}
+\end{frame}
+
+\begin{frame}{Comptabilité financière et comptabilité prudentielle}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{p{3.2cm}p{4.8cm}p{4.8cm}}
+\toprule
+ & \textbf{Comptabilité financière} & \textbf{Comptabilité prudentielle} \\
+\midrule
+Question posée & Quelle performance ? & L'assureur peut-il tenir ses engagements ? \\
+Destinataires & Actionnaires, marché & Superviseur, assurés \\
+Valorisation & Coût historique, principe de prudence & Valeur économique (« cohérente avec le marché ») \\
+Horizon & L'exercice écoulé & Les engagements jusqu'à leur extinction \\
+Indicateur clé & Résultat net & Ratio de couverture du SCR \\
+Référentiels & Code de commerce, règlement ANC 2015-11, IFRS 17 & Directive 2009/138/CE, règlement délégué (UE) 2015/35 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{center}
+\small Du \textbf{conservatisme comptable} au \textbf{réalisme économique}
+\end{center}
+\end{frame}
+
+\begin{frame}{Un exemple : mêmes actifs, deux bilans}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\begin{table}
+\small
+\begin{tabular}{lrrr}
+\toprule
+ & \textbf{Comptable} & \textbf{Prudentiel} & \textbf{Écart} \\
+\midrule
+Actifs financiers & 1\,000 & 950 & $-50$ \\
+Provisions techniques & 800 & 850 & $+50$ \\
+Fonds propres & 200 & 100 & $-100$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+\begin{column}{0.44\textwidth}
+\begin{block}{Lecture}
+\begin{itemize}
+  \item Les actifs perdent leurs moins-values latentes
+  \item Les engagements sont réévalués
+  \item Les fonds propres sont \textbf{divisés par deux}
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.3cm}
+\begin{alertblock}{Avec un SCR de 90}
+Ratio de couverture $= 100 / 90 = 111\,\%$ : l'entreprise est couverte, avec peu de marge.
+Les fonds propres prudentiels sont souvent plus faibles que les fonds propres comptables, mais
+pas toujours : les plus-values latentes jouent dans l'autre sens.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Les acteurs du contrôle}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{EIOPA (en français AEAPP), niveau européen}
+\small
+\begin{itemize}
+  \item Créée par le règlement (UE) n° 1094/2010, à Francfort
+  \item Rédige orientations et projets de normes techniques
+  \item Veille à la convergence des pratiques de contrôle
+  \item Organise les tests de résistance européens
+  \item Publie chaque mois la courbe des taux sans risque et l'ajustement symétrique
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{ACPR, niveau national}
+\small
+\begin{itemize}
+  \item Autorité administrative indépendante adossée à la Banque de France
+  \item Délivre les agréments
+  \item Contrôle sur pièces (états remis via le portail e-Surfi) et sur place
+  \item Prend des mesures de police administrative, sanctionne
+  \item Prépare et conduit la résolution
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Pourquoi contrôler les assureurs ?}
+\begin{enumerate}
+  \item \textbf{Protéger les assurés et les bénéficiaires} : c'est l'objectif principal du contrôle
+        (directive 2009/138/CE, art.~27)
+  \item \textbf{Préserver la stabilité financière} : les assureurs sont de grands investisseurs,
+        leurs difficultés se propagent
+  \item \textbf{Maintenir la confiance} : un engagement d'assurance vaut ce que vaut la promesse
+        de l'assureur
+\end{enumerate}
+\vspace{0.4cm}
+\begin{alertblock}{À retenir}
+La comptabilité prudentielle est un outil de \textbf{contrôle de la solvabilité}, pas une mesure
+de la performance.
+\end{alertblock}
+\end{frame}
+
+% =====================================================================
+\section{De Solvabilité I à Solvabilité II}
+% =====================================================================
+
+\begin{frame}{Solvabilité I : des marges forfaitaires}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Le dispositif}
+\begin{itemize}
+  \item Premières directives : non-vie (1973), vie (1979), réformées en 2002
+  \item Marge de solvabilité \textbf{forfaitaire} :
+  \begin{itemize}
+    \item vie : 4\,\% des provisions mathématiques $+$ 0,3\,\% des capitaux sous risque
+    \item non-vie : environ 16 à 18\,\% des primes, ou 23 à 26\,\% des sinistres
+  \end{itemize}
+  \item Provisions et actifs pris dans les comptes sociaux
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Les limites}
+\begin{itemize}
+  \item Aucun lien entre exigence et \textbf{risques réellement pris} : deux assureurs aux
+        placements opposés ont la même exigence
+  \item Risques de marché, de crédit et opérationnels ignorés
+  \item Règles nationales hétérogènes
+\end{itemize}
+\end{alertblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Solvabilité II : une exigence fondée sur les risques}
+\begin{itemize}
+  \item \textbf{Directive 2009/138/CE}, applicable depuis le \textbf{1\textsuperscript{er} janvier 2016}
+  \item Un \textbf{bilan économique}, et un capital requis qui dépend du profil de risque de chaque entreprise
+  \item La même logique que \textbf{Bâle II} pour les banques : capital fondé sur les risques, contrôle, discipline de marché
+  \item Le principe de \textbf{proportionnalité} : exigences adaptées à la nature, à l'ampleur et à la complexité des risques
+\end{itemize}
+\vspace{0.3cm}
+\begin{block}{Révision en cours}
+La \textbf{directive (UE) 2025/2}, à appliquer à partir de 2027, révise notamment la marge de
+risque, les mesures pour les engagements de long terme, la proportionnalité et l'information
+publique. Les séances signalent ce qui change.
+\end{block}
+\end{frame}
+
+\begin{frame}{Les trois piliers}
+\begin{table}
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{p{2.3cm}p{5.2cm}p{5.2cm}}
+\toprule
+\textbf{Pilier} & \textbf{Contenu} & \textbf{Ce qu'on y trouve} \\
+\midrule
+\textbf{1. Quantitatif} & Valorisation, fonds propres, capital requis & Bilan prudentiel, SCR, MCR \\
+\textbf{2. Qualitatif} & Gouvernance, gestion des risques & Fonctions clés, ORSA \\
+\textbf{3. Information} & Rapports au superviseur et au public & États QRT, RSR, SFCR \\
+\bottomrule
+\end{tabular}
+\end{table}
+\vspace{0.2cm}
+\begin{center}
+\small Cette séance couvre surtout le pilier 1 ; les piliers 2 et 3 sont présentés ici, l'ORSA
+sera traité en séance 8.
+\end{center}
+\end{frame}
+
+\begin{frame}{Pilier 2 : gouvernance et ORSA}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Quatre fonctions clés}
+\begin{itemize}
+  \item Gestion des risques (art.~44)
+  \item Vérification de la conformité (art.~46)
+  \item Audit interne (art.~47)
+  \item Fonction actuarielle (art.~48)
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{ORSA (art.~45)}
+Évaluation interne des risques et de la solvabilité :
+\begin{itemize}
+  \item besoin global de solvabilité propre à l'entreprise
+  \item respect permanent des exigences de capital
+  \item écart entre son profil de risque et les hypothèses du SCR
+\end{itemize}
+Au moins une fois par an, et après tout changement important du profil de risque.
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{L'architecture des textes}
+\begin{center}
+\begin{tikzpicture}[
+  niveau/.style={draw=bleuactu, fill=bleuactu!8, rounded corners, minimum width=10.5cm,
+                 minimum height=0.85cm, align=center, font=\small},
+  fleche/.style={-{Latex[length=2mm]}, thick, bleuactu}]
+\node[niveau] (n1) {\textbf{Niveau 1} : directive 2009/138/CE --- les principes, transposés en droit national};
+\node[niveau, below=0.35cm of n1] (n2) {\textbf{Niveau 2} : règlement délégué (UE) 2015/35 et normes techniques --- les règles de calcul, d'application directe};
+\node[niveau, below=0.35cm of n2] (n3) {\textbf{Niveau 3} : orientations de l'EIOPA --- « se conformer ou s'expliquer »};
+\node[niveau, below=0.35cm of n3, draw=vertactu, fill=vertactu!8] (fr) {\textbf{En France} : Code des assurances (transposition) ; instructions et notices de l'ACPR};
+\draw[fleche] (n1) -- (n2);
+\draw[fleche] (n2) -- (n3);
+\draw[fleche] (n3) -- (fr);
+\end{tikzpicture}
+\end{center}
+\small Les liens vers les textes sont sur le site du cours, page « Textes de référence ».
+\end{frame}
+
+% =====================================================================
+\section{Le bilan prudentiel}
+% =====================================================================
+
+\begin{frame}{Le principe : la valeur d'échange}
+\begin{block}{Directive 2009/138/CE, article 75}
+\small
+« Les actifs sont valorisés au montant pour lequel ils pourraient être échangés dans le cadre d'une
+transaction conclue, dans des conditions de concurrence normales, entre des parties informées et
+consentantes ; les passifs sont valorisés au montant pour lequel ils pourraient être transférés ou
+réglés dans le cadre d'une transaction conclue, dans des conditions de concurrence normales, entre
+des parties informées et consentantes. »
+\end{block}
+\begin{itemize}
+  \item Une seule base pour tous les assureurs européens : comparabilité
+  \item Le bilan ne suit ni les comptes sociaux ni les IFRS, même s'il s'en sert
+  \item Les passifs ne tiennent \textbf{pas} compte de la qualité de crédit propre de l'entreprise
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Du bilan comptable au bilan prudentiel}
+\begin{center}
+\begin{tikzpicture}[
+  bloc/.style={draw=white, very thick, minimum width=2.6cm, align=center, font=\scriptsize\bfseries, text=white},
+  titre/.style={font=\small\bfseries, text=bleuactu}]
+% Bilan comptable
+\node[titre] at (2.6,4.6) {Bilan comptable};
+\node[bloc, fill=bleuactu!70, minimum height=4.2cm] at (1.3,2.1) {Placements\\au coût\\historique};
+\node[bloc, fill=rougeactu!70, minimum height=3.2cm] at (3.9,2.6) {Provisions\\techniques\\(prudentes)};
+\node[bloc, fill=gray!70, minimum height=0.5cm] at (3.9,0.75) {Dettes};
+\node[bloc, fill=vertactu!80, minimum height=0.5cm] at (3.9,0.25) {Capitaux propres};
+% Flèche
+\draw[-{Latex[length=3mm]}, ultra thick, orangeactu] (5.6,2.1) -- (7.0,2.1)
+  node[midway, above, font=\scriptsize, text=orangeactu, align=center] {art.~75};
+% Bilan prudentiel
+\node[titre] at (9.9,4.6) {Bilan prudentiel};
+\node[bloc, fill=bleuactu!70, minimum height=3.8cm] at (8.6,2.3) {Actifs en\\valeur de\\marché};
+\node[bloc, fill=bleuactu!40, minimum height=0.4cm] at (8.6,0.2) {Impôts différés};
+\node[bloc, fill=rougeactu!70, minimum height=2.6cm] at (11.2,2.9) {Meilleure\\estimation};
+\node[bloc, fill=rougeactu!45, minimum height=0.5cm] at (11.2,1.35) {Marge de risque};
+\node[bloc, fill=gray!70, minimum height=0.5cm] at (11.2,0.85) {Dettes};
+\node[bloc, fill=vertactu!80, minimum height=0.6cm] at (11.2,0.3) {Excédent};
+\end{tikzpicture}
+\end{center}
+\small
+\textbf{Ce qui change} : plus- et moins-values latentes, provisions remplacées par meilleure estimation
+$+$ marge de risque, écarts d'acquisition et frais d'acquisition reportés à zéro, impôts différés sur
+tous les écarts. Schéma sans échelle.
+\end{frame}
+
+\begin{frame}{Valoriser les actifs}
+\begin{block}{La hiérarchie de valorisation (règlement délégué, art.~10)}
+\begin{enumerate}
+  \item \textbf{Prix coté sur un marché actif} pour le même actif (action du CAC 40, obligation d'État)
+  \item Sinon, \textbf{prix coté pour un actif similaire}, ajusté des différences
+  \item Sinon, \textbf{méthode de valorisation alternative} (modèle), avec le plus possible de données de marché
+\end{enumerate}
+\end{block}
+\begin{itemize}
+  \item Les normes IFRS servent de référence quand elles sont cohérentes avec l'art.~75 (art.~9)
+  \item Écart d'acquisition : valeur \textbf{nulle} ; autres incorporels : nuls sauf s'ils sont
+        séparables et échangés sur un marché actif (art.~12)
+  \item Exemple : obligation achetée 1\,000\,\euro, cotée 940\,\euro{} : ajustement de $-60$\,\euro
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Les provisions techniques}
+\begin{center}
+\fbox{\parbox{0.6\textwidth}{\centering\large Provisions techniques $=$ $\BE$ $+$ $\MR$}}
+\end{center}
+\vspace{0.2cm}
+\begin{block}{Une valeur de transfert (art.~76)}
+Le montant qu'il faudrait payer aujourd'hui à une autre entreprise pour qu'elle reprenne
+\emph{sur-le-champ} les engagements d'assurance.
+\end{block}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{itemize}
+  \item \textbf{Meilleure estimation} ($\BE$) : ce que coûteront en moyenne les engagements
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{itemize}
+  \item \textbf{Marge de risque} ($\MR$) : ce que demanderait le repreneur pour immobiliser le capital nécessaire
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{La meilleure estimation}
+\begin{block}{Définition (art.~77)}
+Moyenne pondérée par leur probabilité des flux de trésorerie futurs, actualisés avec la courbe
+des taux sans risque pertinente :
+\[ \BE = \sum_{t=1}^{n} \frac{\mathbb{E}[F_t]}{(1+r_t)^t} \]
+\end{block}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\small
+\textbf{Flux} : prestations, frais, primes futures dans les limites des contrats, participations
+aux bénéfices futures. Calculée \textbf{brute} de réassurance.
+\end{column}
+\begin{column}{0.48\textwidth}
+\small
+\textbf{Hypothèses} réalistes : mortalité, rachats, frais, inflation, comportement des assurés.
+\textbf{Taux} : courbe de l'EIOPA, mensuelle, extrapolée par Smith-Wilson.
+\end{column}
+\end{columns}
+\vspace{0.2cm}
+\begin{center}\small Calcul détaillé : séance 3 (non-vie) et séance 4 (vie).\end{center}
+\end{frame}
+
+\begin{frame}{La marge de risque : un coût du capital}
+\begin{block}{Règlement délégué, art.~37 et 39}
+\[ \MR = \mathrm{CoC} \times \sum_{t \geq 0} \frac{\SCR(t)}{(1+r_{t+1})^{t+1}}, \qquad \mathrm{CoC} = 6\,\% \]
+$\SCR(t)$ : capital requis projeté pour l'entreprise de référence qui reprendrait les engagements,
+jusqu'à leur extinction.
+\end{block}
+\begin{itemize}
+  \item Logique : le repreneur doit immobiliser ce capital ; il demande une rémunération de 6\,\%
+        par an au-delà du taux sans risque
+  \item En pratique, le SCR futur est souvent approché par des simplifications (proportionnalité)
+  \item La révision de Solvabilité II \textbf{allège} cette marge à partir de 2027
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Les impôts différés}
+\begin{block}{Règlement délégué, art.~15}
+Les impôts différés naissent des écarts entre la valeur prudentielle de chaque actif ou passif et
+sa valeur fiscale.
+\end{block}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{itemize}
+  \item Actifs réévalués à la hausse, passifs à la baisse : \textbf{impôt différé passif}
+  \item Actifs réévalués à la baisse, passifs à la hausse : \textbf{impôt différé actif}
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Attention}
+Un impôt différé actif n'est retenu que s'il est \textbf{recouvrable} : il faut des bénéfices
+imposables futurs pour l'utiliser.
+\end{alertblock}
+\end{column}
+\end{columns}
+\vspace{0.3cm}
+\small Exemple : 36\,000\keur{} de moins-values et de surcroît de provisions, taux d'impôt de 25\,\% :
+impôt différé actif de 9\,000\keur.
+\end{frame}
+
+\begin{frame}{Des capitaux propres aux fonds propres prudentiels}
+\begin{center}
+\begin{tikzpicture}[
+  etape/.style={draw=bleuactu, fill=bleuactu!8, rounded corners, minimum width=3.2cm,
+                minimum height=1.2cm, align=center, font=\small},
+  fleche/.style={-{Latex[length=2mm]}, thick, bleuactu}]
+\node[etape] (a) {Excédent\\d'actif sur passif};
+\node[etape, right=1.2cm of a] (b) {Fonds propres\\de base};
+\node[etape, right=1.2cm of b] (c) {Fonds propres\\éligibles};
+\draw[fleche] (a) -- node[above, font=\scriptsize]{$+$ dettes} node[below, font=\scriptsize]{subordonnées} (b);
+\draw[fleche] (b) -- node[above, font=\scriptsize]{niveaux et} node[below, font=\scriptsize]{limites} (c);
+\end{tikzpicture}
+\end{center}
+\begin{itemize}
+  \item \textbf{Fonds propres de base} (art.~88) : excédent d'actif sur passif, plus les passifs
+        subordonnés, moins les actions propres
+  \item \textbf{Fonds propres auxiliaires} (art.~89--90) : éléments non versés mais appelables
+        (capital non appelé, lettres de crédit), sur autorisation du superviseur
+  \item \textbf{Réserve de réconciliation} (règlement délégué, art.~70) : l'excédent, diminué des
+        autres éléments de fonds propres et des dividendes prévisibles. Elle porte tous les écarts de valorisation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Trois niveaux de qualité}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{p{1.6cm}p{6.2cm}p{5.2cm}}
+\toprule
+\textbf{Niveau} & \textbf{Exemples} & \textbf{Qualité} \\
+\midrule
+\textbf{1} & Capital social versé, primes d'émission, réserve de réconciliation ; « restreint » : certains instruments subordonnés perpétuels & Disponible en permanence, totalement subordonné \\
+\textbf{2} & Dettes subordonnées d'échéance initiale d'au moins 10 ans ; la plupart des fonds propres auxiliaires & Subordonné, durée suffisante \\
+\textbf{3} & Impôts différés actifs nets ; dettes subordonnées d'au moins 5 ans & Qualité la plus faible \\
+\bottomrule
+\end{tabular}
+\end{table}
+\small Critères : directive, art.~93--94 ; listes : règlement délégué, art.~69 à 78. Les fonds propres
+auxiliaires ne sont jamais de niveau 1.
+\end{frame}
+
+\begin{frame}{Les limites d'éligibilité}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Pour couvrir le SCR}
+\begin{itemize}
+  \item Niveau 1 : au moins 50\,\% du SCR
+  \item Niveau 3 : moins de 15\,\% du SCR
+  \item Niveaux 2 $+$ 3 : au plus 50\,\% du SCR
+  \item Niveau 1 restreint : au plus 20\,\% du niveau 1
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{Pour couvrir le MCR}
+\begin{itemize}
+  \item Niveau 1 : au moins 80\,\% du MCR
+  \item Niveau 2 : au plus 20\,\% du MCR
+  \item Niveau 3 : exclu
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.3cm}
+\small Règlement délégué, art.~82. Les fonds propres au-delà des limites existent, mais ne
+comptent pas dans la couverture.
+\end{frame}
+
+% =====================================================================
+\section{Capital requis et ratio de couverture}
+% =====================================================================
+
+\begin{frame}{SCR et MCR}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{SCR (art.~100--101)}
+\begin{itemize}
+  \item Valeur en risque des fonds propres de base à \textbf{99,5\,\%}, horizon \textbf{un an} :
+        résister à un choc « une fois en 200 ans »
+  \item Formule standard (modules de risque agrégés) ou modèle interne approuvé
+  \item Calculé au moins une fois par an
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{MCR (art.~128--129)}
+\begin{itemize}
+  \item Calibré sur une valeur en risque à 85\,\%, un an
+  \item Formule linéaire, encadrée entre \textbf{25\,\%} et \textbf{45\,\%} du SCR, avec un plancher absolu
+  \item Le seuil en deçà duquel l'agrément est en jeu
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.2cm}
+\begin{center}\small Calcul de la formule standard : séance 7.\end{center}
+\end{frame}
+
+\begin{frame}{Le ratio de couverture et l'échelle d'intervention}
+\begin{center}
+\fbox{\parbox{0.6\textwidth}{\centering Ratio de couverture $=$ fonds propres éligibles $/$ SCR}}
+\end{center}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{p{4.2cm}p{8.3cm}}
+\toprule
+\textbf{Situation} & \textbf{Conséquence} \\
+\midrule
+Ratio $\geq 100\,\%$ & Situation conforme ; l'ORSA dit quelle marge viser au-delà \\
+SCR non couvert & Information immédiate de l'ACPR ; \textbf{plan de rétablissement} sous deux mois ;
+retour à la couverture en six mois, prolongeable (art.~138) \\
+MCR non couvert & \textbf{Plan de financement à court terme} sous un mois ; retour à la couverture en
+trois mois (art.~139) ; à défaut, \textbf{retrait d'agrément} (art.~144) \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Exemple : l'Assureur Alpha}
+\begin{columns}[T]
+\begin{column}{0.44\textwidth}
+\begin{block}{Situation initiale}
+\begin{itemize}
+  \item Fonds propres éligibles : 120\,M\euro
+  \item SCR : 100\,M\euro{} ; MCR : 45\,M\euro
+  \item Ratio : $120/100 = 120\,\%$
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.52\textwidth}
+\begin{alertblock}{Après un choc de $-20$\,M\euro{} sur les actifs}
+\begin{itemize}
+  \item Fonds propres : 100\,M\euro{}, ratio : $100\,\%$
+  \item L'entreprise est exactement au seuil : le moindre choc supplémentaire déclenche
+        l'intervention du superviseur
+\end{itemize}
+\end{alertblock}
+\end{column}
+\end{columns}
+\vspace{0.3cm}
+\small \textbf{Simplifications} : le SCR ne change pas après le choc, et la perte n'est pas allégée
+par les impôts différés. Deux effets que l'on mesurera dans les séances suivantes.
+\end{frame}
+
+% =====================================================================
+\section{Rendre compte : le pilier 3}
+% =====================================================================
+
+\begin{frame}{Les états quantitatifs (QRT)}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lll}
+\toprule
+\textbf{État} & \textbf{Contenu} & \textbf{Séance} \\
+\midrule
+S.02.01 & Bilan prudentiel & 1 \\
+S.06.02 & Liste des actifs, ligne à ligne & 2 \\
+S.12.01 et S.17.01 & Provisions techniques vie et non-vie & 3, 4 \\
+S.23.01 & Fonds propres & 1, 7 \\
+S.25.01 & SCR en formule standard & 7 \\
+S.28.01 & MCR & 7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{itemize}
+  \item Modèles fixés par le règlement d'exécution (UE) 2023/894 ; remise annuelle et trimestrielle
+  \item Format \textbf{XBRL}, taxonomie de l'EIOPA ; remis à l'ACPR, qui les transmet à l'EIOPA
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Les rapports narratifs : SFCR et RSR}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{SFCR : rapport sur la solvabilité et la situation financière}
+\small
+\textbf{Public}, annuel, sur le site de l'entreprise (directive, art.~51). Cinq parties :
+\begin{enumerate}[A.]
+  \item Activité et résultats
+  \item Système de gouvernance
+  \item Profil de risque
+  \item Valorisation à des fins de solvabilité
+  \item Gestion du capital
+\end{enumerate}
+avec une sélection d'états en annexe.
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{RSR : rapport régulier au contrôleur}
+\small
+\textbf{Non public}, destiné à l'ACPR (directive, art.~35). Même plan, plus détaillé :
+informations sensibles, stratégie, réassurance, limites de risque.
+\end{block}
+\begin{alertblock}{Qui produit quoi ?}
+\small
+Calculs : actuariat et direction financière ; validation des provisions : fonction actuarielle ;
+signature : dirigeants effectifs ; approbation : conseil d'administration.
+\end{alertblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+% =====================================================================
+\section{Étude de cas : le mini-bilan prudentiel}
+% =====================================================================
+
+\begin{frame}{L'Assureur Bêta : le bilan des comptes sociaux}
+\begin{table}
+\centering
+\small
+\begin{tabular}{lrr@{\qquad}lr}
+\toprule
+\textbf{Actif} & \textbf{Comptable} & \textbf{Marché} & \textbf{Passif} & \textbf{Comptable} \\
+\midrule
+Obligations d'État        & 500\,000 & 480\,000 & Provisions techniques       & 950\,000 \\
+Obligations d'entreprises & 200\,000 & 195\,000 & Dettes subordonnées (12 ans) & 50\,000 \\
+Actions cotées            & 100\,000 &  90\,000 & Autres dettes               &  20\,000 \\
+Immobilier                & 200\,000 & 210\,000 & Capital social              &  30\,000 \\
+Trésorerie                &  50\,000 &  50\,000 & Réserves et résultat        &  20\,000 \\
+Créances                  &  20\,000 &  19\,000 &                             &          \\
+\midrule
+\textbf{Total}            & \textbf{1\,070\,000} & & \textbf{Total} & \textbf{1\,070\,000} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\small Assureur vie fictif, montants en k\euro. Meilleure estimation : 920\,000\keur ; taux d'impôt
+25\,\% ; SCR 70\,000\keur, MCR 17\,500\keur. Données : \texttt{assureur-beta.csv} sur le site du cours.
+\end{frame}
+
+\begin{frame}{La démarche du TD, en sept étapes}
+\begin{enumerate}
+  \item \textbf{Revaloriser les actifs} en valeur de marché
+  \item \textbf{Recalculer les provisions techniques} : meilleure estimation $+$ marge de risque
+  \item \textbf{Calculer les impôts différés} sur les écarts de valorisation
+  \item \textbf{Construire le bilan prudentiel} et l'excédent d'actif sur passif ; le réconcilier avec les capitaux propres
+  \item \textbf{Classer les fonds propres} en niveaux ; calculer la réserve de réconciliation
+  \item \textbf{Vérifier la couverture} du SCR et du MCR après limites d'éligibilité
+  \item \textbf{Mesurer la sensibilité} à trois chocs : actions, taux, écarts de crédit
+\end{enumerate}
+\vspace{0.2cm}
+\begin{alertblock}{Avant de calculer}
+Pariez : les fonds propres prudentiels de Bêta seront-ils supérieurs ou inférieurs à ses
+50\,000\keur{} de capitaux propres comptables ? Son SCR sera-t-il couvert ?
+\end{alertblock}
+\end{frame}
+
+% =====================================================================
+\section{Synthèse}
+% =====================================================================
+
+\begin{frame}{À retenir}
+\begin{enumerate}
+  \item La comptabilité prudentielle répond à une question : l'assureur pourra-t-il payer, même
+        après un choc ? Elle ne mesure pas sa performance.
+  \item Le bilan prudentiel valorise tout à la \textbf{valeur d'échange} (art.~75) : actifs en valeur
+        de marché, provisions $=$ meilleure estimation $+$ marge de risque, impôts différés sur les écarts.
+  \item Les fonds propres se \textbf{classent} en trois niveaux et ne comptent que dans des
+        \textbf{limites} (art.~82).
+  \item Le \textbf{ratio de couverture} rapporte les fonds propres éligibles au SCR (99,5\,\%, un an) ;
+        sous le SCR puis sous le MCR, le superviseur intervient de plus en plus fort.
+  \item Trois piliers : le chiffre (1), la gouvernance (2), la transparence (3).
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Pour la prochaine séance}
+\begin{block}{À faire}
+\begin{itemize}
+  \item Terminer le TD 1 ; le corrigé est publié sur le site après la séance
+  \item Revoir les unités 1 à 3 du \textbf{polycopié de prérequis} : valeur actuelle, échéancier,
+        obligations et courbe des taux
+\end{itemize}
+\end{block}
+\begin{block}{Questions de rappel, en ouverture de la séance 2}
+\begin{itemize}
+  \item Pourquoi un écart d'acquisition vaut-il zéro au bilan prudentiel ?
+  \item D'où vient un impôt différé actif, et à quelle condition est-il retenu ?
+  \item Pourquoi un SCR non couvert n'entraîne-t-il pas immédiatement un retrait d'agrément ?
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[c]
+\centering
+\Huge Questions ?
+
+\vspace{1cm}
+\Large
+\textbf{Séance 2} : valorisation des produits financiers
+\end{frame}
+
+\end{document}

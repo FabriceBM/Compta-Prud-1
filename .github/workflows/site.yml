@@ -41,6 +41,7 @@ jobs:
           name: pdf
           path: |
             seances/*/diapos.pdf
+            seances/*/td*.pdf
             prerequis/prerequis*.pdf
 
   code:
