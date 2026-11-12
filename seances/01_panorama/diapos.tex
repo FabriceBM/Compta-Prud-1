@@ -1,0 +1,397 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,arrows.meta}
+\usepackage{eurosym}
+
+% Thème : celui des autres séances
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\definecolor{bleuactu}{RGB}{0,51,102}
+\definecolor{vertactu}{RGB}{0,102,51}
+\definecolor{rougeactu}{RGB}{153,0,0}
+\definecolor{orangeactu}{RGB}{230,126,34}
+
+\setbeamercolor{structure}{fg=bleuactu}
+\setbeamercolor{frametitle}{bg=bleuactu,fg=white}
+
+\newcommand{\keur}{\,k\euro}
+% Un cas : cadre orange, renvoi à la séance qui le traite
+\newenvironment{cas}[2]{\begin{exampleblock}{Cas #1 --- #2}}{\end{exampleblock}}
+
+% Compilation pdfLaTeX sans erreur : caractères absents de l'encodage T1 (voir README « LaTeX »)
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+
+\title[Séance 1 -- Panorama]{Séance 1 : la comptabilité prudentielle en un coup d'œil}
+\subtitle{Pourquoi, comment, quand, à quoi ça sert, et ses limites}
+\author[F. Borel-Mathurin]{Fabrice BOREL-MATHURIN}
+\institute[ACPR-DEAR et SAF Lyon 1]{
+    ACPR - DEAR\\
+    et\\
+    Laboratoire SAF Université Claude Bernard Lyon 1
+}
+\date{2026-2027}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Plan de la séance (4 h)}
+\tableofcontents
+\end{frame}
+
+\begin{frame}{Objectifs pédagogiques}
+\begin{block}{À l'issue de cette séance, vous serez capable de :}
+\begin{enumerate}
+  \item Expliquer pourquoi les assureurs relèvent d'une comptabilité prudentielle
+  \item Décrire en quelques phrases la mécanique de Solvabilité II : bilan économique, capital requis, ratio, trois piliers
+  \item Situer les échéances : l'histoire du cadre, le calendrier d'une année, le moment où le superviseur intervient
+  \item Dire à quoi sert le ratio de couverture, et ce qu'il ne dit pas
+\end{enumerate}
+\end{block}
+\vspace{0.3cm}
+\begin{alertblock}{Déroulé}
+\textbf{Principes :} 1 h \quad | \quad \textbf{Cinq cas, en groupes :} 1 h 30 \quad | \quad
+\textbf{Mise en commun :} 1 h \quad | \quad \textbf{La carte du cours :} 30 min
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Pour commencer : trois questions}
+\begin{block}{À discuter à deux, 5 minutes}
+\begin{enumerate}
+  \item Une obligation achetée 100\,\euro{} cote aujourd'hui 85\,\euro. Que vaut-elle dans les
+        comptes de l'assureur ? Et pour quelqu'un qui voudrait la racheter ?
+  \item Un assureur encaisse la prime \emph{avant} de payer les sinistres. Qu'est-ce que cela
+        change pour celui qui le contrôle ?
+  \item Qui a intérêt à ce qu'un assureur reste solvable ?
+\end{enumerate}
+\end{block}
+\vspace{0.2cm}
+\small Nous reviendrons sur vos réponses au fil de la séance.
+\end{frame}
+
+% =====================================================================
+\section{Pourquoi ?}
+% =====================================================================
+
+\begin{frame}{Un métier à cycle inversé}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{L'assureur}
+\begin{itemize}
+  \item \textbf{encaisse d'abord} la prime, \textbf{paie ensuite}, parfois des décennies plus tard
+  \item ne connaît son coût de revient qu'\textbf{après coup}
+  \item porte des engagements \textbf{longs}, \textbf{aléatoires}, souvent assortis de \textbf{garanties}
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Le problème}
+Le résultat de l'année ne dit pas si l'assureur pourra payer ses assurés \textbf{même après un
+choc}. Il faut une mesure \textbf{prospective} et \textbf{économique} de sa solidité.
+\end{alertblock}
+\end{column}
+\end{columns}
+\vspace{0.4cm}
+\begin{block}{Les objectifs du contrôle}
+\textbf{Protéger les assurés et les bénéficiaires}, objectif principal (directive 2009/138/CE,
+art.~27) ; préserver la \textbf{stabilité financière} ; maintenir la \textbf{confiance}.
+\end{block}
+\end{frame}
+
+\begin{frame}{Des marges forfaitaires à une exigence fondée sur les risques}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Solvabilité I (1973, 1979, 2002)}
+Une marge \textbf{forfaitaire} : par exemple, en vie, 4\,\% des provisions mathématiques
+$+$ 0,3\,\% des capitaux sous risque. Deux assureurs aux placements opposés ont la même exigence.
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{Solvabilité II (depuis 2016)}
+Un \textbf{bilan économique}, et un capital requis qui dépend des \textbf{risques réellement
+pris} : marché, crédit, souscription, opérationnel. La même logique que Bâle II pour les banques.
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.4cm}
+\begin{cas}{A}{Equitable Life (Royaume-Uni, 2000)}
+Des contrats de retraite vendus avec une option de rente à taux garanti, qui ne valait presque
+rien à la vente. Les taux baissent : l'option devient très coûteuse, et rien ne l'avait mesurée.
+\textbf{Question} : qu'aurait-il fallu valoriser, et qui paie à la fin ? \hfill
+\emph{$\to$ séances 5 à 7}
+\end{cas}
+\end{frame}
+
+% =====================================================================
+\section{Comment ?}
+% =====================================================================
+
+\begin{frame}{La mécanique en une image}
+\begin{center}
+\begin{tikzpicture}[
+  boite/.style={draw=bleuactu, fill=bleuactu!8, rounded corners, minimum width=2.9cm,
+                minimum height=1.25cm, align=center, font=\small},
+  fleche/.style={-{Latex[length=2mm]}, thick, bleuactu}]
+\node[boite] (b) {\textbf{Bilan économique}\\\scriptsize valeur d'échange (art.~75)};
+\node[boite, right=1cm of b] (f) {\textbf{Fonds propres}\\\scriptsize classés, plafonnés};
+\node[boite, right=1cm of f] (r) {\textbf{Ratio}\\\scriptsize fonds propres / SCR};
+\node[boite, below=1.1cm of f, draw=rougeactu, fill=rougeactu!8] (s) {\textbf{SCR}\\\scriptsize VaR 99,5\,\%, un an};
+\draw[fleche] (b) -- node[above, font=\scriptsize]{actif $-$ passif} (f);
+\draw[fleche] (f) -- (r);
+\draw[fleche] (s) -| (r);
+\end{tikzpicture}
+\end{center}
+\begin{itemize}
+  \item \textbf{Actifs} en valeur de marché ; \textbf{provisions techniques} $=$ meilleure estimation $+$ marge de risque
+  \item \textbf{SCR} : le capital qui permet d'encaisser un choc « une fois en 200 ans » sur un an
+  \item \textbf{MCR} : un plancher, entre 25 et 45\,\% du SCR, sous lequel l'agrément est en jeu
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Trois piliers, deux autorités}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{4.3cm}}
+\toprule
+\textbf{Pilier} & \textbf{Contenu} \\
+\midrule
+\textbf{1. Chiffre} & Bilan prudentiel, fonds propres, SCR, MCR \\
+\textbf{2. Gouvernance} & Fonctions clés, gestion des risques, ORSA \\
+\textbf{3. Information} & États au superviseur, rapport public (SFCR) \\
+\bottomrule
+\end{tabular}
+\end{column}
+\begin{column}{0.42\textwidth}
+\begin{block}{EIOPA (européenne)}
+\small Normes techniques, orientations, tests de résistance, courbe des taux sans risque mensuelle.
+\end{block}
+\begin{block}{ACPR (française)}
+\small Agrément, contrôle sur pièces et sur place, sanctions, résolution.
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.3cm}
+\begin{cas}{B}{l'Assureur Bêta}
+Capitaux propres comptables : 50\,000\keur. Après revalorisation des actifs, des provisions et des
+impôts différés : 23\,000\keur. SCR : 70\,000\keur. \textbf{Question} : où sont passés les
+27\,000\keur, et l'assureur est-il couvert ? \hfill \emph{$\to$ séance 2}
+\end{cas}
+\end{frame}
+
+% =====================================================================
+\section{Quand ?}
+% =====================================================================
+
+\begin{frame}{Un cadre construit en cinquante ans}
+\begin{center}
+\begin{tikzpicture}[
+  date/.style={font=\small\bfseries, text=bleuactu},
+  evt/.style={font=\scriptsize, align=center, text width=2.1cm}]
+\draw[-{Latex[length=3mm]}, very thick, bleuactu] (0,0) -- (14.2,0);
+\foreach \x/\a/\t/\pos in {0.4/1973/{Directive non-vie : marge forfaitaire}/above,
+                           2.4/1979/{Directive vie}/below,
+                           4.4/2002/{Solvabilité I réformée}/above,
+                           6.4/2009/{Directive Solvabilité II adoptée}/below,
+                           8.4/2014/{Omnibus II : mesures de long terme}/above,
+                           10.4/2016/{Entrée en application}/below,
+                           12.6/2027/{Révision (directive (UE) 2025/2)}/above} {
+  \fill[bleuactu] (\x,0) circle (2.5pt);
+  \node[date, \pos=2pt] at (\x,0) {\a};
+  \node[evt, \pos=16pt] at (\x,0) {\t};
+}
+\end{tikzpicture}
+\end{center}
+\vspace{0.2cm}
+\small Chaque étape répond à une limite de la précédente : des marges sans lien avec le risque
+(Solvabilité I), puis un bilan de marché trop volatil pour les engagements longs (mesures de
+2014), puis des exigences jugées trop lourdes ou mal calibrées (révision).
+\end{frame}
+
+\begin{frame}{Le calendrier d'une année}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{p{4cm}p{9cm}}
+\toprule
+\textbf{Quand} & \textbf{Quoi} \\
+\midrule
+Chaque trimestre & MCR recalculé (art.~129) ; états trimestriels au superviseur \\
+Au moins une fois par an & SCR calculé (art.~102) ; états annuels ; rapport public (SFCR) ; ORSA \\
+Dès que le profil de risque change sensiblement & SCR recalculé, ORSA refait \\
+En permanence & L'entreprise doit couvrir son SCR et son MCR, pas seulement aux dates de remise \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{block}{Quand le superviseur intervient}
+\small
+SCR non couvert : \textbf{plan de rétablissement} sous deux mois, retour à la couverture en six
+mois (art.~138). MCR non couvert : \textbf{plan de financement} sous un mois, retour en trois mois
+(art.~139), puis, à défaut, \textbf{retrait d'agrément} (art.~144).
+\end{block}
+\end{frame}
+
+\begin{frame}{Un cas pour « quand »}
+\begin{cas}{C}{le cycle des taux, 2012--2022}
+Un assureur vie a vendu des contrats d'épargne avec un taux minimum garanti de 2 à 3\,\%. De 2012
+à 2021, les taux de marché baissent jusqu'à devenir négatifs sur certaines échéances ; en 2022,
+ils remontent brutalement.
+\begin{itemize}
+  \item Taux en baisse : que deviennent la valeur des obligations, la meilleure estimation des
+        contrats, le ratio ?
+  \item Taux en hausse rapide : quel nouveau risque apparaît pour des contrats rachetables ?
+  \item À quel rythme l'assureur et l'ACPR voient-ils ces effets ?
+\end{itemize}
+\hfill \emph{$\to$ séances 5 à 7}
+\end{cas}
+\end{frame}
+
+% =====================================================================
+\section{À quoi ça sert ?}
+% =====================================================================
+
+\begin{frame}{Un même chiffre, plusieurs usages}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{p{3.3cm}p{9.7cm}}
+\toprule
+\textbf{Pour qui} & \textbf{À quoi ça sert} \\
+\midrule
+Les assurés & Être payés, même après un choc sévère ; à défaut, une intervention précoce \\
+Le superviseur & Détecter tôt, comparer les entreprises sur une base commune, graduer son intervention \\
+La direction et le conseil & Piloter : dividendes, réassurance, allocation d'actifs, conception des produits, appétit au risque \\
+Le marché et le public & Comparer, juger la solidité, grâce au rapport public annuel (SFCR) \\
+\bottomrule
+\end{tabular}
+\end{table}
+\vspace{0.2cm}
+\begin{cas}{D}{l'Assureur Alpha}
+Fonds propres éligibles 120\,M\euro, SCR 100\,M\euro : ratio de 120\,\%. Un choc de marché coûte
+20\,M\euro. Le conseil devait voter un dividende de 10\,M\euro. \textbf{Question} : le peut-il ?
+Quels leviers pour remonter le ratio ? \hfill \emph{$\to$ séances 8 et 9}
+\end{cas}
+\end{frame}
+
+% =====================================================================
+\section{Et ses limites}
+% =====================================================================
+
+\begin{frame}{Ce que le ratio ne dit pas : un aperçu}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{4.1cm}p{7.6cm}c}
+\toprule
+\textbf{Limite} & \textbf{En une phrase} & \textbf{Séance} \\
+\midrule
+Volatilité, procyclicité & Une valeur de marché bouge avec les marchés ; vendre en bas de cycle aggrave la crise & 6--8 \\
+Une seule mesure & Un quantile à 99,5\,\% sur un an, pas une prévision ni le pire scénario & 8 \\
+Un calibrage moyen & La formule standard est calibrée pour un assureur « type » & 8 \\
+Modèles et données & Hypothèses, générateurs de scénarios, qualité des données : autant de sources d'erreur & 3--7 \\
+Complexité et coût & Des calculs lourds, d'où le principe de proportionnalité & 2, 8 \\
+Risques mal saisis & Liquidité, climat, cyber : traités surtout dans l'ORSA & 9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Un cas pour les limites}
+\begin{cas}{E}{le printemps 2020}
+Mars 2020 : les actions chutent, les écarts de crédit s'élargissent, les taux restent très bas.
+Deux mécanismes du cadre amortissent la chute des ratios : l'\textbf{ajustement symétrique} du
+choc actions et la \textbf{correction pour volatilité} de la courbe d'actualisation. En avril,
+l'EIOPA appelle les assureurs à suspendre leurs dividendes.
+\begin{itemize}
+  \item Pourquoi un bilan en valeur de marché peut-il amplifier une crise ?
+  \item Que corrigent ces deux mécanismes, et à quel prix ?
+  \item Après un choc record, le SCR calibré sur le passé mesure-t-il encore le bon risque ?
+\end{itemize}
+\hfill \emph{$\to$ séances 6 à 8}
+\end{cas}
+\vspace{0.1cm}
+\small \emph{Pour aller plus loin} : la réévaluation du capital requis après un grand choc est
+une question de recherche ; F. Borel-Mathurin et S. Loisel, \emph{Re-evaluation of the capital charge
+in insurance after a large shock}, article soumis.
+\end{frame}
+
+% =====================================================================
+\section{La carte du cours}
+% =====================================================================
+
+\begin{frame}{La carte du cours}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{clp{6.4cm}}
+\toprule
+\textbf{N°} & \textbf{Séance} & \textbf{Les cas qui y reviennent} \\
+\midrule
+2 & Le bilan prudentiel & B : l'Assureur Bêta, en entier \\
+3 & Excel, Python et agents d'IA & Les contrôles d'un superviseur sur six assureurs \\
+4 & Meilleure estimation non-vie & --- \\
+5 & Meilleure estimation vie & A : la valeur d'une garantie ; C : rachats \\
+6--7 & Approche stochastique et ALM & A, C, E : options, taux, adossement \\
+8 & SCR, MCR et fonds propres & D : l'Assureur Alpha ; E : l'ajustement symétrique \\
+9 & ORSA & D : appétit au risque ; E : risques hors formule \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{À retenir}
+\begin{enumerate}
+  \item \textbf{Pourquoi} : l'assureur promet avant de payer ; il faut mesurer, à valeur
+        économique, s'il pourra tenir sa promesse après un choc.
+  \item \textbf{Comment} : un bilan en valeur d'échange, des fonds propres classés, un SCR à
+        99,5\,\% sur un an, un ratio ; trois piliers, deux autorités.
+  \item \textbf{Quand} : en permanence, avec un MCR trimestriel, un SCR au moins annuel, et une
+        intervention graduée dès que le SCR n'est plus couvert.
+  \item \textbf{À quoi ça sert} : protéger les assurés, contrôler tôt, piloter l'entreprise,
+        informer le public.
+  \item \textbf{Ses limites} : volatilité, mesure unique, calibrage moyen, modèles : le ratio
+        éclaire, il ne remplace pas le jugement.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Pour la prochaine séance}
+\begin{block}{À faire}
+\begin{itemize}
+  \item Relire les cinq cas et vos réponses ; le corrigé est publié sur le site après la séance
+  \item Parcourir les unités 1 et 2 du \textbf{polycopié de prérequis} : valeur actuelle, échéancier
+\end{itemize}
+\end{block}
+\begin{block}{Questions de rappel, en ouverture de la séance 2}
+\begin{itemize}
+  \item Pourquoi le résultat comptable ne suffit-il pas à juger si un assureur pourra payer ses assurés ?
+  \item Que mesure le SCR, et sur quel horizon ?
+  \item Citez deux limites du ratio de couverture.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[c]
+\centering
+\Huge Questions ?
+
+\vspace{1cm}
+\Large
+\textbf{Séance 2} : le bilan prudentiel
+\end{frame}
+
+\end{document}

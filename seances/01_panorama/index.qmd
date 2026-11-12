@@ -1,0 +1,51 @@
+---
+title: "La comptabilité prudentielle en un coup d'œil"
+subtitle: "Pourquoi, comment, quand, à quoi ça sert, et ses limites : principes et cinq cas"
+numero: 1
+corriges: false
+---
+
+## Objectifs
+
+À l'issue de cette séance, vous serez capable de :
+
+1. Expliquer pourquoi les assureurs relèvent d'une comptabilité prudentielle.
+2. Décrire en quelques phrases la mécanique de Solvabilité II : bilan économique, capital requis,
+   ratio, trois piliers.
+3. Situer les échéances : l'histoire du cadre, le calendrier d'une année, le moment où le
+   superviseur intervient.
+4. Dire à quoi sert le ratio de couverture, et ce qu'il ne dit pas.
+
+**Déroulé** : 1 h de principes, 1 h 30 de cas en groupes, 1 h de mise en commun, 30 min sur la
+carte du cours.
+
+## Supports
+
+- [Diapositives (PDF)](diapos.pdf) : pourquoi ; comment ; quand ; à quoi ça sert ; un aperçu des
+  limites ; la carte du cours, qui dit dans quelle séance chaque cas revient.
+
+## Les cinq cas
+
+Un cas par question, sans calcul : chacun donne un aperçu d'une partie du cours.
+
+| Cas | Question | Situation | Repris en séance |
+|:---:|----------|-----------|:----------------:|
+| A | Pourquoi ? | Equitable Life (Royaume-Uni, 2000) : une option de taux garanti que personne n'avait valorisée | 5 à 7 |
+| B | Comment ? | L'Assureur Bêta : de 50 000 k€ de capitaux propres à 23 000 k€ de fonds propres prudentiels | 2 |
+| C | Quand ? | Le cycle des taux, 2012–2022 : taux bas, puis remontée brutale | 5 à 7 |
+| D | À quoi ça sert ? | L'Assureur Alpha : un ratio tombé à 100 % et un dividende à voter | 8 et 9 |
+| E | Les limites | Le printemps 2020 : chute des marchés, mécanismes contracycliques | 6 à 8 |
+
+: Les cinq cas {tbl-colwidths="[6,16,62,16]"}
+
+- [Les cinq cas (PDF)](td.pdf)
+
+::: {.corrige}
+## Éléments de mise en commun
+- [Les cinq cas, avec les éléments de réponse (PDF)](td-corrige.pdf)
+:::
+
+## Après la séance
+
+- Parcourir les unités 1 et 2 du [polycopié de prérequis](../../prerequis/index.qmd) : valeur actuelle, échéancier.
+- Préparer les trois questions de rappel de la dernière diapositive : elles ouvrent la séance 2.

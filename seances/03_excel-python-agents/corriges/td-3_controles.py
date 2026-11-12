@@ -1,6 +1,6 @@
 """
-TD 2 - Contrôler les états de six assureurs : CORRIGÉ (partie B, Python)
-Comptabilité prudentielle en assurance - séance 2
+TD 3 - Contrôler les états de six assureurs : CORRIGÉ (partie B, Python)
+Comptabilité prudentielle en assurance - séance 3
 
 Montants en M€. Données fictives : ../bilans-assureurs.csv (séparateur « ; »).
 Fonds propres de base = excédent d'actif sur passif + dettes subordonnées (pas d'autre élément).

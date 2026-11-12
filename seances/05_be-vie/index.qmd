@@ -1,7 +1,7 @@
 ---
 title: "Meilleure estimation vie"
 subtitle: "Épargne, prévoyance et rentes : projection des flux et actualisation"
-numero: 4
+numero: 5
 corriges: false
 ---
 
@@ -26,7 +26,7 @@ corriges: false
   de rachat, frais, courbe EIOPA et extrapolation de Smith-Wilson) ; introduction à Python pour l'actuariat.
 - Notebook [Premiers pas en Python actuariel](notebooks/premiers-pas-python.ipynb) : vecteurs
   d'âges et loi de Makeham, tableaux de contrats avec pandas, évolution d'une provision mathématique
-  ({{< colab seances/04_be-vie/notebooks/premiers-pas-python.ipynb >}}).
+  ({{< colab seances/05_be-vie/notebooks/premiers-pas-python.ipynb >}}).
 
 ## Travaux dirigés
 
@@ -40,6 +40,6 @@ corriges: false
 ::: {.corrige}
 ## Corrigé
 - TD 4.1 à 4.3 : notebook `td-4_be-vie.ipynb`
-  ({{< colab seances/04_be-vie/corriges/td-4_be-vie.ipynb >}} ·
-  {{< github seances/04_be-vie/corriges/td-4_be-vie.ipynb >}}).
+  ({{< colab seances/05_be-vie/corriges/td-4_be-vie.ipynb >}} ·
+  {{< github seances/05_be-vie/corriges/td-4_be-vie.ipynb >}}).
 :::

@@ -1,7 +1,7 @@
 ---
 title: "SCR, MCR et fonds propres"
 subtitle: "Formule standard, minimum de capital requis, classement et éligibilité des fonds propres"
-numero: 7
+numero: 8
 corriges: false
 ---
 
@@ -34,12 +34,12 @@ corriges: false
 ::: {.corrige}
 ## Corrigés
 - TD 7.0 : script Python [`td-7-0_symmetric-adjustment.py`](corriges/td-7-0_symmetric-adjustment.py)
-  ({{< github seances/07_scr-mcr-fonds-propres/corriges/td-7-0_symmetric-adjustment.py >}}).
+  ({{< github seances/08_scr-mcr-fonds-propres/corriges/td-7-0_symmetric-adjustment.py >}}).
 - TD 7.3 : notebook `td-7-3_management-actions.ipynb`
-  ({{< colab seances/07_scr-mcr-fonds-propres/corriges/td-7-3_management-actions.ipynb >}} ·
-  {{< github seances/07_scr-mcr-fonds-propres/corriges/td-7-3_management-actions.ipynb >}}).
+  ({{< colab seances/08_scr-mcr-fonds-propres/corriges/td-7-3_management-actions.ipynb >}} ·
+  {{< github seances/08_scr-mcr-fonds-propres/corriges/td-7-3_management-actions.ipynb >}}).
 :::
 
 ## Séance suivante
 
-Séance 8 : l'ORSA (évaluation interne des risques et de la solvabilité).
+Séance 9 : l'ORSA (évaluation interne des risques et de la solvabilité).

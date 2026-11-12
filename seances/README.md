@@ -25,5 +25,5 @@ liste les séances par le champ `numero` de leur `index.qmd`, pas par le nom du 
 
 ## Nouvelle séance
 ```bash
-make seance N=08 SLUG=orsa     # crée seances/08_orsa/index.qmd depuis _modele/
+make seance N=09 SLUG=orsa     # crée seances/09_orsa/index.qmd depuis _modele/
 ```

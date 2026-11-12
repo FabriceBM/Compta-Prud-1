@@ -5,12 +5,12 @@
 % Version étudiant par défaut ; `make pdf` produit aussi td-corrige.pdf en définissant \Corrige.
 \ifdefined\Corrige\correctiontrue\else\correctionfalse\fi
 
-\fancyhead[L]{\small\sffamily\color{grisactu}Séance 2 --- Comptabilité prudentielle}
+\fancyhead[L]{\small\sffamily\color{grisactu}Séance 3 --- Comptabilité prudentielle}
 \newcommand{\meur}{\,M\euro}
 \newcommand{\fx}[1]{\texttt{\small #1}}
 
 \title{\vspace{-1.5cm}\sffamily\bfseries\color{bleuactu}
-       TD 2 : contrôler les états de six assureurs\\[2mm]
+       TD 3 : contrôler les états de six assureurs\\[2mm]
        \large\mdseries\color{black}Avec un tableur, puis en Python, puis avec un agent d'IA
        \ifcorrection\\[1mm]\color{vertactu}Version corrigée\fi}
 \author{\sffamily Fabrice Borel-Mathurin}
@@ -150,7 +150,7 @@ une colonne). Produire un tableau des anomalies par entité, et vérifier par de
 retrouvez exactement les résultats du tableur.
 \end{exercice}
 \begin{corrige}
-Script complet : \texttt{corriges/td-2\_controles.py}. Le cœur tient en trois lignes :
+Script complet : \texttt{corriges/td-3\_controles.py}. Le cœur tient en trois lignes :
 
 \smallskip
 \fx{t3 = np.minimum(d["tier3"], 0.15 * d["scr"])}\\

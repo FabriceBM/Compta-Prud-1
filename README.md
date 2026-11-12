@@ -73,7 +73,7 @@ vérifications sans publier.
 
 1. Déposer les fichiers dans [`a-classer/`](a-classer/) (sur GitHub : *Add file > Upload files*).
 2. Les ranger dans `seances/NN_theme/` selon les règles de [`seances/README.md`](seances/README.md) ;
-   `make seance N=08 SLUG=orsa` crée le dossier et la page d'une nouvelle séance.
+   `make seance N=09 SLUG=orsa` crée le dossier et la page d'une nouvelle séance.
 3. Mettre la page de la séance à jour : objectifs, liens vers les supports, TD, corrigés.
 4. `make check`, `make code`, `make check-latex` ; puis pull request vers `main`.
 

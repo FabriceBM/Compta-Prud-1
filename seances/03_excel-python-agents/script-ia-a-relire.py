@@ -7,7 +7,7 @@ Script généré par un assistant d'IA à partir de la consigne :
 couverture du SCR et du MCR à partir du fichier bilans-assureurs.csv, et qui signale
 les ratios déclarés incorrects. »
 
-TD 2, partie C : ce script contient des erreurs. Ne pas le corriger ici : les relever.
+TD 3, partie C : ce script contient des erreurs. Ne pas le corriger ici : les relever.
 """
 import pandas as pd
 

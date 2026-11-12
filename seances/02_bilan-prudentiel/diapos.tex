@@ -33,7 +33,7 @@
 \DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
 \DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
 
-\title[Séance 1 -- Pourquoi la comptabilité prudentielle ?]{Séance 1 : Pourquoi la comptabilité prudentielle ?}
+\title[Séance 2 -- Le bilan prudentiel]{Séance 2 : le bilan prudentiel}
 \subtitle{Comptabilité prudentielle en assurance}
 \author[F. Borel-Mathurin]{Fabrice BOREL-MATHURIN}
 \institute[ACPR-DEAR et SAF Lyon 1]{
@@ -54,62 +54,34 @@
 \begin{frame}{Objectifs pédagogiques}
 \begin{block}{À l'issue de cette séance, vous serez capable de :}
 \begin{enumerate}
-  \item Expliquer la finalité de la comptabilité prudentielle
-  \item Identifier ce qui la distingue de la comptabilité financière
-  \item Situer les institutions (EIOPA, ACPR) et les textes fondateurs
-  \item Construire un bilan prudentiel simplifié à partir d'un bilan comptable
-  \item Calculer et interpréter un ratio de couverture du SCR
+  \item Identifier ce qui distingue le bilan prudentiel du bilan des comptes sociaux
+  \item Valoriser un bilan prudentiel simplifié : actifs, provisions techniques, impôts différés
+  \item Classer les fonds propres en niveaux et appliquer les limites d'éligibilité
+  \item Calculer et interpréter les ratios de couverture du SCR et du MCR
+  \item Situer ces chiffres dans les états remis au superviseur (S.02.01, S.23.01)
 \end{enumerate}
 \end{block}
 \vspace{0.3cm}
 \begin{alertblock}{Déroulé}
-\textbf{Cours :} 2 h \quad | \quad \textbf{Travaux dirigés :} 2 h sur tableur (TD 1 : le mini-bilan prudentiel de l'Assureur Bêta)
+\textbf{Cours :} 2 h \quad | \quad \textbf{Travaux dirigés :} 2 h sur tableur (TD 2 : le mini-bilan prudentiel de l'Assureur Bêta)
 \end{alertblock}
 \end{frame}
 
-\begin{frame}{Pour commencer : trois questions}
-\begin{block}{À discuter à deux, 5 minutes}
+\begin{frame}{Rappel de la séance 1}
+\begin{block}{Trois questions, sans notes}
 \begin{enumerate}
-  \item Une obligation achetée 100\,\euro{} cote aujourd'hui 85\,\euro. Que vaut-elle dans les
-        comptes de l'assureur ? Et pour quelqu'un qui voudrait la racheter ?
-  \item Un assureur encaisse la prime \emph{avant} de payer les sinistres. Qu'est-ce que cela
-        change pour celui qui le contrôle ?
-  \item Qui a intérêt à ce qu'un assureur reste solvable ?
+  \item Pourquoi le résultat comptable ne suffit-il pas à juger si un assureur pourra payer ses assurés ?
+  \item Que mesure le SCR, et sur quel horizon ?
+  \item Citez deux limites du ratio de couverture.
 \end{enumerate}
 \end{block}
 \vspace{0.2cm}
-\small Nous reviendrons sur vos réponses au fil de la séance.
+\small Réponses en 5 minutes, à deux, puis mise en commun.
 \end{frame}
 
 % =====================================================================
-\section{Pourquoi une comptabilité prudentielle ?}
+\section{Deux comptabilités, un même bilan}
 % =====================================================================
-
-\begin{frame}{Le cycle de production inversé de l'assurance}
-\begin{columns}[T]
-\begin{column}{0.48\textwidth}
-\begin{block}{Ce qui fait la spécificité de l'assureur}
-\begin{itemize}
-  \item Il \textbf{encaisse d'abord} la prime, il \textbf{paie ensuite}, parfois des décennies plus tard
-  \item Le coût de revient n'est connu qu'\textbf{a posteriori}
-  \item Ses engagements sont \textbf{longs} et \textbf{aléatoires}
-\end{itemize}
-\end{block}
-\end{column}
-\begin{column}{0.48\textwidth}
-\begin{alertblock}{Conséquence}
-Le résultat de l'année ne dit pas si l'assureur pourra payer ses assurés \textbf{même en cas de
-choc}. Il faut une mesure \textbf{prospective} de sa solidité.
-\end{alertblock}
-\end{column}
-\end{columns}
-\vspace{0.4cm}
-\begin{center}
-\fbox{\parbox{0.8\textwidth}{\centering
-Fonds propres = valeur des actifs $-$ valeur des engagements\\[1mm]
-\small\emph{les deux évalués à leur valeur économique (directive 2009/138/CE, art.~75)}}}
-\end{center}
-\end{frame}
 
 \begin{frame}{Comptabilité financière et comptabilité prudentielle}
 \begin{table}
@@ -166,145 +138,6 @@ Ratio de couverture $= 100 / 90 = 111\,\%$ : l'entreprise est couverte, avec peu
 Les fonds propres prudentiels sont souvent plus faibles que les fonds propres comptables, mais
 pas toujours : les plus-values latentes jouent dans l'autre sens.
 \end{alertblock}
-\end{frame}
-
-\begin{frame}{Les acteurs du contrôle}
-\begin{columns}[T]
-\begin{column}{0.48\textwidth}
-\begin{block}{EIOPA (en français AEAPP), niveau européen}
-\small
-\begin{itemize}
-  \item Créée par le règlement (UE) n° 1094/2010, à Francfort
-  \item Rédige orientations et projets de normes techniques
-  \item Veille à la convergence des pratiques de contrôle
-  \item Organise les tests de résistance européens
-  \item Publie chaque mois la courbe des taux sans risque et l'ajustement symétrique
-\end{itemize}
-\end{block}
-\end{column}
-\begin{column}{0.48\textwidth}
-\begin{block}{ACPR, niveau national}
-\small
-\begin{itemize}
-  \item Autorité administrative indépendante adossée à la Banque de France
-  \item Délivre les agréments
-  \item Contrôle sur pièces (états remis via le portail e-Surfi) et sur place
-  \item Prend des mesures de police administrative, sanctionne
-  \item Prépare et conduit la résolution
-\end{itemize}
-\end{block}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Pourquoi contrôler les assureurs ?}
-\begin{enumerate}
-  \item \textbf{Protéger les assurés et les bénéficiaires} : c'est l'objectif principal du contrôle
-        (directive 2009/138/CE, art.~27)
-  \item \textbf{Préserver la stabilité financière} : les assureurs sont de grands investisseurs,
-        leurs difficultés se propagent
-  \item \textbf{Maintenir la confiance} : un engagement d'assurance vaut ce que vaut la promesse
-        de l'assureur
-\end{enumerate}
-\vspace{0.4cm}
-\begin{alertblock}{À retenir}
-La comptabilité prudentielle est un outil de \textbf{contrôle de la solvabilité}, pas une mesure
-de la performance.
-\end{alertblock}
-\end{frame}
-
-% =====================================================================
-\section{De Solvabilité I à Solvabilité II}
-% =====================================================================
-
-\begin{frame}{Solvabilité I : des marges forfaitaires}
-\begin{columns}[T]
-\begin{column}{0.48\textwidth}
-\begin{block}{Le dispositif}
-\begin{itemize}
-  \item Premières directives : non-vie (1973), vie (1979), réformées en 2002
-  \item Marge de solvabilité \textbf{forfaitaire} :
-  \begin{itemize}
-    \item vie : 4\,\% des provisions mathématiques $+$ 0,3\,\% des capitaux sous risque
-    \item non-vie : environ 16 à 18\,\% des primes, ou 23 à 26\,\% des sinistres
-  \end{itemize}
-  \item Provisions et actifs pris dans les comptes sociaux
-\end{itemize}
-\end{block}
-\end{column}
-\begin{column}{0.48\textwidth}
-\begin{alertblock}{Les limites}
-\begin{itemize}
-  \item Aucun lien entre exigence et \textbf{risques réellement pris} : deux assureurs aux
-        placements opposés ont la même exigence
-  \item Risques de marché, de crédit et opérationnels ignorés
-  \item Règles nationales hétérogènes
-\end{itemize}
-\end{alertblock}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Solvabilité II : une exigence fondée sur les risques}
-\begin{itemize}
-  \item \textbf{Directive 2009/138/CE}, applicable depuis le \textbf{1\textsuperscript{er} janvier 2016}
-  \item Un \textbf{bilan économique}, et un capital requis qui dépend du profil de risque de chaque entreprise
-  \item La même logique que \textbf{Bâle II} pour les banques : capital fondé sur les risques, contrôle, discipline de marché
-  \item Le principe de \textbf{proportionnalité} : exigences adaptées à la nature, à l'ampleur et à la complexité des risques
-\end{itemize}
-\vspace{0.3cm}
-\begin{block}{Révision en cours}
-La \textbf{directive (UE) 2025/2}, à appliquer à partir de 2027, révise notamment la marge de
-risque, les mesures pour les engagements de long terme, la proportionnalité et l'information
-publique. Les séances signalent ce qui change.
-\end{block}
-\end{frame}
-
-\begin{frame}{Les trois piliers}
-\begin{table}
-\centering
-\renewcommand{\arraystretch}{1.5}
-\begin{tabular}{p{2.3cm}p{5.2cm}p{5.2cm}}
-\toprule
-\textbf{Pilier} & \textbf{Contenu} & \textbf{Ce qu'on y trouve} \\
-\midrule
-\textbf{1. Quantitatif} & Valorisation, fonds propres, capital requis & Bilan prudentiel, SCR, MCR \\
-\textbf{2. Qualitatif} & Gouvernance, gestion des risques & Fonctions clés, ORSA \\
-\textbf{3. Information} & Rapports au superviseur et au public & États QRT, RSR, SFCR \\
-\bottomrule
-\end{tabular}
-\end{table}
-\vspace{0.2cm}
-\begin{center}
-\small Cette séance couvre surtout le pilier 1 ; les piliers 2 et 3 sont présentés ici, l'ORSA
-sera traité en séance 8.
-\end{center}
-\end{frame}
-
-\begin{frame}{Pilier 2 : gouvernance et ORSA}
-\begin{columns}[T]
-\begin{column}{0.48\textwidth}
-\begin{block}{Quatre fonctions clés}
-\begin{itemize}
-  \item Gestion des risques (art.~44)
-  \item Vérification de la conformité (art.~46)
-  \item Audit interne (art.~47)
-  \item Fonction actuarielle (art.~48)
-\end{itemize}
-\end{block}
-\end{column}
-\begin{column}{0.48\textwidth}
-\begin{block}{ORSA (art.~45)}
-Évaluation interne des risques et de la solvabilité :
-\begin{itemize}
-  \item besoin global de solvabilité propre à l'entreprise
-  \item respect permanent des exigences de capital
-  \item écart entre son profil de risque et les hypothèses du SCR
-\end{itemize}
-Au moins une fois par an, et après tout changement important du profil de risque.
-\end{block}
-\end{column}
-\end{columns}
 \end{frame}
 
 \begin{frame}{L'architecture des textes}
@@ -433,7 +266,7 @@ aux bénéfices futures. Calculée \textbf{brute} de réassurance.
 \end{column}
 \end{columns}
 \vspace{0.2cm}
-\begin{center}\small Calcul détaillé : séance 3 (non-vie) et séance 4 (vie).\end{center}
+\begin{center}\small Calcul détaillé : séance 4 (non-vie) et séance 5 (vie).\end{center}
 \end{frame}
 
 \begin{frame}{La marge de risque : un coût du capital}
@@ -570,7 +403,7 @@ comptent pas dans la couverture.
 \end{column}
 \end{columns}
 \vspace{0.2cm}
-\begin{center}\small Calcul de la formule standard : séance 7.\end{center}
+\begin{center}\small Calcul de la formule standard : séance 8.\end{center}
 \end{frame}
 
 \begin{frame}{Le ratio de couverture et l'échelle d'intervention}
@@ -595,34 +428,8 @@ trois mois (art.~139) ; à défaut, \textbf{retrait d'agrément} (art.~144) \\
 \end{table}
 \end{frame}
 
-\begin{frame}{Exemple : l'Assureur Alpha}
-\begin{columns}[T]
-\begin{column}{0.44\textwidth}
-\begin{block}{Situation initiale}
-\begin{itemize}
-  \item Fonds propres éligibles : 120\,M\euro
-  \item SCR : 100\,M\euro{} ; MCR : 45\,M\euro
-  \item Ratio : $120/100 = 120\,\%$
-\end{itemize}
-\end{block}
-\end{column}
-\begin{column}{0.52\textwidth}
-\begin{alertblock}{Après un choc de $-20$\,M\euro{} sur les actifs}
-\begin{itemize}
-  \item Fonds propres : 100\,M\euro{}, ratio : $100\,\%$
-  \item L'entreprise est exactement au seuil : le moindre choc supplémentaire déclenche
-        l'intervention du superviseur
-\end{itemize}
-\end{alertblock}
-\end{column}
-\end{columns}
-\vspace{0.3cm}
-\small \textbf{Simplifications} : le SCR ne change pas après le choc, et la perte n'est pas allégée
-par les impôts différés. Deux effets que l'on mesurera dans les séances suivantes.
-\end{frame}
-
 % =====================================================================
-\section{Rendre compte : le pilier 3}
+\section{Rendre compte : les états du bilan et des fonds propres}
 % =====================================================================
 
 \begin{frame}{Les états quantitatifs (QRT)}
@@ -634,12 +441,12 @@ par les impôts différés. Deux effets que l'on mesurera dans les séances suiv
 \toprule
 \textbf{État} & \textbf{Contenu} & \textbf{Séance} \\
 \midrule
-S.02.01 & Bilan prudentiel & 1 \\
-S.06.02 & Liste des actifs, ligne à ligne & 2 \\
-S.12.01 et S.17.01 & Provisions techniques vie et non-vie & 3, 4 \\
-S.23.01 & Fonds propres & 1, 7 \\
-S.25.01 & SCR en formule standard & 7 \\
-S.28.01 & MCR & 7 \\
+S.02.01 & Bilan prudentiel & 2 \\
+S.06.02 & Liste des actifs, ligne à ligne & 3 \\
+S.12.01 et S.17.01 & Provisions techniques vie et non-vie & 4, 5 \\
+S.23.01 & Fonds propres & 2, 8 \\
+S.25.01 & SCR en formule standard & 8 \\
+S.28.01 & MCR & 8 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -647,37 +454,6 @@ S.28.01 & MCR & 7 \\
   \item Modèles fixés par le règlement d'exécution (UE) 2023/894 ; remise annuelle et trimestrielle
   \item Format \textbf{XBRL}, taxonomie de l'EIOPA ; remis à l'ACPR, qui les transmet à l'EIOPA
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Les rapports narratifs : SFCR et RSR}
-\begin{columns}[T]
-\begin{column}{0.48\textwidth}
-\begin{block}{SFCR : rapport sur la solvabilité et la situation financière}
-\small
-\textbf{Public}, annuel, sur le site de l'entreprise (directive, art.~51). Cinq parties :
-\begin{enumerate}[A.]
-  \item Activité et résultats
-  \item Système de gouvernance
-  \item Profil de risque
-  \item Valorisation à des fins de solvabilité
-  \item Gestion du capital
-\end{enumerate}
-avec une sélection d'états en annexe.
-\end{block}
-\end{column}
-\begin{column}{0.48\textwidth}
-\begin{block}{RSR : rapport régulier au contrôleur}
-\small
-\textbf{Non public}, destiné à l'ACPR (directive, art.~35). Même plan, plus détaillé :
-informations sensibles, stratégie, réassurance, limites de risque.
-\end{block}
-\begin{alertblock}{Qui produit quoi ?}
-\small
-Calculs : actuariat et direction financière ; validation des provisions : fonction actuarielle ;
-signature : dirigeants effectifs ; approbation : conseil d'administration.
-\end{alertblock}
-\end{column}
-\end{columns}
 \end{frame}
 
 % =====================================================================
@@ -738,20 +514,19 @@ Pariez : les fonds propres prudentiels de Bêta seront-ils supérieurs ou infér
         \textbf{limites} (art.~82).
   \item Le \textbf{ratio de couverture} rapporte les fonds propres éligibles au SCR (99,5\,\%, un an) ;
         sous le SCR puis sous le MCR, le superviseur intervient de plus en plus fort.
-  \item Trois piliers : le chiffre (1), la gouvernance (2), la transparence (3).
+  \item Deux états résument ces chiffres pour le superviseur : le bilan (S.02.01) et les fonds propres (S.23.01).
 \end{enumerate}
 \end{frame}
 
 \begin{frame}{Pour la prochaine séance}
 \begin{block}{À faire}
 \begin{itemize}
-  \item Terminer le TD 1 ; le corrigé est publié sur le site après la séance
-  \item Revoir les unités 1 à 3 du \textbf{polycopié de prérequis} : valeur actuelle, échéancier,
-        obligations et courbe des taux
-  \item Pour la séance 2 : un compte Google (Colab) ou Python installé, et Excel ou LibreOffice Calc
+  \item Terminer le TD 2 ; le corrigé est publié sur le site après la séance
+  \item Revoir l'unité 3 du \textbf{polycopié de prérequis} : obligations et courbe des taux
+  \item Pour la séance 3 : un compte Google (Colab) ou Python installé, et Excel ou LibreOffice Calc
 \end{itemize}
 \end{block}
-\begin{block}{Questions de rappel, en ouverture de la séance 2}
+\begin{block}{Questions de rappel, en ouverture de la séance 3}
 \begin{itemize}
   \item Pourquoi un écart d'acquisition vaut-il zéro au bilan prudentiel ?
   \item D'où vient un impôt différé actif, et à quelle condition est-il retenu ?
@@ -766,7 +541,7 @@ Pariez : les fonds propres prudentiels de Bêta seront-ils supérieurs ou infér
 
 \vspace{1cm}
 \Large
-\textbf{Séance 2} : Excel, Python et agents d'IA
+\textbf{Séance 3} : Excel, Python et agents d'IA
 \end{frame}
 
 \end{document}

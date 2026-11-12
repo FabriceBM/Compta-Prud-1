@@ -1,7 +1,7 @@
 ---
 title: "Excel, Python et agents d'IA"
 subtitle: "Cours express et conduite de projet, appliqués au contrôle prudentiel"
-numero: 2
+numero: 3
 corriges: false
 ---
 
@@ -29,11 +29,11 @@ corriges: false
   (NumPy, pandas, vérifier, versionner) ; piloter un projet avec des agents d'IA (cycle, consigne,
   relecture, règles du jeu).
 - Notebook [Python express](notebooks/python-express.ipynb) : calculer, vectoriser, manipuler un
-  tableau, tracer, vérifier ({{< colab seances/02_excel-python-agents/notebooks/python-express.ipynb >}}).
+  tableau, tracer, vérifier ({{< colab seances/03_excel-python-agents/notebooks/python-express.ipynb >}}).
 
 ## Travaux dirigés
 
-**TD 2 : contrôler les états de six assureurs**, avec un tableur, puis en Python, puis avec un agent d'IA.
+**TD 3 : contrôler les états de six assureurs**, avec un tableur, puis en Python, puis avec un agent d'IA.
 
 - [Énoncé (PDF)](td.pdf)
 - Données : [`bilans-assureurs.csv`](bilans-assureurs.csv) et [`matrice-correlation.csv`](matrice-correlation.csv),
@@ -43,6 +43,6 @@ corriges: false
 ::: {.corrige}
 ## Corrigé
 - [Énoncé corrigé (PDF)](td-corrige.pdf)
-- Script Python des parties A et B : [`td-2_controles.py`](corriges/td-2_controles.py)
-  ({{< github seances/02_excel-python-agents/corriges/td-2_controles.py >}}).
+- Script Python des parties A et B : [`td-3_controles.py`](corriges/td-3_controles.py)
+  ({{< github seances/03_excel-python-agents/corriges/td-3_controles.py >}}).
 :::

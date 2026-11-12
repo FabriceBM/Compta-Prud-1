@@ -1,7 +1,7 @@
 ---
 title: "Approche stochastique et ALM"
-subtitle: "Séances 5 et 6 : scénarios économiques, valeur des options et garanties, adossement actif-passif"
-numero: 5
+subtitle: "Séances 6 et 7 : scénarios économiques, valeur des options et garanties, adossement actif-passif"
+numero: 6
 corriges: false
 ---
 
@@ -25,4 +25,4 @@ corriges: false
   décisions de gestion, simulations imbriquées et *proxies*) ; ALM (duration, convexité, immunisation,
   ajustement égalisateur et correction pour volatilité).
 - Notebook [Codes Python du cours](notebooks/codes-du-cours.ipynb) : chaque partie des diapositives
-  en code exécutable ({{< colab seances/05_stochastique-alm/notebooks/codes-du-cours.ipynb >}}).
+  en code exécutable ({{< colab seances/06_stochastique-alm/notebooks/codes-du-cours.ipynb >}}).

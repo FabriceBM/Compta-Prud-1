@@ -1,7 +1,7 @@
 ---
 title: "Meilleure estimation non-vie"
 subtitle: "Triangles de liquidation, Chain-Ladder et actualisation des flux"
-numero: 3
+numero: 4
 corriges: false
 ---
 
@@ -19,5 +19,5 @@ résultat du calcul Excel.
 ::: {.corrige}
 ## Corrigé
 - TD 3.5 : script Python [`td-3-5_chain-ladder.py`](corriges/td-3-5_chain-ladder.py)
-  ({{< github seances/03_be-non-vie/corriges/td-3-5_chain-ladder.py >}}).
+  ({{< github seances/04_be-non-vie/corriges/td-3-5_chain-ladder.py >}}).
 :::
