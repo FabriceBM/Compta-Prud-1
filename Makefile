@@ -12,6 +12,8 @@ QUARTO  ?= quarto
 PYTHON  ?= python3
 LATEXMK := latexmk -pdf -interaction=nonstopmode
 DIAPOS  := $(wildcard seances/*/diapos.tex)
+# Feuilles de TD en LaTeX : td.pdf (étudiant) et td-corrige.pdf (\Corrige défini)
+TDS     := $(wildcard seances/*/td.tex)
 # make seance N=08 SLUG=orsa ; make release EDITION=2026-2027
 N       ?=
 SLUG    ?=
@@ -20,7 +22,7 @@ EDITION ?=
 .PHONY: help pdf check-latex site site-enseignant preview code check check-links seance release clean
 
 help:
-	@echo "make pdf                    compile les diapositives (seances/*/diapos.tex) et le polycopié de prérequis"
+	@echo "make pdf                    compile diapositives (diapos.tex), feuilles de TD (td.tex) et polycopié de prérequis"
 	@echo "make check-latex            échoue s'il reste une erreur LaTeX dans les PDF compilés"
 	@echo "make site                   construit le site dans _site/ (corrigés publiés selon chaque page)"
 	@echo "make site-enseignant        même site, tous les corrigés visibles, dans _site-enseignant/ (jamais publié)"
@@ -40,13 +42,20 @@ pdf:
 	  echo "==> $$f"; \
 	  (cd $$(dirname $$f) && $(LATEXMK) -f diapos.tex > /dev/null 2>&1) || echo "    erreurs LaTeX : voir $${f%.tex}.log"; \
 	done
+	@for f in $(TDS); do \
+	  echo "==> $$f (version étudiant, puis corrigée)"; \
+	  (cd $$(dirname $$f) && $(LATEXMK) -f td.tex > /dev/null 2>&1) || echo "    erreurs LaTeX : voir $${f%.tex}.log"; \
+	  (cd $$(dirname $$f) && $(LATEXMK) -f -jobname=td-corrige -usepretex='\def\Corrige{}' td.tex > /dev/null 2>&1) \
+	    || echo "    erreurs LaTeX : voir $$(dirname $$f)/td-corrige.log"; \
+	done
 	@echo "==> prerequis/main.tex (version étudiant, puis corrigée)"
 	@cd prerequis && ($(LATEXMK) -f -jobname=prerequis main.tex > /dev/null 2>&1 || echo "    erreurs LaTeX : voir prerequis/prerequis.log")
 	@cd prerequis && ($(LATEXMK) -f -jobname=prerequis-corrige -usepretex='\def\Corrige{}' main.tex > /dev/null 2>&1 \
 	  || echo "    erreurs LaTeX : voir prerequis/prerequis-corrige.log")
 
 check-latex: pdf
-	@! grep -n -A2 '^! ' $(DIAPOS:.tex=.log) prerequis/prerequis.log prerequis/prerequis-corrige.log \
+	@! grep -n -A2 '^! ' $(DIAPOS:.tex=.log) $(TDS:.tex=.log) $(TDS:td.tex=td-corrige.log) \
+	  prerequis/prerequis.log prerequis/prerequis-corrige.log \
 	  || (echo "ERREUR : erreurs LaTeX ci-dessus (le PDF est produit, mais incomplet ou faux à cet endroit)"; exit 1)
 	@echo "==> check-latex OK : aucune erreur LaTeX"
 
@@ -91,12 +100,15 @@ release: pdf
 	@test ! -e editions/$(EDITION) || (echo "editions/$(EDITION) existe déjà"; exit 1)
 	mkdir -p editions/$(EDITION)
 	@for f in $(DIAPOS:.tex=.pdf); do cp $$f editions/$(EDITION)/$$(basename $$(dirname $$f))_diapos.pdf; done
+	@for f in $(TDS:.tex=.pdf) $(TDS:td.tex=td-corrige.pdf); do \
+	  cp $$f editions/$(EDITION)/$$(basename $$(dirname $$f))_$$(basename $$f); done
 	cp prerequis/prerequis.pdf prerequis/prerequis-corrige.pdf editions/$(EDITION)/
 	@echo "==> editions/$(EDITION)/ : ajouter une ligne à editions/README.md, puis"
 	@echo "    git add editions && git commit -m 'Édition $(EDITION)' && git tag $(EDITION)"
 
 clean:
 	-@for f in $(DIAPOS); do (cd $$(dirname $$f) && latexmk -C diapos.tex > /dev/null 2>&1); done
+	-@for f in $(TDS); do (cd $$(dirname $$f) && latexmk -C td.tex > /dev/null 2>&1; latexmk -C -jobname=td-corrige td.tex > /dev/null 2>&1); done
 	-@cd prerequis && latexmk -C -jobname=prerequis main.tex > /dev/null 2>&1; latexmk -C -jobname=prerequis-corrige main.tex > /dev/null 2>&1
 	rm -f seances/*/diapos.nav seances/*/diapos.snm seances/*/diapos.vrb
 	rm -rf _site _site-enseignant _build .quarto

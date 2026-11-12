@@ -37,7 +37,7 @@ validés pour l'année en cours : établissement, calendrier, modalités d'éval
 
 | N° | Thème | Supports disponibles |
 |:--:|-------|----------------------|
-| 1 | [Pourquoi la comptabilité prudentielle ?](seances/01_introduction/index.qmd) | cours (PDF), étude de cas |
+| 1 | [Pourquoi la comptabilité prudentielle ?](seances/01_introduction/index.qmd) | diapositives, TD 1 et ses données, corrigé |
 | 2 | [Valorisation des produits financiers](seances/02_valorisation-financiere/index.qmd) *(place à confirmer)* | énoncé du TD (PDF), corrigé |
 | 3 | [Meilleure estimation non-vie](seances/03_be-non-vie/index.qmd) | corrigé du TD 3.5 |
 | 4 | [Meilleure estimation vie](seances/04_be-vie/index.qmd) | diapositives, notebook, corrigé des TD |

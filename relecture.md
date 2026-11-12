@@ -44,6 +44,27 @@ numérotation cohérente entre les fichiers. À confirmer, puis aligner les titr
 - cours de la séance 1 (PDF) : partie 7.2 annonce un autre plan (séance 2 SCR, 3 ALM, 4 ORSA, 5 cas pratique) ;
 - TD de valorisation des produits financiers : placé en séance 2 sans certitude (il se dit « annexe au cours »).
 
+## 3 bis. Séance 1 : ce que la nouvelle version change par rapport au PDF 2025-2026
+
+La séance 1 a été refaite en Beamer (`seances/01_introduction/diapos.tex`) avec une feuille de TD
+(`td.tex`, versions étudiant et corrigée) et un script qui refait tous les calculs
+(`corriges/td-1_mini-bilan-prudentiel.py`). Le plan, les exemples et les données de l'Assureur Bêta
+viennent du PDF 2025-2026, qui reste dans `editions/2025-2026/` mais n'est plus mis en lien sur le
+site. Écarts volontaires, à valider :
+
+| Dans le PDF 2025-2026 | Dans la nouvelle version |
+|---|---|
+| Étude de cas : fonds propres = 14 000 (excédent) **+** 10 000 de « capital et réserves comptables » = 24 000 : le capital est compté deux fois | L'excédent d'actif sur passif **contient** déjà le capital ; la réserve de réconciliation est l'excédent moins le capital et les impôts différés actifs nets (RD art. 70) |
+| Pas d'impôts différés | Impôt différé actif de 9 000 (25 % des 36 000 d'écarts), recouvrable par hypothèse (RD art. 15) : excédent de 23 000 |
+| Niveau 2 « éligible » de 30 000 sur une dette de 50 000, ratio de 77 % | Limites de l'art. 82 appliquées : niveau 3 = 9 000, niveau 2 éligible = 26 000, ratio de **70 %** ; le niveau 1 (14 000) est aussi sous les 50 % du SCR ; apport de 21 000 en niveau 1 pour revenir à 100 % |
+| BSCR = √(60² + 30² + 2 × 0,25 × 60 × 30 + 5² + 8²) : risque opérationnel sous la racine, corrélations incomplètes | SCR et MCR donnés (70 000 et 17 500) ; leur calcul relève de la séance 7 |
+| Choc de taux : les fonds propres passent de 14 000 à 23 950 mais la situation est dite « gravement dégradée » (32 %) | Choc de taux favorable ici (passif plus long que l'actif), expliqué comme tel ; le choc actions est le plus pénalisant et fait perdre la couverture du MCR |
+| Exemple de meilleure estimation d'une rente (148 287 €) difficile à concilier avec le tableau (de l'ordre de 100 000 € avec ces probabilités de survie et ces taux) ; marge de risque de 250 k€ puis 8 500 € dans le même exemple | Exemples retirés ; la meilleure estimation et la marge de risque sont présentées par leurs formules (art. 77 ; RD art. 37 et 39) |
+| Niveaux de fonds propres : « Tier 2 (fonds propres auxiliaires) », « certains actifs incorporels » en niveau 3, « Tier 1 restreint + auxiliaire ≤ 20 % du SCR » | Comme au § 1 (points 8 et 9) : fonds propres auxiliaires en niveau 2 ou 3 seulement, niveau 3 = impôts différés actifs nets et dettes subordonnées d'au moins 5 ans, niveau 1 restreint ≤ 20 % du niveau 1 |
+| « Ratio < MCR → plan de redressement » | Échelle de la directive : SCR non couvert → plan de rétablissement (art. 138) ; MCR non couvert → plan de financement à court terme, puis retrait d'agrément (art. 139 et 144) |
+| « Coût du capital de 6 % fixé par l'EIOPA », réduit « à 5 % » par la révision | Taux fixé par le règlement délégué (art. 39) ; la révision allège la marge de risque à partir de 2027 (taux exact à vérifier dans le règlement délégué modifié) |
+| Délais de remise (QRT trimestriels 8 semaines, SFCR et RSR 20 semaines) ; instructions ACPR 2016-I-12 et 2019-I-01 ; « règlement ANC 2023-02 » | Non repris : délais transitoires de 2016 ou références non retrouvées, à vérifier avant de les réintroduire |
+
 ## 4. Code
 
 | # | Où | Constat |
@@ -56,7 +77,7 @@ numérotation cohérente entre les fichiers. À confirmer, puis aligner les titr
 
 - Source LaTeX des **diapositives SCR V3** (50 pages). `archive/07_scr-mcr-fonds-propres_diapos-courtes.tex`
   n'en produit que 18. Une fois déposée en `seances/07_scr-mcr-fonds-propres/diapos.tex`, la CI la compile.
-- Source du **cours de la séance 1** (le PDF a été imprimé depuis un navigateur) et source LaTeX du
-  **TD de valorisation** : avec elles, ces supports deviennent modifiables et recompilés.
+- Source LaTeX du **TD de valorisation** : avec elle, ce support devient modifiable et recompilé.
+  (La séance 1 a désormais sa source : voir § 3 bis.)
 - **Séance 3** : diapositives et énoncé du TD 3.5 (seul le corrigé est déposé).
 - Fichiers Excel des TD, s'ils sont distribués.
