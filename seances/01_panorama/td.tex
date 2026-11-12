@@ -1,0 +1,166 @@
+\documentclass[11pt,a4paper]{article}
+% Même mise en forme que le polycopié de prérequis (boîtes, exercices, corrigés).
+\input{../../prerequis/preambule}
+
+% Version étudiant par défaut ; `make pdf` produit aussi td-corrige.pdf en définissant \Corrige.
+\ifdefined\Corrige\correctiontrue\else\correctionfalse\fi
+
+\fancyhead[L]{\small\sffamily\color{grisactu}Séance 1 --- Comptabilité prudentielle}
+\newcommand{\keur}{\,k\euro}
+\newcommand{\meur}{\,M\euro}
+
+\title{\vspace{-1.5cm}\sffamily\bfseries\color{bleuactu}
+       Cinq cas pour entrer dans le cours\\[2mm]
+       \large\mdseries\color{black}Pourquoi, comment, quand, à quoi ça sert, et ses limites
+       \ifcorrection\\[1mm]\color{vertactu}Éléments de mise en commun\fi}
+\author{\sffamily Fabrice Borel-Mathurin}
+\date{\sffamily\small Master SAFIR --- 2026-2027}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{notion}{Comment travailler (1 h 30, puis 1 h de mise en commun)}
+Par groupes de trois ou quatre, chaque groupe prend un cas. Vingt minutes pour répondre aux
+questions avec ce que vous savez déjà et un peu de bon sens : il n'y a pas de calcul à faire. Puis
+chaque groupe présente son cas en cinq minutes aux autres. Chaque cas annonce une séance du cours :
+notez les questions qui restent ouvertes, nous y reviendrons.
+\end{notion}
+
+\section{Les cas}
+
+\begin{exercice}[A. Pourquoi ? Equitable Life, Royaume-Uni]
+Equitable Life est une mutuelle d'assurance vie britannique fondée en 1762. Des années 1950 à la
+fin des années 1980, elle vend des contrats de retraite assortis d'une option : à l'échéance,
+l'assuré peut convertir son épargne en rente à un taux garanti. À la vente, les taux de marché sont
+élevés : l'option ne vaut presque rien. Dans les années 1990, les taux baissent et l'option devient
+très coûteuse. L'entreprise tente de réduire la participation aux bénéfices des assurés qui
+l'exercent ; la justice le lui interdit en 2000, et elle cesse la même année de vendre des contrats.
+\begin{enumerate}[nosep]
+  \item Pourquoi le coût de cette option n'apparaissait-il pas dans les comptes au moment de la vente ?
+  \item Que faudrait-il mesurer, et à quelle fréquence, pour le voir venir ?
+  \item Dans une mutuelle, qui supporte finalement ce coût ?
+\end{enumerate}
+\end{exercice}
+\begin{corrige}
+\begin{enumerate}[nosep]
+  \item Des provisions calculées avec des hypothèses fixées à la souscription, au coût historique,
+        ne donnent aucune valeur à une option « hors de la monnaie » : elle n'apparaît qu'une fois
+        exercée.
+  \item La valeur \emph{actuelle} de l'option, dans les conditions de marché du jour : c'est ce que
+        fait la meilleure estimation de Solvabilité II, calculée sur de nombreux scénarios de taux
+        (séances 5 à 7), et recalculée au moins une fois par an.
+  \item Les autres assurés, dont la participation aux bénéfices baisse. D'où l'objectif principal
+        du contrôle : protéger les assurés (directive 2009/138/CE, art.~27).
+\end{enumerate}
+\end{corrige}
+
+\begin{exercice}[B. Comment ? L'Assureur Bêta]
+Un assureur vie fictif affiche 50\,000\keur{} de capitaux propres dans ses comptes sociaux. Passé
+au bilan prudentiel, il ressemble à ceci : ses placements valent 26\,000\keur{} de moins que leur
+valeur comptable ; ses provisions techniques, recalculées comme une meilleure estimation plus une
+marge de risque, valent 10\,000\keur{} de plus ; un impôt différé actif de 9\,000\keur{} apparaît.
+Son SCR vaut 70\,000\keur.
+\begin{enumerate}[nosep]
+  \item Que valent ses fonds propres prudentiels (excédent d'actif sur passif) ?
+  \item D'où peut venir chacun des trois écarts ?
+  \item À première vue, son SCR est-il couvert ? Que faudrait-il savoir de plus pour conclure ?
+\end{enumerate}
+\end{exercice}
+\begin{corrige}
+\begin{enumerate}[nosep]
+  \item $50\,000 - 26\,000 - 10\,000 + 9\,000 = 23\,000$\keur.
+  \item Moins-values latentes (taux, écarts de crédit, actions) ; provisions comptables moins
+        élevées que la valeur de transfert des engagements, surtout du fait de la marge de risque ;
+        impôt différé actif sur ces moins-values et ce surcroît de provisions, retenu s'il est
+        recouvrable.
+  \item Non : 23\,000 contre 70\,000. Pour conclure, il faut savoir quels fonds propres comptent
+        (niveaux, limites d'éligibilité) et si une dette subordonnée vient s'ajouter. C'est le TD
+        de la séance 2 : le ratio y ressort à 70\,\%.
+\end{enumerate}
+\end{corrige}
+
+\begin{exercice}[C. Quand ? Le cycle des taux, 2012--2022]
+Un assureur vie a vendu des contrats d'épargne rachetables à tout moment, avec un taux minimum
+garanti de 2 à 3\,\%. Ses placements sont surtout des obligations longues. De 2012 à 2021, les taux
+de marché baissent jusqu'à devenir négatifs sur certaines échéances ; en 2022, ils remontent
+brutalement.
+\begin{enumerate}[nosep]
+  \item Quand les taux baissent, que deviennent la valeur des obligations, la meilleure estimation
+        des contrats et le ratio de couverture ?
+  \item Quand les taux remontent vite, quel risque nouveau apparaît ?
+  \item À quel rythme l'assureur et l'ACPR voient-ils ces effets dans les chiffres prudentiels ?
+\end{enumerate}
+\end{exercice}
+\begin{corrige}
+\begin{enumerate}[nosep]
+  \item Les obligations prennent de la valeur, mais la meilleure estimation augmente aussi :
+        les flux futurs sont moins actualisés et la garantie de taux coûte plus cher. Si les
+        engagements sont plus longs que les placements, le passif monte plus que l'actif et le
+        ratio baisse. Tout dépend de l'écart de duration (séances 6 et 7).
+  \item Les rachats : les assurés partent vers des placements mieux rémunérés, et l'assureur
+        doit parfois vendre des obligations en moins-value pour les payer (séance 5).
+  \item En continu en interne ; le MCR est recalculé chaque trimestre, le SCR au moins une fois
+        par an et dès que le profil de risque change sensiblement (directive, art.~102 et 129) ;
+        les états remis au superviseur sont trimestriels et annuels.
+\end{enumerate}
+\end{corrige}
+
+\begin{exercice}[D. À quoi ça sert ? L'Assureur Alpha]
+L'Assureur Alpha a 120\meur{} de fonds propres éligibles et un SCR de 100\meur{} : ratio de 120\,\%.
+Un choc de marché lui coûte 20\meur{} de fonds propres. Son conseil d'administration devait voter
+le mois suivant un dividende de 10\meur.
+\begin{enumerate}[nosep]
+  \item Quel est son ratio après le choc ? Le conseil peut-il voter le dividende ?
+  \item Citez trois leviers pour remonter le ratio. Lesquels agissent sur les fonds propres,
+        lesquels sur le SCR ?
+  \item Quel ratio viseriez-vous en temps normal, et qui le décide ?
+\end{enumerate}
+\end{exercice}
+\begin{corrige}
+\begin{enumerate}[nosep]
+  \item 100\,\% en supposant le SCR inchangé : l'entreprise est au seuil. Un dividende prévisible
+        se déduit des fonds propres : le ratio tomberait à 90\,\% et le SCR ne serait plus couvert.
+        Le dividende n'est pas raisonnable.
+  \item Sur les fonds propres : augmentation de capital, émission de dette subordonnée, mise en
+        réserve du résultat. Sur le SCR : réassurance, réduction de l'exposition aux actions,
+        couvertures, produits avec moins de garanties.
+  \item Nettement plus de 100\,\%, pour encaisser un choc sans intervention du superviseur. La
+        cible relève de l'appétit au risque fixé par le conseil, éclairé par l'ORSA (séance 9).
+\end{enumerate}
+\end{corrige}
+
+\begin{exercice}[E. Les limites : le printemps 2020]
+En mars 2020, la pandémie de Covid-19 fait chuter les marchés d'actions ; les écarts de crédit
+s'élargissent ; les taux restent très bas. Deux mécanismes prévus par le cadre amortissent la baisse
+des ratios : l'ajustement symétrique, qui réduit le choc actions du SCR après une baisse des
+marchés, et la correction pour volatilité, qui relève le taux d'actualisation des provisions quand
+les écarts de crédit s'élargissent. En avril, l'EIOPA appelle les assureurs à suspendre leurs
+dividendes.
+\begin{enumerate}[nosep]
+  \item Pourquoi un bilan en valeur de marché peut-il amplifier une crise s'il ne prévoit rien ?
+  \item Que corrigent ces deux mécanismes ? Quel en est le prix ?
+  \item Le SCR est calibré sur des données passées. Après un choc record, mesure-t-il encore le bon risque ?
+\end{enumerate}
+\end{exercice}
+\begin{corrige}
+\begin{enumerate}[nosep]
+  \item Les ratios baissent tous en même temps ; pour les remonter, les assureurs vendent les
+        actifs risqués, ce qui fait encore baisser les prix : c'est la procyclicité.
+  \item L'ajustement symétrique allège le choc actions après une baisse (et l'alourdit après une
+        hausse) ; la correction pour volatilité neutralise une partie de l'élargissement
+        temporaire des écarts de crédit. Le prix : un ratio moins fidèle à la valeur de marché
+        du jour, plus difficile à comparer, et des paramètres à justifier (séances 6 à 8).
+  \item Pas forcément : les paramètres sont estimés sur un historique qui ne contenait pas un tel
+        choc, et la question de les réévaluer après coup se pose. C'est un sujet de recherche, et
+        l'une des raisons de l'ORSA, qui demande à chaque entreprise d'évaluer elle-même son
+        besoin de capital.
+\end{enumerate}
+\end{corrige}
+
+\begin{generalisation}{Après la séance}
+Notez, pour chaque cas, la question qui vous paraît encore ouverte. Chaque séance du cours en
+reprendra une ; la carte du cours, sur la dernière diapositive de la séance, dit laquelle.
+\end{generalisation}
+
+\end{document}

@@ -1,6 +1,6 @@
 """
-TD 1 - Mini-bilan prudentiel de l'Assureur Bêta : CORRIGÉ
-Comptabilité prudentielle en assurance - séance 1
+TD 2 - Mini-bilan prudentiel de l'Assureur Bêta : CORRIGÉ
+Comptabilité prudentielle en assurance - séance 2
 
 Montants en k€. Données : ../assureur-beta.csv (séparateur « ; », ouvrable dans Excel).
 Hypothèses de l'énoncé : base fiscale = valeurs des comptes sociaux ; taux d'impôt 25 % ;

@@ -1,6 +1,6 @@
 -- Raccourcis de liens vers le dépôt GitHub. Le chemin part de la racine du dépôt.
---   {{< colab seances/04_be-vie/notebooks/premiers-pas-python.ipynb >}}   « Ouvrir dans Colab »
---   {{< github seances/03_be-non-vie/corriges/td-3-5_chain-ladder.py >}}  « Voir sur GitHub »
+--   {{< colab seances/03_excel-python-agents/notebooks/python-express.ipynb >}}   « Ouvrir dans Colab »
+--   {{< github seances/03_excel-python-agents/corriges/td-3_controles.py >}}  « Voir sur GitHub »
 -- Le dépôt et la branche viennent de `depot` et `branche` dans _quarto.yml.
 
 local function cible(args, meta)

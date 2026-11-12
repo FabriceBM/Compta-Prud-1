@@ -30,7 +30,7 @@ Fabrice Borel-Mathurin (ACPR-DEAR ; Laboratoire SAF, Université Claude Bernard 
 ├── prerequis/           (2) polycopié de prérequis (LaTeX) : version étudiant et version corrigée
 ├── editions/            (3) supports figés tels que distribués, une année par dossier ; jamais modifiés
 ├── a-classer/           (4) boîte de dépôt : y poser le nouveau matériel, il sera rangé ensuite
-├── archive/             versions remplacées, gardées pour mémoire ; pas publiées
+├── archive/             versions remplacées et sources 2025-2026 (archive/2025-2026/) ; pas publiées
 ├── ressources/          glossaire français–anglais, textes de référence
 ├── index.qmd, programme.qmd   accueil et programme du site
 ├── _quarto.yml          configuration du site (navigation, thème, pages publiées)
@@ -73,7 +73,7 @@ vérifications sans publier.
 
 1. Déposer les fichiers dans [`a-classer/`](a-classer/) (sur GitHub : *Add file > Upload files*).
 2. Les ranger dans `seances/NN_theme/` selon les règles de [`seances/README.md`](seances/README.md) ;
-   `make seance N=08 SLUG=orsa` crée le dossier et la page d'une nouvelle séance.
+   `make seance N=09 SLUG=orsa` crée le dossier et la page d'une nouvelle séance.
 3. Mettre la page de la séance à jour : objectifs, liens vers les supports, TD, corrigés.
 4. `make check`, `make code`, `make check-latex` ; puis pull request vers `main`.
 

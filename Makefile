@@ -14,7 +14,7 @@ LATEXMK := latexmk -pdf -interaction=nonstopmode
 DIAPOS  := $(wildcard seances/*/diapos.tex)
 # Feuilles de TD en LaTeX : td.pdf (étudiant) et td-corrige.pdf (\Corrige défini)
 TDS     := $(wildcard seances/*/td.tex)
-# make seance N=08 SLUG=orsa ; make release EDITION=2026-2027
+# make seance N=09 SLUG=orsa ; make release EDITION=2026-2027
 N       ?=
 SLUG    ?=
 EDITION ?=
@@ -30,7 +30,7 @@ help:
 	@echo "make code                   exécute tous les notebooks et scripts Python des séances"
 	@echo "make check                  construit le site et échoue sur tout avertissement Quarto (lien cassé…)"
 	@echo "make check-links            échoue sur un lien cassé dans les fichiers Markdown du dépôt"
-	@echo "make seance N=08 SLUG=orsa  crée seances/08_orsa/ à partir du modèle seances/_modele/"
+	@echo "make seance N=09 SLUG=orsa  crée seances/09_orsa/ à partir du modèle seances/_modele/"
 	@echo "make release EDITION=...    fige les PDF de l'année dans editions/\$$EDITION/"
 	@echo "make clean                  supprime les produits de compilation et le site"
 
@@ -87,11 +87,11 @@ code:
 
 # --- nouvelle séance, édition figée --------------------------------------------------------
 seance:
-	@test -n "$(N)" -a -n "$(SLUG)" || (echo "usage : make seance N=08 SLUG=orsa"; exit 1)
+	@test -n "$(N)" -a -n "$(SLUG)" || (echo "usage : make seance N=09 SLUG=orsa"; exit 1)
 	@test ! -e seances/$(N)_$(SLUG) || (echo "seances/$(N)_$(SLUG) existe déjà"; exit 1)
 	cp -r seances/_modele seances/$(N)_$(SLUG)
 	sed -i.bak -e 's/NN_slug/$(N)_$(SLUG)/g' -e "s/^numero: 0/numero: $$(expr $(N) + 0)/" \
-	  -e '/^# Modèle de page/,/^# seances\/08_orsa/d' seances/$(N)_$(SLUG)/index.qmd
+	  -e '/^# Modèle de page/,/^# seances\/09_orsa/d' seances/$(N)_$(SLUG)/index.qmd
 	rm -f seances/$(N)_$(SLUG)/index.qmd.bak
 	@echo "==> seances/$(N)_$(SLUG)/index.qmd : remplir le titre, les objectifs et les liens"
 

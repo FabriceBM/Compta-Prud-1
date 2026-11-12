@@ -31,21 +31,22 @@ validés pour l'année en cours : établissement, calendrier, modalités d'éval
 5. **Calculer** le SCR en formule standard, le MCR et l'éligibilité des fonds propres, et
    **interpréter** le ratio de couverture ;
 6. **Automatiser** ces calculs en Python et **vérifier** leur cohérence avec un calcul sur tableur ;
-7. **Critiquer** les résultats : sensibilités, décisions de gestion (*management actions*), effets procycliques.
+7. **Conduire** un travail avec des agents d'IA : cadrer la tâche, **vérifier** le résultat, respecter
+   les règles applicables (données, responsabilité, règlement sur l'IA, DORA) ;
+8. **Critiquer** les résultats : sensibilités, décisions de gestion (*management actions*), effets procycliques.
 
 ## Séances
 
-| N° | Thème | Supports disponibles |
-|:--:|-------|----------------------|
-| 1 | [Pourquoi la comptabilité prudentielle ?](seances/01_introduction/index.qmd) | diapositives, TD 1 et ses données, corrigé |
-| 2 | [Valorisation des produits financiers](seances/02_valorisation-financiere/index.qmd) *(place à confirmer)* | énoncé du TD (PDF), corrigé |
-| 3 | [Meilleure estimation non-vie](seances/03_be-non-vie/index.qmd) | corrigé du TD 3.5 |
-| 4 | [Meilleure estimation vie](seances/04_be-vie/index.qmd) | diapositives, notebook, corrigé des TD |
-| 5–6 | [Approche stochastique et ALM](seances/05_stochastique-alm/index.qmd) | diapositives, codes du cours |
-| 7 | [SCR, MCR et fonds propres](seances/07_scr-mcr-fonds-propres/index.qmd) | diapositives, notes, TD 7.0–7.3 |
-| 8 | ORSA *(annoncée en fin de séance 7)* | |
+| Créneau | Séance | Supports |
+|:--:|-------|----------|
+| 1 | [La comptabilité prudentielle en un coup d'œil](seances/01_panorama/index.qmd) | diapositives, cinq cas |
+| 2 | [Le bilan prudentiel](seances/02_bilan-prudentiel/index.qmd) | diapositives, TD et données |
+| 3 | [Excel, Python et agents d'IA](seances/03_excel-python-agents/index.qmd) | diapositives, notebook, TD et données |
+| 4 à 11 | SCR et MCR, fonds propres, meilleure estimation vie et non-vie, approche stochastique, gestion actif-passif, ORSA | en préparation |
+| 6 | **Examen intermédiaire** | |
+| 12 | **Examen final** | |
 
-: Déroulé du cours {tbl-colwidths="[8,52,40]"}
+: Déroulé du cours *(en préparation : l'ordre des séances 4 à 11 reste à fixer)* {tbl-colwidths="[10,60,30]"}
 
 ## Comment le cours fonctionne
 
@@ -55,8 +56,8 @@ Le cours applique quelques principes dont l'effet sur l'apprentissage est bien �
   par ce que vous devez savoir faire à la fin ; les TD et l'examen portent sur ces mêmes compétences.
 - **Se tester plutôt que relire.** Chaque séance s'ouvre sur quelques questions de rappel sur la
   précédente : retrouver une notion de mémoire la consolide bien plus qu'une relecture.
-- **Un même fil d'une séance à l'autre.** Les notions reviennent et se complètent : la meilleure
-  estimation vue en séance 3 et 4 sert au bilan prudentiel, puis au SCR de la séance 7.
+- **Un même fil d'une séance à l'autre.** Les cinq cas de la séance 1 reviennent dans les séances
+  suivantes ; la meilleure estimation des séances 4 et 5 sert au bilan prudentiel, puis au SCR de la séance 8.
 - **De l'exemple résolu à l'exercice autonome.** Le cours montre un calcul complet, le TD le fait
   refaire sur Excel, puis en Python sur des données nouvelles.
 - **Les corrigés après l'effort.** Ils sont publiés sur la page de la séance une fois celle-ci passée.
@@ -65,8 +66,9 @@ Le cours applique quelques principes dont l'effet sur l'apprentissage est bien �
 
 | Composante | Poids | Contenu |
 |------------|:-----:|---------|
-| Contrôle continu | *à fixer* | rendus de TD (fichier Excel, script Python, note d'analyse de deux pages ; exemple : TD 7.0) |
-| Examen final | *à fixer* | calculs et questions d'interprétation sur l'ensemble du programme |
+| Examen intermédiaire | *à fixer* | créneaux 1 à 5 : bilan prudentiel, meilleure estimation, un exercice sur tableur ou en Python |
+| Examen final | *à fixer* | l'ensemble du cours : calculs et questions d'interprétation |
+| Contrôle continu *(éventuel)* | *à fixer* | rendus de TD (classeur, script, note d'analyse) |
 
 ## Outils
 
@@ -80,7 +82,8 @@ Le cours applique quelques principes dont l'effet sur l'apprentissage est bien �
 Les assistants d'IA générative sont autorisés pour comprendre une notion, déboguer du code ou
 reformuler un texte. Tout rendu indique s'ils ont été utilisés et pour quoi faire. Vous restez
 responsable de chaque chiffre et de chaque affirmation rendus : un résultat que vous ne savez pas
-justifier n'est pas acquis. Ils ne sont pas autorisés pendant l'examen.
+justifier n'est pas acquis. Ils ne sont pas autorisés pendant l'examen. La séance 2 montre comment
+les cadrer et vérifier ce qu'ils produisent.
 
 ## Signaler une erreur
 

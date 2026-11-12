@@ -10,4 +10,4 @@ d'examen, notes, données nominatives, documents internes.
 
 | Fichier | En attente de |
 |---|---|
-| `untitled.ipynb` | brouillon du graphique tornado du TD 7.3 : à intégrer au corrigé ou à supprimer |
+| | |

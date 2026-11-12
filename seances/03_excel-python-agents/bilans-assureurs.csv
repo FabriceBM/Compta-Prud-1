@@ -1,0 +1,7 @@
+entite;nom;actif;provisions_techniques;dettes_subordonnees;autres_passifs;excedent_declare;tier1;tier2;tier3;scr;mcr;ratio_scr_declare
+A;Assureur Gamma;1200;1050;35;20;95;85;35;10;80;30;156.25
+B;Assureur Delta;800;700;20;15;75;65;20;0;85;25;100.0
+C;Assureur Epsilon;950;830;0;40;80;50;0;30;60;20;133.3
+D;Assureur Zêta;1500;1320;50;30;100;100;50;0;120;25;125.0
+E;Assureur Êta;600;560;10;5;25;20;10;5;40;12;87.5
+F;Assureur Thêta;300;250;0;10;40;40;0;0;;10;

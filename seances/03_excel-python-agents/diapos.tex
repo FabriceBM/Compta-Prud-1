@@ -1,0 +1,518 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,arrows.meta}
+\usepackage{eurosym}
+
+% Thème : celui des autres séances
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\definecolor{bleuactu}{RGB}{0,51,102}
+\definecolor{vertactu}{RGB}{0,102,51}
+\definecolor{rougeactu}{RGB}{153,0,0}
+\definecolor{orangeactu}{RGB}{230,126,34}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\setbeamercolor{structure}{fg=bleuactu}
+\setbeamercolor{frametitle}{bg=bleuactu,fg=white}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    stringstyle=\color{codepurple},
+    language=Python,
+    showstringspaces=false
+}
+
+\newcommand{\fx}[1]{\texttt{\small #1}}
+
+% Compilation pdfLaTeX sans erreur : caractères absents de l'encodage T1, accents dans les listings
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+\lstset{literate=
+  {é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {à}{{\`a}}1 {â}{{\^a}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {ù}{{\`u}}1
+  {û}{{\^u}}1 {ç}{{\c c}}1 {É}{{\'E}}1 {€}{{\texteuro}}1 {≥}{{$\geq$}}1 {≤}{{$\leq$}}1
+  {«}{{\guillemotleft}}1 {»}{{\guillemotright}}1}
+
+\title[Séance 3 -- Excel, Python et agents d'IA]{Séance 3 : Excel, Python et agents d'IA}
+\subtitle{Les outils de l'actuaire, appliqués au contrôle prudentiel}
+\author[F. Borel-Mathurin]{Fabrice BOREL-MATHURIN}
+\institute[ACPR-DEAR et SAF Lyon 1]{
+    ACPR - DEAR\\
+    et\\
+    Laboratoire SAF Université Claude Bernard Lyon 1
+}
+\date{2026-2027}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Plan de la séance (4 h)}
+\tableofcontents
+\end{frame}
+
+\begin{frame}{Objectifs pédagogiques}
+\begin{block}{À l'issue de cette séance, vous serez capable de :}
+\begin{enumerate}
+  \item Organiser un classeur Excel qu'un autre peut auditer, et y agréger des SCR avec une matrice de corrélation
+  \item Écrire en Python un contrôle reproductible sur des données prudentielles, et le rapprocher du tableur
+  \item Confier une tâche à un agent d'IA : la cadrer, puis relire et vérifier son résultat
+  \item Citer les règles qui encadrent ces usages : qualité des données, responsabilité, confidentialité, règlement sur l'IA, DORA
+\end{enumerate}
+\end{block}
+\vspace{0.3cm}
+\begin{alertblock}{Déroulé}
+\textbf{Cours :} 2 h (Excel 30 min, Python 40 min, agents 40 min) \quad | \quad
+\textbf{TD 3 :} 2 h, un projet en trois parties
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Rappel de la séance 2}
+\begin{block}{Trois questions, sans notes}
+\begin{enumerate}
+  \item Pourquoi un écart d'acquisition vaut-il zéro au bilan prudentiel ?
+  \item D'où vient un impôt différé actif, et à quelle condition est-il retenu ?
+  \item Pourquoi un SCR non couvert n'entraîne-t-il pas immédiatement un retrait d'agrément ?
+\end{enumerate}
+\end{block}
+\vspace{0.2cm}
+\small Réponses en 5 minutes, à deux, puis mise en commun.
+\end{frame}
+
+% =====================================================================
+\section{Pourquoi les outils comptent en prudentiel}
+% =====================================================================
+
+\begin{frame}{Des chiffres sous contrainte}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Ce qu'on demande au chiffre prudentiel}
+\begin{itemize}
+  \item \textbf{Volumes} : la liste des actifs (S.06.02) compte une ligne par titre détenu
+  \item \textbf{Délais} : remises annuelles et trimestrielles à date fixe
+  \item \textbf{Qualité} : des données « appropriées, exhaustives et exactes » pour les provisions techniques (directive, art.~82)
+  \item \textbf{Traçabilité} : l'auditeur, la fonction actuarielle et l'ACPR doivent pouvoir refaire le calcul
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Quand l'outil se trompe}
+\small
+\begin{itemize}
+  \item \textbf{JPMorgan, 2012} (« London Whale ») : le modèle de VaR reposait sur des tableurs
+        alimentés à la main ; une formule divisait par une somme au lieu d'une moyenne et
+        sous-estimait le risque (rapport interne, 2013)
+  \item \textbf{Reinhart et Rogoff, 2010} : une plage de cellules incomplète dans un tableur a
+        biaisé un résultat de politique économique très cité (Herndon, Ash et Pollin, 2013)
+\end{itemize}
+\end{alertblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Trois outils, trois usages}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{p{2.4cm}p{4.6cm}p{5.6cm}}
+\toprule
+\textbf{Outil} & \textbf{Pour} & \textbf{Limites} \\
+\midrule
+\textbf{Tableur} & Explorer, prototyper, montrer un calcul pas à pas & Erreurs invisibles, pas d'historique, difficile à tester, 1\,048\,576 lignes au plus \\
+\textbf{Python} & Automatiser, traiter du volume, tester, versionner & Demande d'apprendre ; un script faux se trompe vite et partout \\
+\textbf{Agent d'IA} & Écrire du code, des tests, une première version & Se trompe avec assurance ; ne remplace ni la vérification ni la signature \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{center}
+\small Le bon réflexe : \textbf{deux calculs indépendants qui se rapprochent}, par exemple le tableur et le script.
+\end{center}
+\end{frame}
+
+% =====================================================================
+\section{Excel express}
+% =====================================================================
+
+\begin{frame}{Un classeur qu'un autre peut auditer}
+\begin{center}
+\begin{tikzpicture}[
+  onglet/.style={draw=bleuactu, fill=bleuactu!8, rounded corners, minimum width=2.6cm,
+                 minimum height=1cm, align=center, font=\small},
+  fleche/.style={-{Latex[length=2mm]}, thick, bleuactu}]
+\node[onglet] (e) {\textbf{Entrées}\\\scriptsize données, paramètres};
+\node[onglet, right=0.8cm of e] (c) {\textbf{Calculs}\\\scriptsize une formule par colonne};
+\node[onglet, right=0.8cm of c] (s) {\textbf{Sorties}\\\scriptsize ce qu'on remet};
+\node[onglet, right=0.8cm of s, draw=rougeactu, fill=rougeactu!8] (k) {\textbf{Contrôles}\\\scriptsize VRAI = anomalie};
+\draw[fleche] (e) -- (c); \draw[fleche] (c) -- (s); \draw[fleche] (s) -- (k);
+\end{tikzpicture}
+\end{center}
+\begin{itemize}
+  \item \textbf{Aucune constante en dur} : 15\,\%, 50\,\%, 0,5 point vont dans des cellules nommées (\emph{Formules > Gestionnaire de noms})
+  \item \textbf{Mettre sous forme de tableau} (Ctrl + L) : références lisibles, formules étendues automatiquement
+  \item \textbf{Une seule formule par colonne}, recopiée sur toutes les lignes
+  \item \textbf{Repérer les antécédents} (\emph{Formules > Audit de formules}) avant de faire confiance à une cellule
+  \item \textbf{Des contrôles visibles} : totaux qui se recoupent, bilan équilibré, mise en forme conditionnelle
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Les formules qui servent}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lll}
+\toprule
+\textbf{Français} & \textbf{Anglais} & \textbf{Usage prudentiel} \\
+\midrule
+\fx{SOMMEPROD} & \fx{SUMPRODUCT} & Somme de flux actualisés, de montants pondérés \\
+\fx{RECHERCHEX} & \fx{XLOOKUP} & Retrouver un taux de la courbe, un facteur par segment \\
+\fx{SI}, \fx{ET}, \fx{OU} & \fx{IF}, \fx{AND}, \fx{OR} & Écrire un contrôle \\
+\fx{MIN}, \fx{MAX} & \fx{MIN}, \fx{MAX} & Appliquer une limite d'éligibilité, un corridor \\
+\fx{NB.SI} & \fx{COUNTIF} & Compter les anomalies \\
+\fx{PRODUITMAT}, \fx{TRANSPOSE} & \fx{MMULT}, \fx{TRANSPOSE} & Agréger des SCR avec une matrice de corrélation \\
+\fx{LET} & \fx{LET} & Nommer les étapes d'une formule longue \\
+\bottomrule
+\end{tabular}
+\end{table}
+\small En français, les arguments sont séparés par un point-virgule et les décimales par une virgule.
+\end{frame}
+
+\begin{frame}{Exemple : limites d'éligibilité et agrégation du SCR}
+\begin{block}{Fonds propres éligibles à la couverture du SCR (règlement délégué, art.~82)}
+\small
+\fx{t3\_elig = MIN([@tier3]; Lim\_T3*[@scr])} \hfill niveau 3 < 15\,\% du SCR\\
+\fx{t2\_elig = MIN([@tier2]; Lim\_T2T3*[@scr]-[@t3\_elig])} \hfill niveaux 2 + 3 ≤ 50\,\%\\
+\fx{ratio = ([@tier1]+[@t2\_elig]+[@t3\_elig])/[@scr]}
+\end{block}
+\begin{block}{SCR de base : $\sqrt{s^\top C\, s}$ (directive, annexe IV)}
+\small
+\fx{=RACINE(PRODUITMAT(PRODUITMAT(TRANSPOSE(s);C);s))}
+
+\smallskip
+Marché 60, contrepartie 5, vie 30 : BSCR $= 75{,}17$, contre 95 en simple somme. La
+diversification vaut 19,83.
+\end{block}
+\end{frame}
+
+% =====================================================================
+\section{Python express}
+% =====================================================================
+
+\begin{frame}{Pourquoi passer au code}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Ce que le code apporte}
+\begin{itemize}
+  \item \textbf{Reproductible} : relancé, il redonne le même chiffre
+  \item \textbf{Lisible} : chaque étape est écrite, nommée, commentée
+  \item \textbf{Testable} : des assertions vérifient les résultats connus
+  \item \textbf{Versionné} : git garde chaque modification, son auteur et sa raison
+  \item \textbf{Sans limite de lignes} pratique
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{Où l'écrire}
+\begin{itemize}
+  \item \textbf{Google Colab} : un notebook dans le navigateur, rien à installer
+  \item \textbf{Sur votre machine} : Python 3.10 ou plus, puis \fx{pip install numpy pandas matplotlib jupyter}
+  \item \textbf{Notebook} pour explorer et expliquer ; \textbf{script} pour la production
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.2cm}
+\begin{center}\small Support : notebook \emph{Python express}, sur la page de la séance (« Ouvrir dans Colab »).\end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Calculer et vectoriser}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\small Une fonction, comme une formule qu'on n'écrit qu'une fois :
+\begin{lstlisting}
+def valeur_actuelle(flux, taux, date):
+    """Valeur actuelle d'un flux."""
+    return flux / (1 + taux) ** date
+
+valeur_actuelle(100, 0.03, 5)   # 86.26
+\end{lstlisting}
+\end{column}
+\begin{column}{0.48\textwidth}
+\small NumPy calcule sur des vecteurs entiers :
+\begin{lstlisting}
+import numpy as np
+flux  = np.array([40, 40, 40, 1040])
+dates = np.arange(1, 5)
+taux  = np.array([.025, .028, .030, .032])
+(flux / (1 + taux) ** dates).sum()
+
+s = np.array([60, 5, 30, 0, 0])
+np.sqrt(s @ C @ s)              # 75.17
+\end{lstlisting}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Manipuler un tableau avec pandas}
+\begin{lstlisting}
+import pandas as pd
+d = pd.read_csv("bilans-assureurs.csv", sep=";")          # une feuille, des colonnes nommées
+
+d["excedent"] = (d["actif"] - d["provisions_techniques"]
+                 - d["dettes_subordonnees"] - d["autres_passifs"])   # une colonne calculée
+d[d["excedent"] != d["excedent_declare"]]                  # filtrer les écarts
+d[d.isna().any(axis=1)]                                    # chercher les données manquantes
+
+t3 = np.minimum(d["tier3"], 0.15 * d["scr"])               # une limite sur toute la colonne
+d.to_excel("controles.xlsx", index=False)                  # rendre le résultat au tableur
+\end{lstlisting}
+\small Pas de boucle sur les lignes : chaque opération s'applique à la colonne entière.
+\end{frame}
+
+\begin{frame}[fragile]{Vérifier}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Assertions}
+\begin{lstlisting}
+assert np.isclose(bscr, 75.17, atol=0.01), \
+       "BSCR différent du calcul Excel"
+\end{lstlisting}
+\small Si le résultat change, le script s'arrête : une régression se voit tout de suite.
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{Les pièges classiques}
+\small
+\begin{itemize}
+  \item \fx{0.1 + 0.2 == 0.3} est faux : comparer avec une \textbf{tolérance}
+  \item \fx{dropna()} fait disparaître des lignes \textbf{en silence}
+  \item Un chemin absolu (\fx{C:/Users/…}) ne marche que sur une machine
+  \item \fx{> 1} au lieu de \fx{>= 1} : un ratio de 100\,\% devient « non couvert »
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.2cm}
+\begin{alertblock}{Le rapprochement}
+Le script et le tableur, construits séparément, doivent donner les mêmes chiffres, au centime près.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Versionner et vérifier automatiquement}
+\begin{itemize}
+  \item \textbf{git} garde l'historique : qui a changé quoi, quand, pourquoi
+  \item \textbf{Une branche par tâche, une demande de fusion (\emph{pull request})} : une seconde personne relit avant que le changement n'entre
+  \item \textbf{L'intégration continue} relance les vérifications à chaque modification : compilation, exécution des notebooks, tests
+\end{itemize}
+\vspace{0.3cm}
+\begin{block}{Exemple : le site de ce cours}
+Chaque diapositive, notebook et corrigé est dans un dépôt git. À chaque modification, les PDF sont
+recompilés, chaque notebook est exécuté, les liens sont vérifiés, puis le site est publié. Un
+notebook qui ne tourne plus est signalé dès la modification qui l'a cassé.
+\end{block}
+\end{frame}
+
+% =====================================================================
+\section{Piloter un projet avec des agents d'IA}
+% =====================================================================
+
+\begin{frame}{Assistant, agent : de quoi parle-t-on ?}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Un assistant}
+Répond à une question dans une conversation. Vous copiez, collez, exécutez.
+\end{block}
+\begin{block}{Un agent}
+Reçoit un objectif, découpe le travail, \textbf{agit} avec des outils (lire et écrire des
+fichiers, exécuter du code, chercher), observe le résultat et recommence jusqu'à ce qu'il
+estime avoir fini. Exemples : Claude Code, GitHub Copilot en mode agent.
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Ce qu'il faut savoir}
+\begin{itemize}
+  \item Il produit vite du travail plausible, \textbf{y compris quand il se trompe}
+  \item Il ne connaît que ce que vous lui donnez et ce qu'il trouve
+  \item Il comble les manques de la consigne par des hypothèses
+  \item Il peut affirmer avoir vérifié ce qu'il n'a pas vérifié
+\end{itemize}
+\end{alertblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Le cycle d'un projet mené avec un agent}
+\begin{center}
+\begin{tikzpicture}[
+  etape/.style={draw=bleuactu, fill=bleuactu!8, rounded corners, minimum width=2.7cm,
+                minimum height=1.1cm, align=center, font=\small},
+  fleche/.style={-{Latex[length=2mm]}, thick, bleuactu}]
+\node[etape] (a) {\textbf{1. Cadrer}\\\scriptsize objectif, critères};
+\node[etape, right=1.1cm of a] (b) {\textbf{2. Déléguer}\\\scriptsize une tâche courte};
+\node[etape, right=1.1cm of b] (c) {\textbf{3. Vérifier}\\\scriptsize exécuter, rapprocher};
+\node[etape, right=1.1cm of c] (d) {\textbf{4. Documenter}\\\scriptsize tracer, faire relire};
+\draw[fleche] (a) -- (b); \draw[fleche] (b) -- (c); \draw[fleche] (c) -- (d);
+\draw[fleche] (c.south) -- ++(0,-0.6) -| node[pos=0.25, below, font=\scriptsize]{corriger la consigne, recommencer} (b.south);
+\end{tikzpicture}
+\end{center}
+\vspace{0.2cm}
+\begin{itemize}
+  \item \textbf{Découper} : des tâches courtes, chacune vérifiable seule (« ajouter le contrôle C4 », pas « refaire le reporting »)
+  \item \textbf{Garder la main} sur ce qui engage : interprétation des textes, hypothèses, validation, signature
+  \item \textbf{Déléguer} ce qui se vérifie : code, tests, graphiques, mise en forme, premier jet d'un document
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Une bonne consigne}
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize]
+OBJECTIF   Ajouter au script controles.py le contrôle C4 : « MCR hors de 25-45 % du SCR »
+           (directive 2009/138/CE, art. 129).
+CONTEXTE   Données : bilans-assureurs.csv, fictives, en M€, séparateur « ; ».
+CONTRAINTES pandas et NumPy seulement ; ne pas modifier les autres contrôles ;
+           ne supprimer aucune ligne ; comparer les nombres avec une tolérance.
+ACCEPTATION C4 signale l'entité D et elle seule ; une assertion le vérifie ;
+           le script s'exécute depuis le dossier de la séance.
+NE PAS     citer un article sans l'avoir vérifié ; affirmer que tout est détecté.
+LIVRER     les modifications, la sortie du script, la liste des vérifications faites.
+\end{lstlisting}
+\small Les critères d'acceptation disent \textbf{à quoi vous reconnaîtrez un travail juste}. Sans
+eux, l'agent décide seul quand il a fini.
+\end{frame}
+
+\begin{frame}{Vérifier ce que l'agent a produit}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{La liste de relecture}
+\begin{enumerate}
+  \item L'exécuter soi-même, sur une autre machine
+  \item Rapprocher d'un calcul indépendant (le tableur)
+  \item Tester les cas limites : donnée manquante, valeur exactement au seuil
+  \item Vérifier \textbf{chaque} référence réglementaire dans le texte
+  \item Lire les modifications ligne à ligne
+  \item Se méfier des conclusions générales (« tout est vérifié »)
+\end{enumerate}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Retour d'expérience}
+\small
+Relecture d'un support de cours préparé en 2025 avec des assistants d'IA :
+\begin{itemize}
+  \item matrice de corrélation du SCR inexacte
+  \item ajustement symétrique sans son terme de $-8\,\%$, et de sens inversé
+  \item références réglementaires introuvables
+  \item marqueurs d'outil oubliés rendant un notebook illisible
+  \item chemins de fichiers d'une autre machine
+\end{itemize}
+Tout était plausible. Seuls les textes et l'exécution du code l'ont révélé.
+\end{alertblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Les règles du jeu dans une entreprise d'assurance}
+\begin{table}
+\centering
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{p{3cm}p{10cm}}
+\toprule
+\textbf{Question} & \textbf{Repère} \\
+\midrule
+Quelles données ? & Seulement ce que la politique de l'entreprise autorise pour l'outil ; données personnelles : RGPD (règlement (UE) 2016/679) ; rien de confidentiel dans un service non approuvé \\
+Qui répond du chiffre ? & L'entreprise et la personne qui valide. Même logique que l'externalisation : l'entreprise reste pleinement responsable (directive, art.~49) \\
+Quelle gouvernance ? & Un système de gouvernance garantissant une gestion saine et prudente (art.~41) ; revue par une seconde personne ; données de qualité (art.~82) \\
+Quels textes propres à l'IA ? & Règlement (UE) 2024/1689 sur l'IA, applicable par étapes : l'évaluation des risques et la tarification en assurance vie et santé sont « à haut risque » (annexe~III) \\
+Quel risque informatique ? & DORA, règlement (UE) 2022/2554, applicable depuis le 17 janvier 2025 : un service d'IA en nuage est un prestataire tiers de services informatiques \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+% =====================================================================
+\section{TD 3 et synthèse}
+% =====================================================================
+
+\begin{frame}{TD 3 : contrôler les états de six assureurs}
+\begin{columns}[T]
+\begin{column}{0.32\textwidth}
+\begin{block}{A. Tableur (40 min)}
+\small
+Recalculer excédent, fonds propres éligibles, ratios ; sept contrôles ; agréger un SCR.
+\end{block}
+\end{column}
+\begin{column}{0.32\textwidth}
+\begin{block}{B. Python (40 min)}
+\small
+Automatiser les mêmes contrôles, traiter les cas limites, rapprocher du tableur.
+\end{block}
+\end{column}
+\begin{column}{0.32\textwidth}
+\begin{block}{C. Agent (40 min)}
+\small
+Relire un script produit par une IA ; rédiger la consigne d'un agent ; règles du jeu.
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.4cm}
+\small Données : \fx{bilans-assureurs.csv} et \fx{matrice-correlation.csv} sur la page de la séance.
+À rendre : le classeur, le script, la consigne et une note de revue d'une page.
+\begin{alertblock}{Avant de commencer}
+Les six ratios déclarés sont-ils tous justes ? Pariez, puis vérifiez.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{À retenir}
+\begin{enumerate}
+  \item Un chiffre prudentiel doit pouvoir être \textbf{refait} : entrées séparées, paramètres nommés, contrôles visibles.
+  \item Le tableur sert à comprendre, le code à \textbf{reproduire et tester} ; les deux se rapprochent au centime.
+  \item Un agent d'IA va vite, se trompe avec assurance, et \textbf{ne vérifie pas à votre place}.
+  \item Une bonne consigne contient ses \textbf{critères d'acceptation} ; une bonne revue exécute, rapproche et vérifie chaque référence.
+  \item L'entreprise et la personne qui valide restent \textbf{responsables} ; données, gouvernance, IA et risque informatique ont leurs textes.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Pour la prochaine séance}
+\begin{block}{À faire}
+\begin{itemize}
+  \item Terminer le TD 3 ; le corrigé est publié sur le site après la séance
+  \item Revoir les unités 4 à 6 du \textbf{polycopié de prérequis} : flux aléatoire, flux optionnel, contrat d'assurance
+\end{itemize}
+\end{block}
+\begin{block}{Questions de rappel, en ouverture de la séance 4}
+\begin{itemize}
+  \item Pourquoi une limite d'éligibilité peut-elle faire passer un ratio sous 100\,\% ?
+  \item Citez deux pièges qui font échouer un script en silence.
+  \item Que doit contenir la consigne d'un agent pour qu'on puisse juger son travail ?
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[c]
+\centering
+\Huge Questions ?
+
+\vspace{1cm}
+\Large
+\textbf{Séance 4} : meilleure estimation non-vie
+\end{frame}
+
+\end{document}

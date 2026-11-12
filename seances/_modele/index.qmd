@@ -1,6 +1,6 @@
 ---
-# Modèle de page de séance. Ne pas modifier ici : `make seance N=08 SLUG=orsa` le copie dans
-# seances/08_orsa/. Les dossiers commençant par « _ » ne sont pas publiés.
+# Modèle de page de séance. Ne pas modifier ici : `make seance N=09 SLUG=orsa` le copie dans
+# seances/09_orsa/. Les dossiers commençant par « _ » ne sont pas publiés.
 title: "Titre de la séance"
 subtitle: "Ce que la séance couvre, en une ligne"
 numero: 0

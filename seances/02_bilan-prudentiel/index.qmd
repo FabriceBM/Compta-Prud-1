@@ -1,0 +1,48 @@
+---
+title: "Le bilan prudentiel"
+subtitle: "Du bilan des comptes sociaux aux fonds propres éligibles et au ratio de couverture"
+numero: 2
+corriges: false
+---
+
+## Objectifs
+
+À l'issue de cette séance, vous serez capable de :
+
+1. Identifier ce qui distingue le bilan prudentiel du bilan des comptes sociaux.
+2. Valoriser un bilan prudentiel simplifié : actifs, provisions techniques, impôts différés.
+3. Classer les fonds propres en niveaux et appliquer les limites d'éligibilité.
+4. Calculer et interpréter les ratios de couverture du SCR et du MCR.
+5. Situer ces chiffres dans les états remis au superviseur (S.02.01, S.23.01).
+
+**Durée** : 2 h de cours, 2 h de TD sur tableur.
+
+## Supports
+
+- [Diapositives (PDF)](diapos.pdf) : deux comptabilités, un même bilan ; le bilan prudentiel (valeur
+  d'échange, valorisation des actifs, meilleure estimation, marge de risque, impôts différés, fonds
+  propres et leurs niveaux, limites d'éligibilité) ; SCR, MCR et échelle d'intervention ; les états
+  du bilan et des fonds propres.
+
+## Travaux dirigés
+
+**TD 2 : le mini-bilan prudentiel de l'Assureur Bêta.** Partir du bilan des comptes sociaux d'un
+assureur vie fictif ; revaloriser les actifs, recalculer les provisions techniques, calculer les
+impôts différés ; construire le bilan prudentiel, classer les fonds propres, vérifier la couverture
+du SCR et du MCR ; mesurer l'effet de trois chocs de marché.
+
+- [Énoncé (PDF)](td.pdf)
+- Données : [`assureur-beta.csv`](assureur-beta.csv), séparateur « ; », s'ouvre directement dans Excel.
+
+::: {.corrige}
+## Corrigé
+- [Énoncé corrigé (PDF)](td-corrige.pdf)
+- Script Python qui refait tous les calculs : [`td-2_mini-bilan-prudentiel.py`](corriges/td-2_mini-bilan-prudentiel.py)
+  ({{< github seances/02_bilan-prudentiel/corriges/td-2_mini-bilan-prudentiel.py >}}).
+:::
+
+## Après la séance
+
+- Revoir l'unité 3 du [polycopié de prérequis](../../prerequis/index.qmd) : obligations et courbe des taux.
+- Préparer les trois questions de rappel de la dernière diapositive : elles ouvrent la séance 3.
+- Pour la séance 3 : un compte Google (pour Colab) ou Python installé, et Excel ou LibreOffice Calc.
