@@ -1,6 +1,7 @@
 # Points à relire dans le matériel déposé
 
-Relevés en rangeant le dépôt (octobre 2026). **Ce n'est pas une relecture complète** : ce sont les
+Relevés en rangeant le dépôt (octobre 2026). Les §§ 1, 2 et 4 portent sur les supports 2025-2026,
+**archivés depuis dans `archive/2025-2026/`** : à reprendre si ces sources sont réutilisées. **Ce n'est pas une relecture complète** : ce sont les
 points rencontrés en chemin, à trancher par l'enseignant. Rien du contenu pédagogique n'a été modifié ;
 seules ont été faites les corrections nécessaires à la compilation ou à l'exécution (voir l'historique git).
 
@@ -11,7 +12,7 @@ n'est pas dans le dépôt : les mêmes erreurs y figurent, à corriger dans la s
 
 | # | Où | Constat | Correction proposée |
 |---|----|---------|---------------------|
-| 1 | `seances/08_scr-mcr-fonds-propres/notes.qmd` §1.4 ; diapos V3 p. 7 | La matrice de corrélation de niveau 1 contient un module « Intangibles » et met 0,25 entre Vie et Non-vie, et entre Santé et Non-vie. Elle est attribuée à l'annexe IV du règlement délégué. | Matrice de l'**annexe IV de la directive** : Vie–Non-vie = 0, Santé–Non-vie = 0. Le risque des immobilisations incorporelles n'est pas dans la matrice : il s'ajoute après la racine (BSCR = √(Σ ρ·SCRᵢ·SCRⱼ) + SCR_intangibles, RD art. 87). |
+| 1 | `archive/2025-2026/scr-mcr-fonds-propres/notes.qmd` §1.4 ; diapos V3 p. 7 | La matrice de corrélation de niveau 1 contient un module « Intangibles » et met 0,25 entre Vie et Non-vie, et entre Santé et Non-vie. Elle est attribuée à l'annexe IV du règlement délégué. | Matrice de l'**annexe IV de la directive** : Vie–Non-vie = 0, Santé–Non-vie = 0. Le risque des immobilisations incorporelles n'est pas dans la matrice : il s'ajoute après la racine (BSCR = √(Σ ρ·SCRᵢ·SCRⱼ) + SCR_intangibles, RD art. 87). |
 | 2 | `notes.qmd` §7.1, exercice 7.1.1 (l. 312) | `150*0,36 + 30*0,46 * 0,95 = 68,4` : parenthèses manquantes et résultat faux. | (150 × 36 % + 30 × 46 %) × 0,95 = **64,4** M€, valeur reprise ailleurs (diapos V3, TD 7.3). |
 | 3 | `notes.qmd` §7.1 ; diapos V3 ; corrigé `corriges/td-7-0_symmetric-adjustment.py` (`calculer_scr_equity`, l. 357) | SCR actions = somme des charges type 1 et type 2. | La formule standard les agrège avec une corrélation de 0,75 : √(54² + 2 × 0,75 × 54 × 13,8 + 13,8²) = 65,0 M€ avant l'abattement de 5 % (61,7 M€ après), au lieu de 67,8 (64,4). Si la somme est une simplification voulue, le dire dans l'énoncé. |
 | 4 | `notes.qmd` §2.1.4 ; diapos V3 p. 38 (TD 7.1, question 3) | Choc de spread « a + b × duration » avec AAA-AA : 0,9 % + 0,06 %, A : 1,1 % + 0,07 %… ; d'où SCR spread = 2,9 M€ pour 200 M€ notés A, duration 5. | RD art. 176 : pour une duration ≤ 5 ans, choc = bᵢ × duration, avec bᵢ = 0,9 % / 1,1 % / 1,4 % / 2,5 % / 4,5 % / 7,5 % selon l'échelon de qualité de crédit 0 / 1 / 2 / 3 / 4 / 5-6 (AAA = 0, AA = 1, **A = 2**). Ici 1,4 % × 5 = 7 %, soit **14,0 M€**. |
@@ -45,14 +46,14 @@ stochastique (« Séance 6 & 7 »). Restent à aligner, si vous le souhaitez :
 - les numéros de TD, qui suivent l'ancien plan : TD 3.5 (séance 4), TD 4.1 à 4.3 (séance 5),
   TD 7.0 à 7.3 (séance 8), dans les noms de fichiers et dans les supports ;
 - diapositives BE vie, dernière page : « Prochaine séance : Risk Margin et SCR Vie »
-  (`seances/05_be-vie/diapos.tex`, l. 1607) ;
+  (`archive/2025-2026/be-vie/diapos.tex`, l. 1607) ;
 - notebook des codes du stochastique : « Séance 5 » ;
 - diapositives SCR V3 : « Séance 8 : ORSA » annoncée en fin de séance ; l'ORSA devient la séance 9 ;
 - cours 2025-2026 de la séance 1 (PDF) : sa partie 7.2 annonçait encore un autre plan.
 
 Autres points de plan :
 
-- TD de valorisation des produits financiers : rangé en annexe du polycopié de prérequis.
+- TD de valorisation des produits financiers : archivé avec les autres supports 2025-2026.
 - Séance 3 : la diapositive « Vérifier ce que l'agent a produit » cite comme retour d'expérience la
   relecture des supports 2025-2026 de ce cours (§ 1 et 2), sans les nommer. À garder, reformuler ou retirer.
 - Séance 1, cas E : la dernière diapositive cite l'article de F. Borel-Mathurin et S. Loisel
@@ -85,13 +86,13 @@ site. Écarts volontaires, à valider :
 | # | Où | Constat |
 |---|----|---------|
 | 16 | `corriges/td-7-3_management-actions.ipynb` | La bibliothèque `waterfallcharts` (dernière version 2019) échoue avec pandas ≥ 2. Le notebook est exclu de `make code` ([`tools/code_exclu.txt`](tools/code_exclu.txt)) : remplacer le graphique en cascade par `matplotlib` (barres empilées), puis retirer l'exclusion. |
-| 17 | `seances/05_be-vie/corriges/td-4_be-vie.ipynb` | Les cellules 13 et 14 répètent les cellules 4 et 5 (exercice 4.1). |
+| 17 | `archive/2025-2026/be-vie/corriges/td-4_be-vie.ipynb` | Les cellules 13 et 14 répètent les cellules 4 et 5 (exercice 4.1). |
 | 18 | `a-classer/untitled.ipynb` | Brouillon du graphique tornado du TD 7.3 : à intégrer ou à supprimer. |
 
 ## 5. Sources à déposer
 
-- Source LaTeX des **diapositives SCR V3** (50 pages). `archive/07_scr-mcr-fonds-propres_diapos-courtes.tex`
-  n'en produit que 18. Une fois déposée en `seances/08_scr-mcr-fonds-propres/diapos.tex`, la CI la compile.
+- Source LaTeX des **diapositives SCR V3** (50 pages). `archive/2025-2026/scr-mcr-fonds-propres/diapos-courtes_18-pages.tex`
+  n'en produit que 18. Une fois déposée en `archive/2025-2026/scr-mcr-fonds-propres/diapos.tex`, la CI la compile.
 - Source LaTeX du **TD de valorisation** : avec elle, ce support devient modifiable et recompilé.
   (Le cours de la séance 1 a désormais sa source : voir § 3 bis.)
 - **Séance 3** : diapositives et énoncé du TD 3.5 (seul le corrigé est déposé).

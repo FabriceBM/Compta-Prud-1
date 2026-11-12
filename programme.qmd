@@ -14,8 +14,7 @@ validés pour l'année en cours : établissement, calendrier, modalités d'éval
 - **Public** : Master SAFIR, M2 en alternance, Université Paris 1 Panthéon-Sorbonne *(à confirmer)*.
 - **Format** : séances de 4 heures, en général 2 h de cours puis 2 h de travaux dirigés sur Excel et en Python.
 - **Prérequis** : actualisation, probabilités, notions de comptabilité d'assurance. Le
-  [polycopié de prérequis](prerequis/index.qmd) les reprend pas à pas, avec des exercices corrigés,
-  et propose en annexe un TD de valorisation des produits financiers.
+  [polycopié de prérequis](prerequis/index.qmd) les reprend pas à pas, avec des exercices corrigés.
 
 ## Acquis d'apprentissage
 
@@ -38,18 +37,16 @@ validés pour l'année en cours : établissement, calendrier, modalités d'éval
 
 ## Séances
 
-| N° | Thème | Supports disponibles |
-|:--:|-------|----------------------|
-| 1 | [La comptabilité prudentielle en un coup d'œil](seances/01_panorama/index.qmd) | diapositives, cinq cas, éléments de mise en commun |
-| 2 | [Le bilan prudentiel](seances/02_bilan-prudentiel/index.qmd) | diapositives, TD 2 et ses données, corrigé |
-| 3 | [Excel, Python et agents d'IA](seances/03_excel-python-agents/index.qmd) | diapositives, notebook Python express, TD 3 et ses données, corrigé |
-| 4 | [Meilleure estimation non-vie](seances/04_be-non-vie/index.qmd) | corrigé du TD 3.5 |
-| 5 | [Meilleure estimation vie](seances/05_be-vie/index.qmd) | diapositives, notebook, corrigé des TD 4.1 à 4.3 |
-| 6–7 | [Approche stochastique et ALM](seances/06_stochastique-alm/index.qmd) | diapositives, codes du cours |
-| 8 | [SCR, MCR et fonds propres](seances/08_scr-mcr-fonds-propres/index.qmd) | diapositives, notes, TD 7.0–7.3 |
-| 9 | ORSA *(annoncée en fin de séance 8)* | |
+| Créneau | Séance | Supports |
+|:--:|-------|----------|
+| 1 | [La comptabilité prudentielle en un coup d'œil](seances/01_panorama/index.qmd) | diapositives, cinq cas |
+| 2 | [Le bilan prudentiel](seances/02_bilan-prudentiel/index.qmd) | diapositives, TD et données |
+| 3 | [Excel, Python et agents d'IA](seances/03_excel-python-agents/index.qmd) | diapositives, notebook, TD et données |
+| 4 à 11 | SCR et MCR, fonds propres, meilleure estimation vie et non-vie, approche stochastique, gestion actif-passif, ORSA | en préparation |
+| 6 | **Examen intermédiaire** | |
+| 12 | **Examen final** | |
 
-: Déroulé du cours, sur neuf créneaux *(à confirmer)*. Les TD des séances 4 à 8 gardent la numérotation de leurs fichiers d'origine. {tbl-colwidths="[8,52,40]"}
+: Déroulé du cours *(en préparation : l'ordre des séances 4 à 11 reste à fixer)* {tbl-colwidths="[10,60,30]"}
 
 ## Comment le cours fonctionne
 
@@ -69,8 +66,9 @@ Le cours applique quelques principes dont l'effet sur l'apprentissage est bien �
 
 | Composante | Poids | Contenu |
 |------------|:-----:|---------|
-| Contrôle continu | *à fixer* | rendus de TD (fichier Excel, script Python, note d'analyse de deux pages ; exemple : TD 7.0) |
-| Examen final | *à fixer* | calculs et questions d'interprétation sur l'ensemble du programme |
+| Examen intermédiaire | *à fixer* | créneaux 1 à 5 : bilan prudentiel, meilleure estimation, un exercice sur tableur ou en Python |
+| Examen final | *à fixer* | l'ensemble du cours : calculs et questions d'interprétation |
+| Contrôle continu *(éventuel)* | *à fixer* | rendus de TD (classeur, script, note d'analyse) |
 
 ## Outils
 

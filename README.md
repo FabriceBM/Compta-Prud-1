@@ -30,7 +30,7 @@ Fabrice Borel-Mathurin (ACPR-DEAR ; Laboratoire SAF, Université Claude Bernard 
 ├── prerequis/           (2) polycopié de prérequis (LaTeX) : version étudiant et version corrigée
 ├── editions/            (3) supports figés tels que distribués, une année par dossier ; jamais modifiés
 ├── a-classer/           (4) boîte de dépôt : y poser le nouveau matériel, il sera rangé ensuite
-├── archive/             versions remplacées, gardées pour mémoire ; pas publiées
+├── archive/             versions remplacées et sources 2025-2026 (archive/2025-2026/) ; pas publiées
 ├── ressources/          glossaire français–anglais, textes de référence
 ├── index.qmd, programme.qmd   accueil et programme du site
 ├── _quarto.yml          configuration du site (navigation, thème, pages publiées)

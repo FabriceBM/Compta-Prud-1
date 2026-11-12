@@ -22,6 +22,8 @@ Il arrive dans `a-classer/` ou à la racine de `main` (« Add files via upload �
      depuis la page de la séance ; PDF compilé depuis une source du dépôt → supprimé (la CI le recompile) ;
    - archive `.zip` de sources → décompressée, le zip supprimé ;
    - version remplacée → `archive/`, avec une ligne dans `archive/README.md`.
+   - Les sources 2025-2026 sont dans `archive/2025-2026/` : le matériel nouveau va dans `seances/`,
+     sans reprendre l'archive sauf demande de l'enseignant.
 3. **Mettre à jour** la page `seances/NN_theme/index.qmd` (créer la séance avec `make seance`), la
    table du [`programme.qmd`](programme.qmd), et le registre `editions/README.md` si un PDF y entre.
 4. **Vérifier** : `make check-latex` (pdfLaTeX, aucune erreur), `make code` (chaque notebook et script

@@ -36,7 +36,7 @@ def exclus():
 
 
 def dossier_seance(fichier):
-    """seances/07_x/corriges/a.py -> seances/07_x ; prerequis/a.py -> prerequis"""
+    """seances/02_x/corriges/a.py -> seances/02_x ; prerequis/a.py -> prerequis"""
     rel = fichier.relative_to(RACINE)
     return RACINE.joinpath(*rel.parts[:2]) if rel.parts[0] == "seances" else RACINE / rel.parts[0]
 
