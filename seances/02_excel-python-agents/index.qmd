@@ -1,0 +1,48 @@
+---
+title: "Excel, Python et agents d'IA"
+subtitle: "Cours express et conduite de projet, appliqués au contrôle prudentiel"
+numero: 2
+corriges: false
+---
+
+## Objectifs
+
+À l'issue de cette séance, vous serez capable de :
+
+1. Organiser un classeur Excel qu'un autre peut auditer, et y agréger des SCR avec une matrice de corrélation.
+2. Écrire en Python un contrôle reproductible sur des données prudentielles, et le rapprocher du tableur.
+3. Confier une tâche à un agent d'IA : la cadrer, puis relire et vérifier son résultat.
+4. Citer les règles qui encadrent ces usages : qualité des données, responsabilité, confidentialité,
+   règlement sur l'IA, DORA.
+
+**Durée** : 2 h de cours (Excel 30 min, Python 40 min, agents 40 min), 2 h de TD.
+
+## Avant la séance
+
+- Ouvrir un compte Google pour utiliser Colab, ou installer Python 3.10 ou plus sur votre machine.
+- Avoir Excel ou LibreOffice Calc.
+
+## Supports
+
+- [Diapositives (PDF)](diapos.pdf) : pourquoi les outils comptent en prudentiel ; Excel express
+  (classeur auditable, formules utiles, limites d'éligibilité, agrégation du SCR) ; Python express
+  (NumPy, pandas, vérifier, versionner) ; piloter un projet avec des agents d'IA (cycle, consigne,
+  relecture, règles du jeu).
+- Notebook [Python express](notebooks/python-express.ipynb) : calculer, vectoriser, manipuler un
+  tableau, tracer, vérifier ({{< colab seances/02_excel-python-agents/notebooks/python-express.ipynb >}}).
+
+## Travaux dirigés
+
+**TD 2 : contrôler les états de six assureurs**, avec un tableur, puis en Python, puis avec un agent d'IA.
+
+- [Énoncé (PDF)](td.pdf)
+- Données : [`bilans-assureurs.csv`](bilans-assureurs.csv) et [`matrice-correlation.csv`](matrice-correlation.csv),
+  séparateur « ; ».
+- Partie C : [`script-ia-a-relire.py`](script-ia-a-relire.py), un script produit par un assistant d'IA, à relire.
+
+::: {.corrige}
+## Corrigé
+- [Énoncé corrigé (PDF)](td-corrige.pdf)
+- Script Python des parties A et B : [`td-2_controles.py`](corriges/td-2_controles.py)
+  ({{< github seances/02_excel-python-agents/corriges/td-2_controles.py >}}).
+:::

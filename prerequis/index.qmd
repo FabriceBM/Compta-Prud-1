@@ -26,7 +26,19 @@ références réglementaires correspondantes.
 
 : Les six unités {tbl-colwidths="[8,20,36,36]"}
 
+## Annexe : valorisation des produits financiers
+
+Un TD progressif, à faire en autonomie, des obligations aux options exotiques : zéro-coupons et
+reconstitution de la courbe des taux, absence d'opportunité d'arbitrage et change à terme, arbre
+binomial à une puis plusieurs périodes, Monte-Carlo et réduction de variance. Il prépare la
+valorisation des actifs du bilan prudentiel et la valorisation stochastique des séances 5 et 6.
+
+- [Énoncé du TD (PDF, 14 pages)](../editions/2025-2026/02_valorisation-financiere_td.pdf), version 2025-2026.
+
 ::: {.corrige}
 ## Corrigés
 - [Polycopié avec les corrigés (PDF)](prerequis-corrige.pdf)
+- TD de valorisation : notebook `td-valorisation-produits-financiers.ipynb`, une fonction Python par exercice
+  ({{< colab prerequis/corriges/td-valorisation-produits-financiers.ipynb >}} ·
+  {{< github prerequis/corriges/td-valorisation-produits-financiers.ipynb >}}).
 :::

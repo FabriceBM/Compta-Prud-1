@@ -42,7 +42,10 @@ numérotation cohérente entre les fichiers. À confirmer, puis aligner les titr
 - diapositives stochastique : « Séance 6 & 7 » (`seances/05_stochastique-alm/diapos.tex`, l. 69) ;
   le notebook des codes dit « Séance 5 » ;
 - cours de la séance 1 (PDF) : partie 7.2 annonce un autre plan (séance 2 SCR, 3 ALM, 4 ORSA, 5 cas pratique) ;
-- TD de valorisation des produits financiers : placé en séance 2 sans certitude (il se dit « annexe au cours »).
+- TD de valorisation des produits financiers : d'abord placé en séance 2, puis rangé en annexe du
+  polycopié de prérequis quand la séance 2 est devenue « Excel, Python et agents d'IA » (novembre 2026).
+- Séance 2 : la diapositive « Vérifier ce que l'agent a produit » cite comme retour d'expérience la
+  relecture des supports 2025-2026 de ce cours (§ 1 et 2), sans les nommer. À garder, reformuler ou retirer.
 
 ## 3 bis. Séance 1 : ce que la nouvelle version change par rapport au PDF 2025-2026
 

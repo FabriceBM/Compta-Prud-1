@@ -45,3 +45,4 @@ du SCR et du MCR ; mesurer l'effet de trois chocs de marché.
 
 - Revoir les unités 1 à 3 du [polycopié de prérequis](../../prerequis/index.qmd).
 - Préparer les trois questions de rappel de la dernière diapositive : elles ouvrent la séance 2.
+- Pour la séance 2 : un compte Google (pour Colab) ou Python installé, et Excel ou LibreOffice Calc.

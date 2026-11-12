@@ -1,0 +1,6 @@
+module;marche;contrepartie;vie;sante;non_vie
+marche;1;0.25;0.25;0.25;0.25
+contrepartie;0.25;1;0.25;0.25;0.5
+vie;0.25;0.25;1;0.25;0
+sante;0.25;0.25;0.25;1;0
+non_vie;0.25;0.5;0;0;1

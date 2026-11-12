@@ -1,0 +1,254 @@
+\documentclass[11pt,a4paper]{article}
+% Même mise en forme que le polycopié de prérequis (boîtes, exercices, corrigés).
+\input{../../prerequis/preambule}
+
+% Version étudiant par défaut ; `make pdf` produit aussi td-corrige.pdf en définissant \Corrige.
+\ifdefined\Corrige\correctiontrue\else\correctionfalse\fi
+
+\fancyhead[L]{\small\sffamily\color{grisactu}Séance 2 --- Comptabilité prudentielle}
+\newcommand{\meur}{\,M\euro}
+\newcommand{\fx}[1]{\texttt{\small #1}}
+
+\title{\vspace{-1.5cm}\sffamily\bfseries\color{bleuactu}
+       TD 2 : contrôler les états de six assureurs\\[2mm]
+       \large\mdseries\color{black}Avec un tableur, puis en Python, puis avec un agent d'IA
+       \ifcorrection\\[1mm]\color{vertactu}Version corrigée\fi}
+\author{\sffamily Fabrice Borel-Mathurin}
+\date{\sffamily\small Master SAFIR --- 2026-2027}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{notion}{Le projet (2 heures, trois parties de 40 minutes)}
+Vous êtes chargé de vérifier, avant leur remise au superviseur, quelques chiffres clés des états
+de six assureurs fictifs : bilan, fonds propres par niveau, SCR, MCR et ratio de couverture.
+Vous faites les contrôles une première fois sur tableur (partie A), puis vous les automatisez en
+Python (partie B). Enfin, vous relisez un script produit par un assistant d'IA et vous rédigez la
+consigne d'un agent chargé d'étendre vos contrôles (partie C).
+
+\smallskip
+\textbf{À rendre} : le classeur, le script Python, la consigne et une note de revue d'une page.
+\end{notion}
+
+\section{Données et règles}
+
+\texttt{bilans-assureurs.csv} (séparateur « ; », montants en M\euro) donne, pour chaque entité :
+l'actif, les provisions techniques, les dettes subordonnées et les autres passifs du bilan
+prudentiel ; l'excédent d'actif sur passif déclaré ; les fonds propres de niveau 1, 2 et 3 ; le
+SCR ; le MCR ; le ratio de couverture du SCR déclaré (en \%). \texttt{matrice-correlation.csv}
+donne la matrice de corrélation entre modules du SCR de base (directive, annexe IV).
+
+\smallskip
+\noindent Règles à appliquer :
+\begin{itemize}[nosep]
+  \item fonds propres de base $=$ excédent d'actif sur passif $+$ dettes subordonnées ;
+  \item couverture du SCR (règlement délégué, art.~82) : niveau 3 $< 15\,\%$ du SCR ; niveaux 2 $+$ 3
+        $\leq 50\,\%$ du SCR ; niveau 1 $\geq 50\,\%$ du SCR ;
+  \item couverture du MCR : niveau 2 $\leq 20\,\%$ du MCR ; niveau 3 exclu ; niveau 1 $\geq 80\,\%$ du MCR ;
+  \item le MCR est compris entre 25\,\% et 45\,\% du SCR (directive, art.~129) ; le plancher absolu
+        est supposé non contraignant ;
+  \item un ratio déclaré est jugé faux s'il s'écarte de plus de 0,5 point du ratio recalculé.
+\end{itemize}
+
+\section{Partie A : le tableur}
+
+\begin{exercice}[Un classeur qu'un autre peut auditer]
+Importer le fichier (\emph{Données > À partir d'un fichier texte/CSV}, séparateur point-virgule)
+dans un onglet \emph{Données} et le mettre sous forme de tableau. Créer trois autres onglets :
+\emph{Calculs}, \emph{Contrôles}, \emph{Synthèse}. Aucune valeur saisie en dur dans une formule : les
+paramètres (15\,\%, 50\,\%, 20\,\%, 0,5 point…) vont dans des cellules nommées.
+\end{exercice}
+\begin{corrige}
+La séparation entrées / calculs / sorties et les paramètres nommés permettent de relire le classeur
+et de changer une règle à un seul endroit. La mise sous forme de tableau donne des références
+lisibles (\fx{[@scr]}) et étend les formules aux lignes ajoutées.
+\end{corrige}
+
+\begin{exercice}[Recalculer]
+Pour chaque entité : l'excédent d'actif sur passif ; les fonds propres éligibles à la couverture
+du SCR, puis le ratio ; les fonds propres éligibles à la couverture du MCR, puis le ratio.
+\end{exercice}
+\begin{corrige}
+Formules (Excel en français, tableau \fx{T}, paramètres nommés) :
+\begin{itemize}[nosep]
+  \item niveau 3 éligible : \fx{=MIN([@tier3];Lim\_T3*[@scr])}
+  \item niveau 2 éligible : \fx{=MIN([@tier2];Lim\_T2T3*[@scr]-[@t3\_elig])}
+  \item ratio : \fx{=([@tier1]+[@t2\_elig]+[@t3\_elig])/[@scr]}
+  \item éligibles MCR : \fx{=[@tier1]+MIN([@tier2];Lim\_T2\_MCR*[@mcr])}
+\end{itemize}
+\begin{center}
+\small
+\begin{tabular}{llrrrrr}
+\toprule
+ & Entité & Excédent & Éligibles SCR & Ratio SCR & Éligibles MCR & Ratio MCR \\
+\midrule
+A & Gamma   & 95  & 125 & 156,3\,\% & 91   & 303\,\% \\
+B & Delta   & 65  & 85  & 100,0\,\% & 70   & 280\,\% \\
+C & Epsilon & 80  & 59  & 98,3\,\%  & 50   & 250\,\% \\
+D & Zêta    & 100 & 150 & 125,0\,\% & 105  & 420\,\% \\
+E & Êta     & 25  & 35  & 87,5\,\%  & 22,4 & 187\,\% \\
+F & Thêta   & 40  & --- & ---       & 40   & 400\,\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+Pour C, le niveau 3 (30) est plafonné à 9 : le ratio passe de 133\,\% (déclaré, limites oubliées)
+à 98\,\%, et le SCR n'est plus couvert.
+\end{corrige}
+
+\begin{exercice}[Contrôler]
+Dans l'onglet \emph{Contrôles}, une colonne par contrôle, à valeur \fx{VRAI} en cas d'anomalie :
+\begin{enumerate}[nosep]
+  \item[C0] une donnée manque ;
+  \item[C1] l'excédent déclaré diffère de l'excédent recalculé ;
+  \item[C2] la somme des niveaux diffère des fonds propres de base ;
+  \item[C3] le ratio déclaré est faux ;
+  \item[C4] le MCR sort du corridor de 25 à 45\,\% du SCR ;
+  \item[C5] le SCR n'est pas couvert ; C6 le MCR n'est pas couvert.
+\end{enumerate}
+Mettre en couleur les anomalies (mise en forme conditionnelle) et compter, dans la \emph{Synthèse},
+les anomalies par entité (\fx{NB.SI}).
+\end{exercice}
+\begin{corrige}
+\begin{center}
+\small
+\begin{tabular}{lll}
+\toprule
+Entité & Anomalies & Lecture \\
+\midrule
+A & aucune & --- \\
+B & C1 & excédent déclaré 75, recalculé 65 \\
+C & C3, C5 & ratio déclaré 133,3\,\% sans les limites ; 98,3\,\% avec \\
+D & C4 & MCR $=$ 20,8\,\% du SCR \\
+E & C5 & ratio 87,5\,\% : SCR non couvert (déclaré comme tel) \\
+F & C0 & SCR et ratio manquants : C3 à C5 ne peuvent pas être évalués \\
+\bottomrule
+\end{tabular}
+\end{center}
+C5 pour E n'est pas une erreur de déclaration mais une alerte : l'entité doit présenter un plan
+de rétablissement (directive, art.~138).
+\end{corrige}
+
+\begin{exercice}[Agréger des SCR]
+Pour l'Assureur Gamma, les SCR des modules valent : marché 60, contrepartie 5, vie 30, santé 0,
+non-vie 0 (M\euro). Calculer le SCR de base $\sqrt{s^\top C s}$ avec la matrice fournie, et le
+comparer à la simple somme.
+\end{exercice}
+\begin{corrige}
+\fx{=RACINE(PRODUITMAT(PRODUITMAT(TRANSPOSE(s);C);s))} avec \fx{s} le vecteur colonne nommé et
+\fx{C} la matrice nommée : \textbf{75,17\meur}, contre 95 en simple somme ; la diversification vaut
+19,83\meur. Le risque des immobilisations incorporelles s'ajouterait hors de la racine
+(règlement délégué, art.~87).
+\end{corrige}
+
+\section{Partie B : Python}
+
+\begin{exercice}[Automatiser]
+Partir du notebook \emph{Python express} de la séance. Reproduire en pandas les calculs et les
+contrôles de la partie A, sans boucle sur les lignes (\fx{np.minimum} applique une limite à toute
+une colonne). Produire un tableau des anomalies par entité, et vérifier par des assertions que vous
+retrouvez exactement les résultats du tableur.
+\end{exercice}
+\begin{corrige}
+Script complet : \texttt{corriges/td-2\_controles.py}. Le cœur tient en trois lignes :
+
+\smallskip
+\fx{t3 = np.minimum(d["tier3"], 0.15 * d["scr"])}\\
+\fx{t2 = np.minimum(d["tier2"], 0.50 * d["scr"] - t3)}\\
+\fx{ratio = (d["tier1"] + t2 + t3) / d["scr"]}
+
+\smallskip
+Les assertions du script reprennent les résultats de la partie A (ratios de A, B, C ; anomalies
+de chaque entité ; BSCR de 75,17) : si le code change, une régression se voit immédiatement.
+\end{corrige}
+
+\begin{exercice}[Les cas limites]
+Que fait votre script de l'entité F ? D'un ratio d'exactement 100\,\% (entité B) ? Comment
+comparez-vous un ratio recalculé à un ratio déclaré arrondi au dixième ? Justifier chaque choix.
+\end{exercice}
+\begin{corrige}
+F doit rester dans le rapport, signalée « donnée manquante » : la supprimer ferait disparaître
+l'entité la plus douteuse. Un ratio de 100\,\% couvre le SCR (fonds propres éligibles $\geq$ SCR) :
+le test est \fx{>= 1}, pas \fx{> 1}. Deux nombres à virgule ne se comparent pas avec \fx{==} :
+on compare l'écart à une tolérance (ici 0,5 point).
+\end{corrige}
+
+\section{Partie C : travailler avec un agent d'IA}
+
+\begin{exercice}[Relire un script produit par une IA]
+Le fichier \texttt{script-ia-a-relire.py} a été produit par un assistant d'IA à partir d'une
+consigne d'une phrase. Relevez toutes ses erreurs (il y en a au moins huit). Pour chacune : sa
+nature (réglementaire, données, programmation, communication) et son effet sur les résultats.
+Exécutez-le pour le vérifier, après avoir corrigé ce qui l'empêche de tourner.
+\end{exercice}
+\begin{corrige}
+\small
+\begin{tabular}{p{0.3cm}p{6.6cm}p{7.2cm}}
+\toprule
+ & Erreur & Effet \\
+\midrule
+1 & « Article 82 de la directive » & La règle est à l'art.~82 du règlement délégué : référence fausse, énoncée avec assurance \\
+2 & Chemin absolu \fx{C:/Users/…} & Le script ne tourne sur aucune autre machine \\
+3 & \fx{dropna()} sans avertissement & F disparaît ; le rapport annonce « 5 entités analysées » \\
+4 & Niveau 3 plafonné à 15\,\% des fonds propres, pas du SCR & C passe à 103,3\,\% : déclaré couvert à tort \\
+5 & Niveau 2 plafonné seul à 50\,\% du SCR, pas niveaux 2 $+$ 3 & A passe à 162,5\,\% : son ratio déclaré, juste, est signalé faux \\
+6 & Minimum de niveau 1 (50\,\% du SCR, 80\,\% du MCR) non vérifié & Sans effet sur ces données, faux dans d'autres cas \\
+7 & MCR : niveau 3 compté, niveau 2 non plafonné & E : 292\,\% au lieu de 187\,\% \\
+8 & Couverture testée par \fx{> 1} & B, à 100\,\%, déclaré non couvert \\
+9 & Comparaison de flottants par \fx{==} & Fragile : un ratio déclaré arrondi sera signalé faux \\
+10 & Excédent et corridor du MCR non contrôlés ; « toutes les anomalies ont été détectées » & B et D passent inaperçus ; la conclusion est fausse et rien ne la justifie \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\normalsize
+La consigne d'une phrase ne donnait ni les règles, ni les cas limites, ni de quoi vérifier : l'agent
+a comblé les trous avec des hypothèses plausibles et fausses.
+\end{corrige}
+
+\begin{exercice}[Rédiger la consigne d'un agent]
+Rédiger la consigne à donner à un agent d'IA pour qu'il ajoute à \emph{votre} script les contrôles
+C1 (excédent) et C4 (corridor du MCR). Elle précise : l'objectif, le contexte et les données, les
+contraintes, les critères d'acceptation, ce que l'agent ne doit pas faire, ce qu'il doit livrer.
+Si vous disposez d'un agent, lancez-le, puis rédigez une note de revue : ce que vous avez vérifié,
+comment, ce que vous avez accepté ou refusé.
+\end{exercice}
+\begin{corrige}
+\small
+\textbf{Objectif} : ajouter à \texttt{controles.py} deux contrôles, C1 « excédent déclaré $\neq$
+actif $-$ provisions techniques $-$ dettes subordonnées $-$ autres passifs » et C4 « MCR hors de
+25--45\,\% du SCR » (directive, art.~129). \textbf{Contexte} : \texttt{bilans-assureurs.csv},
+données fictives, M\euro, séparateur « ; ». \textbf{Contraintes} : pandas et NumPy seulement ;
+ne pas modifier les contrôles existants ; ne supprimer aucune ligne (une donnée manquante est
+signalée par C0) ; comparaisons avec tolérance. \textbf{Critères d'acceptation} : C1 signale B et
+lui seul ; C4 signale D et lui seul ; F reste dans le rapport ; une assertion par critère ; le
+script s'exécute depuis le dossier de la séance. \textbf{Ne pas} : citer un article sans l'avoir
+vérifié dans le texte, conclure que « toutes les anomalies » sont détectées. \textbf{Livrer} :
+les modifications (diff), la sortie du script, la liste des vérifications faites.
+\end{corrige}
+
+\begin{exercice}[Les règles du jeu en entreprise]
+Dans un assureur, quelles données pouvez-vous confier à un agent d'IA ? Qui répond d'un chiffre
+qu'il a calculé ? Que faut-il conserver pour qu'un auditeur ou le superviseur puisse refaire le
+chemin ? Quels textes encadrent ces usages ?
+\end{exercice}
+\begin{corrige}
+\textbf{Données} : uniquement ce que la politique de l'entreprise autorise pour l'outil utilisé ;
+jamais de données personnelles hors d'un cadre conforme au RGPD (règlement (UE) 2016/679), ni
+d'informations confidentielles dans un service non approuvé. \textbf{Responsabilité} : l'entreprise
+et la personne qui valide restent responsables, comme pour toute activité externalisée (directive,
+art.~49) ; le système de gouvernance doit garantir une gestion saine et prudente (art.~41).
+\textbf{Traçabilité} : code et consignes versionnés, tests, revue par une seconde personne, sources
+réglementaires vérifiées. \textbf{Textes} : règlement (UE) 2024/1689 sur l'IA (systèmes à haut
+risque, dont l'évaluation des risques et la tarification en assurance vie et santé, annexe~III) ;
+règlement (UE) 2022/2554 (DORA) pour le risque informatique et les prestataires tiers, applicable
+depuis le 17 janvier 2025.
+\end{corrige}
+
+\begin{generalisation}{Ce que le TD simplifie}
+Six entités et quelques colonnes au lieu des états complets ; des fonds propres de base sans
+déduction ni élément restreint ; un plancher absolu du MCR ignoré. Les vrais contrôles de cohérence
+des états sont les règles de validation publiées par l'EIOPA avec la taxonomie XBRL.
+\end{generalisation}
+
+\end{document}

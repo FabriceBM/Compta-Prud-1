@@ -14,7 +14,8 @@ validés pour l'année en cours : établissement, calendrier, modalités d'éval
 - **Public** : Master SAFIR, M2 en alternance, Université Paris 1 Panthéon-Sorbonne *(à confirmer)*.
 - **Format** : séances de 4 heures, en général 2 h de cours puis 2 h de travaux dirigés sur Excel et en Python.
 - **Prérequis** : actualisation, probabilités, notions de comptabilité d'assurance. Le
-  [polycopié de prérequis](prerequis/index.qmd) les reprend pas à pas, avec des exercices corrigés.
+  [polycopié de prérequis](prerequis/index.qmd) les reprend pas à pas, avec des exercices corrigés,
+  et propose en annexe un TD de valorisation des produits financiers.
 
 ## Acquis d'apprentissage
 
@@ -31,14 +32,16 @@ validés pour l'année en cours : établissement, calendrier, modalités d'éval
 5. **Calculer** le SCR en formule standard, le MCR et l'éligibilité des fonds propres, et
    **interpréter** le ratio de couverture ;
 6. **Automatiser** ces calculs en Python et **vérifier** leur cohérence avec un calcul sur tableur ;
-7. **Critiquer** les résultats : sensibilités, décisions de gestion (*management actions*), effets procycliques.
+7. **Conduire** un travail avec des agents d'IA : cadrer la tâche, **vérifier** le résultat, respecter
+   les règles applicables (données, responsabilité, règlement sur l'IA, DORA) ;
+8. **Critiquer** les résultats : sensibilités, décisions de gestion (*management actions*), effets procycliques.
 
 ## Séances
 
 | N° | Thème | Supports disponibles |
 |:--:|-------|----------------------|
 | 1 | [Pourquoi la comptabilité prudentielle ?](seances/01_introduction/index.qmd) | diapositives, TD 1 et ses données, corrigé |
-| 2 | [Valorisation des produits financiers](seances/02_valorisation-financiere/index.qmd) *(place à confirmer)* | énoncé du TD (PDF), corrigé |
+| 2 | [Excel, Python et agents d'IA](seances/02_excel-python-agents/index.qmd) | diapositives, notebook Python express, TD 2 et ses données, corrigé |
 | 3 | [Meilleure estimation non-vie](seances/03_be-non-vie/index.qmd) | corrigé du TD 3.5 |
 | 4 | [Meilleure estimation vie](seances/04_be-vie/index.qmd) | diapositives, notebook, corrigé des TD |
 | 5–6 | [Approche stochastique et ALM](seances/05_stochastique-alm/index.qmd) | diapositives, codes du cours |
@@ -80,7 +83,8 @@ Le cours applique quelques principes dont l'effet sur l'apprentissage est bien �
 Les assistants d'IA générative sont autorisés pour comprendre une notion, déboguer du code ou
 reformuler un texte. Tout rendu indique s'ils ont été utilisés et pour quoi faire. Vous restez
 responsable de chaque chiffre et de chaque affirmation rendus : un résultat que vous ne savez pas
-justifier n'est pas acquis. Ils ne sont pas autorisés pendant l'examen.
+justifier n'est pas acquis. Ils ne sont pas autorisés pendant l'examen. La séance 2 montre comment
+les cadrer et vérifier ce qu'ils produisent.
 
 ## Signaler une erreur
 
